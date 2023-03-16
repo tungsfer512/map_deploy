@@ -1,7 +1,7 @@
-CREATE DATABASE IF NOT EXISTS `map` DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_0900_ai_ci;
+CREATE DATABASE IF NOT EXISTS `map` DEFAULT CHARACTER SET utf8mb4;
 USE `map`;
 -- map.adm_area definition
-CREATE TABLE IF NOT EXISTS `adm_area` (
+CREATE TABLE `adm_area` (
   `id` int NOT NULL AUTO_INCREMENT,
   `acreage` double DEFAULT NULL,
   `description` text,
@@ -9,7 +9,8 @@ CREATE TABLE IF NOT EXISTS `adm_area` (
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREME -- map.adm_bin definition
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
+ -- map.adm_bin definition
 CREATE TABLE IF NOT EXISTS `adm_bin` (
   `id` int NOT NULL AUTO_INCREMENT,
   `latitude` double DEFAULT NULL,
@@ -36,7 +37,7 @@ CREATE TABLE IF NOT EXISTS `adm_bin` (
   KEY `areaId` (`areaId`),
   CONSTRAINT `adm_bin_ibfk_1` FOREIGN KEY (`areaId`) REFERENCES `adm_area` (`id`) ON DELETE
   SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 49 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 49 DEFAULT CHARSET = utf8mb4;
 -- map.adm_user definition
 CREATE TABLE IF NOT EXISTS `adm_user` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -54,7 +55,7 @@ CREATE TABLE IF NOT EXISTS `adm_user` (
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 8 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 8 DEFAULT CHARSET = utf8mb4;
 -- map.adm_vehicle definition
 CREATE TABLE IF NOT EXISTS `adm_vehicle` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -76,7 +77,7 @@ CREATE TABLE IF NOT EXISTS `adm_vehicle` (
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB AUTO_INCREMENT = 6 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 DEFAULT CHARSET = utf8mb4;
 -- map.adm_task definition
 CREATE TABLE IF NOT EXISTS `adm_task` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -97,7 +98,7 @@ CREATE TABLE IF NOT EXISTS `adm_task` (
   SET NULL ON UPDATE CASCADE,
     CONSTRAINT `adm_task_ibfk_3` FOREIGN KEY (`areaId`) REFERENCES `adm_area` (`id`) ON DELETE
   SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 11 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 11 DEFAULT CHARSET = utf8mb4;
 -- map.log_bin_state definition
 CREATE TABLE IF NOT EXISTS `log_bin_state` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -113,7 +114,7 @@ CREATE TABLE IF NOT EXISTS `log_bin_state` (
   KEY `binId` (`binId`),
   CONSTRAINT `log_bin_state_ibfk_1` FOREIGN KEY (`binId`) REFERENCES `adm_bin` (`id`) ON DELETE
   SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 -- map.log_vehicle_work definition
 CREATE TABLE IF NOT EXISTS `log_vehicle_work` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -142,7 +143,7 @@ CREATE TABLE IF NOT EXISTS `log_vehicle_work` (
   SET NULL ON UPDATE CASCADE,
     CONSTRAINT `log_vehicle_work_ibfk_3` FOREIGN KEY (`binStateId`) REFERENCES `log_bin_state` (`id`) ON DELETE
   SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 -- map.sup_vehicle_position definition
 CREATE TABLE IF NOT EXISTS `sup_vehicle_position` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -154,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `sup_vehicle_position` (
   PRIMARY KEY (`id`),
   KEY `vehicleId` (`vehicleId`),
   CONSTRAINT `sup_vehicle_position_ibfk_1` FOREIGN KEY (`vehicleId`) REFERENCES `adm_vehicle` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 6 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 6 DEFAULT CHARSET = utf8mb4;
 -- map.sup_vehicle_state definition
 CREATE TABLE IF NOT EXISTS `sup_vehicle_state` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -177,7 +178,7 @@ CREATE TABLE IF NOT EXISTS `sup_vehicle_state` (
   SET NULL ON UPDATE CASCADE,
     CONSTRAINT `sup_vehicle_state_ibfk_2` FOREIGN KEY (`driverId`) REFERENCES `adm_user` (`id`) ON DELETE
   SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 -- map.sup_vehicle_trouble definition
 CREATE TABLE IF NOT EXISTS `sup_vehicle_trouble` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -201,7 +202,7 @@ CREATE TABLE IF NOT EXISTS `sup_vehicle_trouble` (
   SET NULL ON UPDATE CASCADE,
     CONSTRAINT `sup_vehicle_trouble_ibfk_2` FOREIGN KEY (`driverId`) REFERENCES `adm_user` (`id`) ON DELETE
   SET NULL ON UPDATE CASCADE
-) ENGINE = InnoDB AUTO_INCREMENT = 52 DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+) ENGINE = InnoDB AUTO_INCREMENT = 52 DEFAULT CHARSET = utf8mb4;
 -- map.valid_vehicle definition
 CREATE TABLE IF NOT EXISTS `valid_vehicle` (
   `id` int NOT NULL AUTO_INCREMENT,
@@ -213,7 +214,7 @@ CREATE TABLE IF NOT EXISTS `valid_vehicle` (
   `createdAt` datetime NOT NULL,
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4 COLLATE = utf8mb4_0900_ai_ci;
+) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
 REPLACE INTO map.adm_area (
   id,
   acreage,
