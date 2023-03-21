@@ -8,6 +8,11 @@ export const getVehiclesDataAsync = createAsyncThunk("vehicles/getAllVehicles", 
     const response = await axios.get("/vehicles", { headers: { token: token } });
     return response.data.data;
 })
+// get vehicles validation
+export const getVehiclesValidationDataAsync = createAsyncThunk("vehicles/validation", async () => {
+    const response = await axios.get("/vehicles/validation", { headers: { token: token } });
+    return response.data.data;
+})
 
 // add | post vehicle
 export const postVehicleDataAsync = createAsyncThunk("vehicles/postvehicle", async (vehicle) => {
@@ -30,9 +35,14 @@ export const deleteVehicleDataAsync = createAsyncThunk('vehicles/deleteVehicle',
     return response.data.data;
 })
 
-// get vehicle by id
+// get routes by vehicle id
 export const getRoutesByVehicleId = async (vehicleId) => {
     const response = await axios.get(`/vehicles/routes/${vehicleId}`, { headers: { token: token } });
+    return response.data.data;
+}
+// get vehicle validation
+export const getVehicleValidationData = async () => {
+    const response = await axios.get(`/vehicles/validation`, { headers: { token: token } });
     return response.data.data;
 }
 // get vehicle by id
