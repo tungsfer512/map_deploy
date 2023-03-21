@@ -34,6 +34,12 @@ export const getBinDataById = async (id) => {
     return response.data.data;
 }
 
+// get resest bin weight
+export const getResetBinWeightAsync = createAsyncThunk('bins/getResetBinWeight', async (binId) => {
+    const response = await axios.get(`/bins/reset/${binId}`, { headers: { token: token } });
+    return response.data.data;
+})
+
 // get bin state log limit 10
 export const getBinStateLog = async (binId) => {
     const response = await axios.get(`/bins/states/recent/${binId}`, { headers: { token: token } });

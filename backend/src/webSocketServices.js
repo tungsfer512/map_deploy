@@ -60,13 +60,13 @@ const webSocketServices = (wss) => {
             // let vehicles = await ADM_Vehicle.findAll({
             //     raw: true
             // })
-            // let vehicles = await ADM_Vehicle.findAll({
-            //     where: {
-            //         id: 1
-            //     },
-            //     raw: true
-            // })
-            let vehicles = []
+            let vehicles = await ADM_Vehicle.findAll({
+                where: {
+                    id: 1
+                },
+                raw: true
+            })
+            // let vehicles = []
             setInterval(async () => {
                 for (let vehicle of vehicles) {
                     let vehicleData = await axios.get(`${process.env.STATUS_API}/tracking/${vehicle.id}`);
@@ -103,13 +103,13 @@ const webSocketServices = (wss) => {
             // let bins = await ADM_Bin.findAll({
             //     raw: true
             // })
-            // let bins = await ADM_Bin.findAll({
-            //     where: {
-            //         id: [1, 2]
-            //     },
-            //     raw: true
-            // })
-            let bins = []
+            let bins = await ADM_Bin.findAll({
+                where: {
+                    id: [1, 2]
+                },
+                raw: true
+            })
+            // let bins = []
             setInterval(async () => {
                 for (let bin of bins) {
                     let binData = await axios.get(`${process.env.STATUS_API}/cell/${bin.id}`);
@@ -168,32 +168,6 @@ const webSocketServices = (wss) => {
         } catch (err) {
             console.log(err);
         }
-
-        ws.on('message', function (message) {
-            console.log("check message", message);
-            let data = JSON.parse(message);
-            let control = global.L.Routing.control({
-                waypoints: [
-                    L.latLng(data[0], data[1]),
-                    L.latLng(data[2], data[3])
-                ],
-                routeWhileDragging: false,
-                showAlternatives: false,
-                createMarker: function () { return null; },
-            })
-            control.getRouter().route(control.getWaypoints(), function (error, routes) {
-                if (error) {
-                    console.log(error);
-                } else {
-                    let route = routes[0];
-                    console.log('check route: ', route.coordinates);
-                    // for (const [key, value] of Object.entries(admins)) {
-                    //     value.send(JSON.stringify(route.coordinates));
-                    // }
-                }
-            });
-        })
-
         ws.on('close', function () {
             ws.close();
         });

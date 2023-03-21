@@ -24,6 +24,7 @@ import AlertContent from './AlertContent';
 import TabPanelVehicle from './TabPanelVehicle';
 import TabPanelItemBin from './TabPanelItemBin';
 import axios from 'axios';
+import { getResetBinWeightAsync } from '../../store/reducers/binSlice';
 
 let id = -1;
 
@@ -166,12 +167,17 @@ const Map1 = () => {
           angle: angle
         }
         const vehiclesUpdate = [...vehicles.filter(item => item.id.toString() !== data[0]), vehicleData];
-        // if (routes.length > 0) {
-        //   if (L.latLng(data[1], data[2]).distanceTo(L.latLng(routes[0].demand.latitude, routes[0].demand.longitude)) < 5) {
-        //     routes.shift()
-        //     setRoutes(routes)
-        //   }
-        // }
+        for (let bin of bins) {
+          if (bin.status === "full") {
+            let binCoor = L.latLng(bin.latitude, bin.longitude);
+            let vehicleCoor = L.latLng(data[1], data[2]);
+            let distance = binCoor.distanceTo(vehicleCoor);
+            if (distance < 5) {
+              dispatch(getResetBinWeightAsync(bin.id));
+              console.log("reset bin weight");
+            }
+          }
+        }
         setVehicles(vehiclesUpdate);
       }
     }
