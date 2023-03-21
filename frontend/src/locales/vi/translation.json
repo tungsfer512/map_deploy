@@ -52,6 +52,7 @@
         "detailed": "Chi tiết",
         "table": {
             "id": "ID",
+            "binId": "Mã thùng rác",
             "code": "Code",
             "plate": "Biển số xe",
             "model": "Kiểu xe",

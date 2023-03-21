@@ -52,6 +52,7 @@
         "detailed": "Detailed",
         "table": {
             "id": "ID",
+            "binId": "Bin ID",
             "code": "Code",
             "plate": "License Plate",
             "model": "Model",

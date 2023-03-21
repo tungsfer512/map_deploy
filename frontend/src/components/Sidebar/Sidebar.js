@@ -35,7 +35,7 @@ const getIndex = (path) => {
             return 3;
         case 'bins':
             return 4;
-        case 'alert':
+        case 'alerts':
             return 5;
         case 'managers':
             return 6;

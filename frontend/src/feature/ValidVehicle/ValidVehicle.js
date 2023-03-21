@@ -7,8 +7,9 @@ import AddIcon from '@mui/icons-material/Add';
 import { useLocation, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from 'react-redux';
 import {
-    getVehicleValidationData, 
-    getVehiclesValidationDataAsync
+    getVehicleValidationData,
+    getVehiclesValidationDataAsync,
+    vehicleValidation
 } from '../../store/reducers/vehicleSlice';
 
 import {
@@ -18,11 +19,14 @@ import {
 } from '../../components/Box/BoxContainer';
 import { DataTable } from '../../components/DataTable';
 import { useTranslation } from 'react-i18next';
+import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 
+const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
 
-const ValidVehicle = async () => {
+const ValidVehicle = () => {
     const { t } = useTranslation();
-    const validations = await getVehicleValidationData()
+    const validations = useSelector(vehicleValidation);
+    console.log(validations);
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -36,24 +40,11 @@ const ValidVehicle = async () => {
     const navigate = useNavigate();
 
     const columns = [
-        { field: 'id', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.id")}`, minWidth: 70, sortable: false, },
-        { field: 'code', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.code")}`, minWidth: 70, sortable: false, },
+        { field: 'id', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.id")}`, minWidth: 70, flex: 1, sortable: false, },
+        { field: 'binId', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.binId")}`, minWidth: 70, flex: 1, sortable: false, },
         { field: 'plate', headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.plate")}`, minWidth: 150, flex: 1, sortable: false, },
-        { field: 'model', headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.model")}`, minWidth: 200 },
-        { field: 'engineType', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.engineType")}`, minWidth: 150, flex: 1, sortable: false },
-        {
-            field: 'odometer', headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.odometer")}`, minWidth: 100, sortable: false,
-            renderCell: (params) => (
-                `${params.value} Km`
-            ),
-        },
-        {
-            field: 'tonnage', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.tonnage")}`, minWidth: 150, flex: 1, sortable: false,
-            renderCell: (params) => (
-                `${params.value} Kg`
-            ),
-        },
-        { field: 'status', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.status")}`, minWidth: 100, sortable: true },
+        { field: 'model', headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.model")}`, minWidth: 200, flex: 1, },
+        { field: 'status', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.status")}`, minWidth: 100, flex: 1, sortable: true },
     ];
 
     return (
@@ -75,7 +66,24 @@ const ValidVehicle = async () => {
                     </BoxStack>
 
 
-                    <DataTable rows={validations} columns={columns} />
+                    <DataTable rows={validations?.data} columns={columns} />
+
+                    <PieChart width={1000} height={400}>
+                        <Pie
+                            dataKey="value"
+                            isAnimationActive={true}
+                            data={validations?.graph}
+                            cx={200}
+                            cy={200}
+                            outerRadius={80}
+                            label
+                        >
+                            {validations?.graph?.map((entry, index) => (
+                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                            ))}
+                        </Pie>
+                        <Tooltip />
+                    </PieChart>
                 </BoxTitle>
             </BoxContainer>
         </Fragment >

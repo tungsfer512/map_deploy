@@ -67,6 +67,10 @@ const vehicleSlice = createSlice({ // createReducer + createActions
     name: 'vehicles',
     initialState: {
         allVehicles: [],
+        vehicleValidation: {
+            data: [],
+            graph: [],
+        },
     },
     reducers: {
         updateVehicles: (state, action) => {
@@ -83,6 +87,18 @@ const vehicleSlice = createSlice({ // createReducer + createActions
             state.allVehicles = action.payload
         },
         [getVehiclesDataAsync.rejected]: (state, action) => { // rejected = error
+            console.log("error")
+        },
+
+        // get vehicle validation
+        [getVehiclesValidationDataAsync.pending]: (state, action) => {
+            console.log("pending")
+        },
+        [getVehiclesValidationDataAsync.fulfilled]: (state, action) => {
+            console.log("success")
+            state.vehicleValidation = action.payload
+        },
+        [getVehiclesValidationDataAsync.rejected]: (state, action) => {
             console.log("error")
         },
 
@@ -130,6 +146,7 @@ const vehicleSlice = createSlice({ // createReducer + createActions
 const vehiclesReducer = vehicleSlice.reducer;
 
 export const vehiclesSelector = state => state.vehiclesReducer.allVehicles;
+export const vehicleValidation = state => state.vehiclesReducer.vehicleValidation;
 
 // export updateVehicles
 export const { updateVehicles } = vehicleSlice.actions;
