@@ -15,6 +15,7 @@ import { useTranslation } from 'react-i18next';
 
 import { useDispatch } from 'react-redux';
 import { addNoti, increment } from '../../store/reducers/notiSlice';
+import { getRoutesByVehicleId } from '../../store/reducers/vehicleSlice';
 import ws from './WebSocket';
 import RotatedMarker from './RotatedMarker';
 import PopupVehicleMarker from './PopupVehicleMarker';
@@ -36,6 +37,7 @@ const Map1 = () => {
   const [dataAlert, setDataAlert] = useState([]);
   const [vehicles, setVehicles] = useState([]);
   const [bins, setBins] = useState([]);
+  const [routes, setRoutes] = useState([]);
 
   useEffect(() => {
     getBinsData().then((data) => {
@@ -109,9 +111,16 @@ const Map1 = () => {
           ...vehicle,
           latitude: data[1],
           longitude: data[2],
+          camera: data[3],
           angle: angle
         }
         const vehiclesUpdate = [...vehicles.filter(item => item.id.toString() !== data[0]), vehicleData];
+        // if (routes.length > 0) {
+        //   if (L.latLng(data[1], data[2]).distanceTo(L.latLng(routes[0].demand.latitude, routes[0].demand.longitude)) < 5) {
+        //     routes.shift()
+        //     setRoutes(routes)
+        //   }
+        // }
         setVehicles(vehiclesUpdate);
       }
     }
@@ -132,16 +141,16 @@ const Map1 = () => {
         }
       }
     }
-    if (dataAlert[0] === "alert") {
-      let binCoor = L.latLng(dataAlert[1]['latitude'], dataAlert[1]['longitude']);
-      for (let vehicle of vehicles) {
-        let vehicleCoor = L.latLng(vehicle['latitude'], vehicle['longitude']);
-        if (binCoor.distanceTo(vehicleCoor) < 5) {
-          // axios.get('path/to/reset/bin/weight')
-          break;
-        }
-      }
-    }
+    // if (dataAlert[0] === "alert") {
+    //   let binCoor = L.latLng(dataAlert[1]['latitude'], dataAlert[1]['longitude']);
+    //   for (let vehicle of vehicles) {
+    //     let vehicleCoor = L.latLng(vehicle['latitude'], vehicle['longitude']);
+    //     if (binCoor.distanceTo(vehicleCoor) < 5) {
+    //       // axios.get('path/to/reset/bin/weight')
+    //       break;
+    //     }
+    //   }
+    // }
   }, [dataAlert]);
 
   const [openVehicle, setOpenVehicle] = useState(false);
@@ -152,7 +161,16 @@ const Map1 = () => {
     setOpenVehicle(true);
     setItem(item);
     if (openBin) setOpenBin(false);
+
+
   };
+
+  const handleClickOpen = async (e, id) => {
+    let routeData = await getRoutesByVehicleId(id);
+    console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>");
+    setRoutes(routeData)
+    // goi api lay routes --> set state cho mang routes --> lay routing machine cho 2 diem 1 --> neu di den diem cuoi thi set lai state mang routes = routes[1:] --> xoa tat ca layer routing --> lay routing moi
+  }
 
   const handleCloseVehicle = (e) => {
     setOpenVehicle(false);
@@ -202,9 +220,9 @@ const Map1 = () => {
 
             {!!vehicles && vehicles.map((vehicle) => (
               <RotatedMarker key={vehicle.id} position={[vehicle.latitude, vehicle.longitude]} icon={iconXe} rotationOrigin="center" rotationAngle={vehicle.angle}
-              // eventHandlers={{
-              //   click: (e) => { handleClickOpen(e) },
-              // }}
+                eventHandlers={{
+                  click: (e) => handleClickOpen(e, vehicle.id),
+                }}
               >
                 <PopupVehicleMarker vehicle={vehicle} handleClickOpen={handleClickOpenVehicle} />
               </RotatedMarker>
@@ -216,9 +234,9 @@ const Map1 = () => {
               </RotatedMarker>
             ))}
 
+            <Routing from={[40.848447, -73.856077]} to={[102.45, 105.456]}></Routing>
           </MapContainer>
         </Box>
-
         <TabPanelItemBin open={openBin} handleClose={handleCloseBin} item={item} ></TabPanelItemBin>
         <TabPanelVehicle open={openVehicle} handleClose={handleCloseVehicle} item={item} ></TabPanelVehicle>
       </Box>

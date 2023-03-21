@@ -1,23 +1,6 @@
 version: "3.5"
 
 services:
-  db:
-    image: mysql:8.0
-    environment:
-      MYSQL_HOST: mysql
-      MYSQL_PASSWORD: password
-      MYSQL_DATABASE: map
-      MYSQL_ROOT_PASSWORD: password
-    command: --default-authentication-plugin=mysql_native_password && --init-file /docker-entrypoint-initdb.d/map.sql
-    volumes:
-      - ./backend/src/config/map.sql:/docker-entrypoint-initdb.d/map.sql
-      - dbdata:/var/lib/mysql
-    ports:
-      - "3308:3306"
-    restart: unless-stopped
-    networks:
-      map: null
-
   backend:
     build:
       context: ./backend
@@ -27,8 +10,6 @@ services:
     command: bash -c "npm start"
     ports:
       - "7000:7000"
-    depends_on:
-      - db
     restart: unless-stopped
     networks:
       map: null
@@ -49,7 +30,6 @@ services:
       map: null
 
 volumes:
-  dbdata: null
   build_folder: null
 
 networks:
