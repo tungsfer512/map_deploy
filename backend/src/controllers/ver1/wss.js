@@ -10,7 +10,7 @@ const {
 const addEvent_Bin_state = async (data) => {
     try {
         await ADM_Bin.update(
-            { status: data.status },
+            { status: data.status, weight: data.weight },
             { where: { code: data.code }, raw: true }
         );
         const bin = await ADM_Bin.findOne({
@@ -42,6 +42,16 @@ const updatePosition = async (data) => {
             },
             raw: true
         })
+        await ADM_Vehicle.update(
+            {
+                camera: data.camera
+            },
+            {
+                where: {
+                    code: data.code
+                },
+                raw: true
+            })
         const log = await SUP_Vehicle_Position.update(
             {
                 latitude: data.latitude,

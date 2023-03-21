@@ -31,6 +31,11 @@ export const deleteVehicleDataAsync = createAsyncThunk('vehicles/deleteVehicle',
 })
 
 // get vehicle by id
+export const getRoutesByVehicleId = async (vehicleId) => {
+    const response = await axios.get(`/vehicles/routes/${vehicleId}`, { headers: { token: token } });
+    return response.data.data;
+}
+// get vehicle by id
 export const getVehicleDataById = async (vehicleId) => {
     const response = await axios.get(`/vehicles/${vehicleId}`, { headers: { token: token } });
     return response.data.data;
@@ -97,7 +102,6 @@ const vehicleSlice = createSlice({ // createReducer + createActions
         [putVehicleDataAsync.rejected]: (state, action) => {
             console.log('put error')
         },
-
         // delete vehicle
         [deleteVehicleDataAsync.pending]: (state, action) => {
             console.log("delete pending");

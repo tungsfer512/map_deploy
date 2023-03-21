@@ -1,7 +1,7 @@
-CREATE DATABASE IF NOT EXISTS `map` DEFAULT CHARACTER SET utf8mb4;
-USE `map`;
--- map.adm_area definition
-CREATE TABLE `adm_area` (
+CREATE DATABASE IF NOT EXISTS `map_ws_dev` DEFAULT CHARACTER SET utf8mb4;
+USE `map_ws_dev`;
+-- map_ws_dev.adm_area definition
+CREATE TABLE IF NOT EXISTS `adm_area` (
   `id` int NOT NULL AUTO_INCREMENT,
   `acreage` double DEFAULT NULL,
   `description` text,
@@ -10,7 +10,7 @@ CREATE TABLE `adm_area` (
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8mb4;
- -- map.adm_bin definition
+ -- map_ws_dev.adm_bin definition
 CREATE TABLE IF NOT EXISTS `adm_bin` (
   `id` int NOT NULL AUTO_INCREMENT,
   `latitude` double DEFAULT NULL,
@@ -38,7 +38,7 @@ CREATE TABLE IF NOT EXISTS `adm_bin` (
   CONSTRAINT `adm_bin_ibfk_1` FOREIGN KEY (`areaId`) REFERENCES `adm_area` (`id`) ON DELETE
   SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 49 DEFAULT CHARSET = utf8mb4;
--- map.adm_user definition
+-- map_ws_dev.adm_user definition
 CREATE TABLE IF NOT EXISTS `adm_user` (
   `id` int NOT NULL AUTO_INCREMENT,
   `phone` text,
@@ -56,7 +56,7 @@ CREATE TABLE IF NOT EXISTS `adm_user` (
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 8 DEFAULT CHARSET = utf8mb4;
--- map.adm_vehicle definition
+-- map_ws_dev.adm_vehicle definition
 CREATE TABLE IF NOT EXISTS `adm_vehicle` (
   `id` int NOT NULL AUTO_INCREMENT,
   `code` text,
@@ -78,7 +78,7 @@ CREATE TABLE IF NOT EXISTS `adm_vehicle` (
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB AUTO_INCREMENT = 6 DEFAULT CHARSET = utf8mb4;
--- map.adm_task definition
+-- map_ws_dev.adm_task definition
 CREATE TABLE IF NOT EXISTS `adm_task` (
   `id` int NOT NULL AUTO_INCREMENT,
   `driverId` int DEFAULT NULL,
@@ -99,7 +99,7 @@ CREATE TABLE IF NOT EXISTS `adm_task` (
     CONSTRAINT `adm_task_ibfk_3` FOREIGN KEY (`areaId`) REFERENCES `adm_area` (`id`) ON DELETE
   SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 11 DEFAULT CHARSET = utf8mb4;
--- map.log_bin_state definition
+-- map_ws_dev.log_bin_state definition
 CREATE TABLE IF NOT EXISTS `log_bin_state` (
   `id` int NOT NULL AUTO_INCREMENT,
   `latitude` double DEFAULT NULL,
@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS `log_bin_state` (
   CONSTRAINT `log_bin_state_ibfk_1` FOREIGN KEY (`binId`) REFERENCES `adm_bin` (`id`) ON DELETE
   SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
--- map.log_vehicle_work definition
+-- map_ws_dev.log_vehicle_work definition
 CREATE TABLE IF NOT EXISTS `log_vehicle_work` (
   `id` int NOT NULL AUTO_INCREMENT,
   `latitude` double DEFAULT NULL,
@@ -144,7 +144,7 @@ CREATE TABLE IF NOT EXISTS `log_vehicle_work` (
     CONSTRAINT `log_vehicle_work_ibfk_3` FOREIGN KEY (`binStateId`) REFERENCES `log_bin_state` (`id`) ON DELETE
   SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
--- map.sup_vehicle_position definition
+-- map_ws_dev.sup_vehicle_position definition
 CREATE TABLE IF NOT EXISTS `sup_vehicle_position` (
   `id` int NOT NULL AUTO_INCREMENT,
   `latitude` double DEFAULT NULL,
@@ -156,7 +156,7 @@ CREATE TABLE IF NOT EXISTS `sup_vehicle_position` (
   KEY `vehicleId` (`vehicleId`),
   CONSTRAINT `sup_vehicle_position_ibfk_1` FOREIGN KEY (`vehicleId`) REFERENCES `adm_vehicle` (`id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 6 DEFAULT CHARSET = utf8mb4;
--- map.sup_vehicle_state definition
+-- map_ws_dev.sup_vehicle_state definition
 CREATE TABLE IF NOT EXISTS `sup_vehicle_state` (
   `id` int NOT NULL AUTO_INCREMENT,
   `latitude` double DEFAULT NULL,
@@ -179,7 +179,7 @@ CREATE TABLE IF NOT EXISTS `sup_vehicle_state` (
     CONSTRAINT `sup_vehicle_state_ibfk_2` FOREIGN KEY (`driverId`) REFERENCES `adm_user` (`id`) ON DELETE
   SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
--- map.sup_vehicle_trouble definition
+-- map_ws_dev.sup_vehicle_trouble definition
 CREATE TABLE IF NOT EXISTS `sup_vehicle_trouble` (
   `id` int NOT NULL AUTO_INCREMENT,
   `latitude` double DEFAULT NULL,
@@ -203,7 +203,7 @@ CREATE TABLE IF NOT EXISTS `sup_vehicle_trouble` (
     CONSTRAINT `sup_vehicle_trouble_ibfk_2` FOREIGN KEY (`driverId`) REFERENCES `adm_user` (`id`) ON DELETE
   SET NULL ON UPDATE CASCADE
 ) ENGINE = InnoDB AUTO_INCREMENT = 52 DEFAULT CHARSET = utf8mb4;
--- map.valid_vehicle definition
+-- map_ws_dev.valid_vehicle definition
 CREATE TABLE IF NOT EXISTS `valid_vehicle` (
   `id` int NOT NULL AUTO_INCREMENT,
   `latitude` double DEFAULT NULL,
@@ -215,7 +215,7 @@ CREATE TABLE IF NOT EXISTS `valid_vehicle` (
   `updatedAt` datetime NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE = InnoDB DEFAULT CHARSET = utf8mb4;
-REPLACE INTO map.adm_area (
+REPLACE INTO map_ws_dev.adm_area (
   id,
   acreage,
   description,
@@ -263,7 +263,7 @@ VALUES (
     '2022-12-17 14:36:18',
     '2022-12-17 14:36:18'
   );
-REPLACE INTO map.adm_bin (
+REPLACE INTO map_ws_dev.adm_bin (
   id,
   latitude,
   longitude,
@@ -1390,7 +1390,7 @@ VALUES (
     '2022-12-17 16:44:10',
     '2022-12-17 16:44:10'
   );
-REPLACE INTO map.adm_user (
+REPLACE INTO map_ws_dev.adm_user (
   id,
   phone,
   password,
@@ -1518,7 +1518,7 @@ VALUES (
     '2022-12-17 13:58:55',
     '2022-12-17 13:58:55'
   );
-REPLACE INTO map.adm_vehicle (
+REPLACE INTO map_ws_dev.adm_vehicle (
   id,
   code,
   engineHours,
@@ -1638,7 +1638,7 @@ VALUES (
     '2022-12-17 15:05:47',
     '2022-12-17 15:05:47'
   );
-REPLACE INTO map.adm_task (
+REPLACE INTO map_ws_dev.adm_task (
   id,
   driverId,
   vehicleId,
@@ -1748,7 +1748,7 @@ VALUES (
     '2022-12-17 15:23:51',
     '2022-12-17 15:23:51'
   );
-REPLACE INTO map.sup_vehicle_position (
+REPLACE INTO map_ws_dev.sup_vehicle_position (
   id,
   latitude,
   longitude,
@@ -1796,7 +1796,7 @@ VALUES (
     '2022-12-17 15:05:47',
     '2022-12-17 15:05:47'
   );
-REPLACE INTO map.sup_vehicle_trouble (
+REPLACE INTO map_ws_dev.sup_vehicle_trouble (
   id,
   latitude,
   longitude,
@@ -1972,7 +1972,7 @@ VALUES (
     '2022-12-17 20:14:03',
     '2022-12-17 20:14:03'
   );
-REPLACE INTO map.sup_vehicle_trouble (
+REPLACE INTO map_ws_dev.sup_vehicle_trouble (
   id,
   latitude,
   longitude,
@@ -2148,7 +2148,7 @@ VALUES (
     '2022-12-17 20:26:28',
     '2022-12-17 20:26:28'
   );
-REPLACE INTO map.sup_vehicle_trouble (
+REPLACE INTO map_ws_dev.sup_vehicle_trouble (
   id,
   latitude,
   longitude,
@@ -2324,7 +2324,7 @@ VALUES (
     '2022-12-17 20:30:53',
     '2022-12-17 20:30:53'
   );
-REPLACE INTO map.sup_vehicle_trouble (
+REPLACE INTO map_ws_dev.sup_vehicle_trouble (
   id,
   latitude,
   longitude,
@@ -2500,7 +2500,7 @@ VALUES (
     '2022-12-17 20:44:28',
     '2022-12-17 20:44:28'
   );
-REPLACE INTO map.sup_vehicle_trouble (
+REPLACE INTO map_ws_dev.sup_vehicle_trouble (
   id,
   latitude,
   longitude,
@@ -2676,7 +2676,7 @@ VALUES (
     '2022-12-17 20:44:29',
     '2022-12-17 20:44:29'
   );
-REPLACE INTO map.sup_vehicle_trouble (
+REPLACE INTO map_ws_dev.sup_vehicle_trouble (
   id,
   latitude,
   longitude,
