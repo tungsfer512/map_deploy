@@ -14,25 +14,26 @@ export default function Routing({ dataWaypoints, showWaypoints }) {
 
   const waypoints = dataWaypoints.map((item) => L.latLng([item[0], item[1]]));
 
-  var allLeafletElements = document.querySelector(".leaflet-container .leaflet-overlay-pane svg");
+  var allLeafletElements = document.querySelector(".leaflet-container .leaflet-overlay-pane svg path");
   if (allLeafletElements) {
     console.log("remove waypoints");
     console.log(allLeafletElements);
     allLeafletElements.remove();
   }
-  else {
-    console.log("add waypoints");
-    const leafletElement = L.Routing.control({
-      waypoints: waypoints,
-      routeWhileDragging: true,
-      show: false,
-      createMarker: () => null,
-      lineOptions: {
-        styles: [{ color: "red", opacity: 1, weight: 5 }]
-      }
-    });
-    leafletElement.addTo(map);
-  }
+
+  // else {
+  console.log("add waypoints");
+  const leafletElement = L.Routing.control({
+    waypoints: waypoints,
+    routeWhileDragging: true,
+    show: false,
+    createMarker: () => null,
+    lineOptions: {
+      styles: [{ color: "red", opacity: 1, weight: 5 }]
+    }
+  });
+  leafletElement.addTo(map);
+  // }
 
   // useEffect(() => {
   //   if (showWaypoints) {

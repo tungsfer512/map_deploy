@@ -167,13 +167,18 @@ const Map1 = () => {
   };
 
   const handleClickOpen = async (e, vehicle) => {
-    if (showWaypoints) {
-      setShowWaypoints(false);
-      setRoutes([]);
+    // if (showWaypoints) {
+    var allLeafletElements = document.querySelector(".leaflet-container .leaflet-overlay-pane svg path");
+    if (allLeafletElements) {
+      console.log("remove waypoints");
+      console.log(allLeafletElements);
+      allLeafletElements.remove();
     }
-    else {
-      setShowWaypoints(true);
-    }
+    //   setShowWaypoints(false);
+    // }
+    // else {
+    //   setShowWaypoints(true);
+    // }
     let routeData = await getRoutesByVehicleId(vehicle.id);
     console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", routeData);
 
@@ -216,6 +221,17 @@ const Map1 = () => {
   const iconBinRed = new L.Icon({ iconUrl: iconBinRedUrl, iconSize: [16, 24] })
   const iconBinYellow = new L.Icon({ iconUrl: iconBinYellowUrl, iconSize: [16, 24] })
 
+  // const map = useMap();
+  // const leafletElement = L.Routing.control({
+  //   waypoints: [],
+  //   routeWhileDragging: true,
+  //   show: false,
+  //   createMarker: () => null,
+  //   lineOptions: {
+  //     styles: [{ color: "red", opacity: 1, weight: 5 }]
+  //   }
+  // }).addTo(map);
+
   return (
     <Fragment>
       <Box sx={{ position: 'relative', with: '100%' }}>
@@ -253,7 +269,7 @@ const Map1 = () => {
               </RotatedMarker>
             ))}
 
-            <Routing dataWaypoints={routes} showWaypoints={showWaypoints}></Routing>
+            <Routing dataWaypoints={routes} ></Routing>
           </MapContainer>
         </Box>
         <TabPanelItemBin open={openBin} handleClose={handleCloseBin} item={item} ></TabPanelItemBin>
