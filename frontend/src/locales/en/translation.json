@@ -39,6 +39,10 @@
         "chartTitle4": "Garbage volume and number of dumps in each area",
         "chartTitle5": "Recent events"
     },
+    "alerts": {
+        "home": "Home",
+        "pageName": "Alerts"
+    },
     "vehicles": {
         "home": "Home",
         "pageName": "Vehicles",

@@ -21,7 +21,7 @@ import { DataTable } from '../../components/DataTable';
 import { useTranslation } from 'react-i18next';
 import { Cell, Pie, PieChart, Tooltip } from 'recharts';
 
-const COLORS = ["#0088FE", "#00C49F", "#FFBB28", "#FF8042"];
+const COLORS = ["#00C49F", "#FF8042"];
 
 const ValidVehicle = () => {
     const { t } = useTranslation();
@@ -53,37 +53,44 @@ const ValidVehicle = () => {
                 <BoxTitle>
                     <BoxStack>
                         <Typography variant="h5" component="h1" fontWeight='bold' gutterBottom>
-                            {t("vehicles.pageName")}
+                            {t("alerts.pageName")}
                             <Breadcrumbs maxItems={2} aria-label="breadcrumb" sx={{ mt: 1 }}>
                                 <Link underline="hover" color="inherit" href="">
-                                    {t("vehicles.home")}
+                                    {t("alerts.home")}
                                 </Link>
                                 <Typography color="text.primary">
-                                    {t("vehicles.pageName")}
+                                    {t("alerts.pageName")}
                                 </Typography>
                             </Breadcrumbs>
                         </Typography>
                     </BoxStack>
 
+                    <Box sx={{
+                        display: 'flex',
+                        flexDirection: 'row',
+                        flexWrap: 'wrap',
+                        gap: 1,
+                    }}>
+                        <PieChart width={400} height={400}>
+                            <Pie
+                                dataKey="value"
+                                isAnimationActive={true}
+                                data={validations?.graph}
+                                cx={200}
+                                cy={200}
+                                outerRadius={120}
+                                label
+                            >
+                                {validations?.graph?.map((entry, index) => (
+                                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                                ))}
+                            </Pie>
+                            <Tooltip />
+                        </PieChart>
 
-                    <DataTable rows={validations?.data} columns={columns} />
+                        <DataTable rows={validations?.data} columns={columns} />
+                    </Box>
 
-                    <PieChart width={1000} height={400}>
-                        <Pie
-                            dataKey="value"
-                            isAnimationActive={true}
-                            data={validations?.graph}
-                            cx={200}
-                            cy={200}
-                            outerRadius={80}
-                            label
-                        >
-                            {validations?.graph?.map((entry, index) => (
-                                <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
-                            ))}
-                        </Pie>
-                        <Tooltip />
-                    </PieChart>
                 </BoxTitle>
             </BoxContainer>
         </Fragment >
