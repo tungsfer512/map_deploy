@@ -170,6 +170,9 @@ const ADM_Bin = sequelize.define(
         width: {
             type: DataTypes.DOUBLE
         },
+        weight: {
+            type: DataTypes.DOUBLE
+        },
         maxWeight: {
             type: DataTypes.DOUBLE
         },
@@ -549,6 +552,15 @@ const VALID_Vehicle = sequelize.define(
         },
         status: {
             type: DataTypes.TEXT
+        },
+        binId: {
+            type: DataTypes.INTEGER,
+            references: {
+                model: 'adm_bin',
+                key: 'id'
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL'
         }
     },
     {

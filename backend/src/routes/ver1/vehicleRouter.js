@@ -31,6 +31,11 @@ vehicleRouter.get(
     VehicleController.getVehicleValidation
 )
 vehicleRouter.get(
+    '/routes/:vehicleId',
+    MiddlewareController.verify_Token,
+    VehicleController.getRoutesByVehicleId
+);
+vehicleRouter.get(
     '/:vehicleId',
     MiddlewareController.verify_Token,
     VehicleController.getVehicleById

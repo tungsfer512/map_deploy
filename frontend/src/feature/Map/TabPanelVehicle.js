@@ -30,7 +30,6 @@ import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
 import { assetUrl } from '../../ultils/axiosApi';
-import Hls from 'hls.js'
 import ReactPlayer from 'react-player'
 
 function TabPanel(props) {
@@ -64,29 +63,6 @@ function a11yProps(index) {
         id: `simple-tab-${index}`,
         'aria-controls': `simple-tabpanel-${index}`,
     };
-}
-
-let handleViewCamera = (id) => {
-    setTimeout(() => {
-        if (Hls.isSupported()) {
-            var video = document.getElementById(`video${id}`);
-            console.log(`check video${id}`, video);
-            var hls = new Hls();
-            hls.on(Hls.Events.MEDIA_ATTACHED, function () {
-                console.log('video tag and hls.js are now bound together !');
-            });
-            hls.on(Hls.Events.MANIFEST_PARSED, function (event, data) {
-                console.log(
-                    'manifest loaded, found ' + data.levels.length + ' quality level'
-                );
-            });
-            hls.loadSource('https://devstreaming-cdn.apple.com/videos/streaming/examples/img_bipbop_adv_example_fmp4/master.m3u8');
-            // bind them together
-            hls.attachMedia(video);
-            video.play();
-        }
-
-    }, 2000)
 }
 
 
@@ -390,7 +366,7 @@ export default function TabPanelVehicle({ open, handleClose, item }) {
                         <video id='video1' height={"360px"} width={"640px"} muted controls></video>
                     </TabPanel> */}
                     <TabPanel value={value} index={4}>
-                        <ReactPlayer
+                        {/* <ReactPlayer
                             url={item.camera}
                             playing={true}
                             volume={1}
@@ -405,7 +381,8 @@ export default function TabPanelVehicle({ open, handleClose, item }) {
                                     },
                                 },
                             }}
-                        />
+                        /> */}
+                        <img src={item.camera} height={"90vh"} width={"100%"}></img>
                     </TabPanel>
                 </Box>
             </Box>

@@ -15,8 +15,8 @@
         "vehicle": "Vehicle",
         "driver": "Driver",
         "bin": "Bin",
-        "manager": "Manager"
-
+        "manager": "Manager",
+        "alerts": "Alerts"
     },
     "search": "Search",
     "map" : {
@@ -39,6 +39,10 @@
         "chartTitle4": "Garbage volume and number of dumps in each area",
         "chartTitle5": "Recent events"
     },
+    "alerts": {
+        "home": "Home",
+        "pageName": "Alerts"
+    },
     "vehicles": {
         "home": "Home",
         "pageName": "Vehicles",
@@ -52,6 +56,7 @@
         "detailed": "Detailed",
         "table": {
             "id": "ID",
+            "binId": "Bin ID",
             "code": "Code",
             "plate": "License Plate",
             "model": "Model",

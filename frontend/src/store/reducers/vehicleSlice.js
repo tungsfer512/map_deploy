@@ -8,6 +8,11 @@ export const getVehiclesDataAsync = createAsyncThunk("vehicles/getAllVehicles", 
     const response = await axios.get("/vehicles", { headers: { token: token } });
     return response.data.data;
 })
+// get vehicles validation
+export const getVehiclesValidationDataAsync = createAsyncThunk("vehicles/validation", async () => {
+    const response = await axios.get("/vehicles/validation", { headers: { token: token } });
+    return response.data.data;
+})
 
 // add | post vehicle
 export const postVehicleDataAsync = createAsyncThunk("vehicles/postvehicle", async (vehicle) => {
@@ -30,6 +35,16 @@ export const deleteVehicleDataAsync = createAsyncThunk('vehicles/deleteVehicle',
     return response.data.data;
 })
 
+// get routes by vehicle id
+export const getRoutesByVehicleId = async (vehicleId) => {
+    const response = await axios.get(`/vehicles/routes/${vehicleId}`, { headers: { token: token } });
+    return response.data.data;
+}
+// get vehicle validation
+export const getVehicleValidationData = async () => {
+    const response = await axios.get(`/vehicles/validation`, { headers: { token: token } });
+    return response.data.data;
+}
 // get vehicle by id
 export const getVehicleDataById = async (vehicleId) => {
     const response = await axios.get(`/vehicles/${vehicleId}`, { headers: { token: token } });
@@ -52,6 +67,10 @@ const vehicleSlice = createSlice({ // createReducer + createActions
     name: 'vehicles',
     initialState: {
         allVehicles: [],
+        vehicleValidation: {
+            data: [],
+            graph: [],
+        },
     },
     reducers: {
         updateVehicles: (state, action) => {
@@ -68,6 +87,18 @@ const vehicleSlice = createSlice({ // createReducer + createActions
             state.allVehicles = action.payload
         },
         [getVehiclesDataAsync.rejected]: (state, action) => { // rejected = error
+            console.log("error")
+        },
+
+        // get vehicle validation
+        [getVehiclesValidationDataAsync.pending]: (state, action) => {
+            console.log("pending")
+        },
+        [getVehiclesValidationDataAsync.fulfilled]: (state, action) => {
+            console.log("success")
+            state.vehicleValidation = action.payload
+        },
+        [getVehiclesValidationDataAsync.rejected]: (state, action) => {
             console.log("error")
         },
 
@@ -97,7 +128,6 @@ const vehicleSlice = createSlice({ // createReducer + createActions
         [putVehicleDataAsync.rejected]: (state, action) => {
             console.log('put error')
         },
-
         // delete vehicle
         [deleteVehicleDataAsync.pending]: (state, action) => {
             console.log("delete pending");
@@ -116,6 +146,7 @@ const vehicleSlice = createSlice({ // createReducer + createActions
 const vehiclesReducer = vehicleSlice.reducer;
 
 export const vehiclesSelector = state => state.vehiclesReducer.allVehicles;
+export const vehicleValidation = state => state.vehiclesReducer.vehicleValidation;
 
 // export updateVehicles
 export const { updateVehicles } = vehicleSlice.actions;

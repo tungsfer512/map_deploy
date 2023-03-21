@@ -15,7 +15,8 @@
         "vehicle": "Xe chở",
         "driver": "Tài xế",
         "bin": "Thùng rác",
-        "manager": "Quản lý"
+        "manager": "Quản lý",
+        "alerts": "Cảnh báo"
     },
     "search": "Tìm kiếm",
     "map": {
@@ -38,6 +39,10 @@
         "chartTitle4": "Khối lượng rác và số lần đổ rác trong từng khu vực",
         "chartTitle5": "Sự kiện gần đây"
     },
+    "alerts": {
+        "home": "Trang chủ",
+        "pageName": "Cảnh báo"
+    },
     "vehicles": {
         "home": "Trang chủ",
         "pageName": "Xe chở",
@@ -51,6 +56,7 @@
         "detailed": "Chi tiết",
         "table": {
             "id": "ID",
+            "binId": "Mã thùng rác",
             "code": "Code",
             "plate": "Biển số xe",
             "model": "Kiểu xe",
