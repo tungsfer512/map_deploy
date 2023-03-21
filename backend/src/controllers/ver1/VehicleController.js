@@ -322,7 +322,8 @@ const getVehicleValidation = async (req, res) => {
         let invalids = vehicles.filter(vehicle => vehicle.status === 'invalid')
         let resData = {
             'valids': valids,
-            'invalids': invalids
+            'invalids': invalids, 
+            'data': vehicles
         }
         return res.status(200).json({
             resCode: 200,
