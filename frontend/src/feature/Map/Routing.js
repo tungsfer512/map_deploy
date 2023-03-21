@@ -8,7 +8,7 @@ L.Marker.prototype.options.icon = L.icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png"
 });
 
-export default function Routing({ dataWaypoints, showWaypoints }) {
+export default function Routing({ dataWaypoints, showWaypoints, id }) {
   console.log("dataWaypoints", dataWaypoints);
   const map = useMap();
 
@@ -19,6 +19,9 @@ export default function Routing({ dataWaypoints, showWaypoints }) {
     console.log("remove waypoints");
     console.log(allLeafletElements);
     allLeafletElements.remove();
+  }
+  if (id == -1) {
+    return;
   }
 
   // else {

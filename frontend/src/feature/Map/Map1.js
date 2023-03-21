@@ -26,6 +26,7 @@ import TabPanelItemBin from './TabPanelItemBin';
 import axios from 'axios';
 
 // WebSocket init
+let id = -1;
 
 const Map1 = () => {
   const { t } = useTranslation();
@@ -38,7 +39,7 @@ const Map1 = () => {
   const [vehicles, setVehicles] = useState([]);
   const [bins, setBins] = useState([]);
   const [routes, setRoutes] = useState([]);
-  const [showWaypoints, setShowWaypoints] = useState(false);
+  // const [zoom, setZoom] = useState(-1);
 
   useEffect(() => {
     getBinsData().then((data) => {
@@ -174,25 +175,37 @@ const Map1 = () => {
       console.log(allLeafletElements);
       allLeafletElements.remove();
     }
-    //   setShowWaypoints(false);
-    // }
-    // else {
-    //   setShowWaypoints(true);
-    // }
-    let routeData = await getRoutesByVehicleId(vehicle.id);
-    console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", routeData);
+    if (id !== vehicle.id) {
+      id = vehicle.id;
+      //   setShowWaypoints(false);
+      // }
+      // else {
+      //   setShowWaypoints(true);
+      // }
+      let routeData = await getRoutesByVehicleId(vehicle.id);
+      console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", routeData);
 
-    const route = routeData.map((item, index) => {
-      // console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", item);
-      return [
-        item?.demand?.latitude,
-        item?.demand?.longitude
-      ]
-    })
+      const route = routeData.map((item, index) => {
+        // console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", item);
+        return [
+          item?.demand?.latitude,
+          item?.demand?.longitude
+        ]
+      })
 
-    route.push([vehicle.latitude, vehicle.longitude])
-    console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", route);
-    setRoutes(route)
+      route.push([vehicle.latitude, vehicle.longitude])
+      console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", route);
+      setRoutes(route);
+    }
+    else {
+      var allLeafletElements = document.querySelector(".leaflet-container .leaflet-overlay-pane svg path");
+      if (allLeafletElements) {
+        console.log("remove waypoints");
+        console.log(allLeafletElements);
+        allLeafletElements.remove();
+      }
+      id = -1
+    }
     // goi api lay routes --> set state cho mang routes --> lay routing machine cho 2 diem 1 --> neu di den diem cuoi thi set lai state mang routes = routes[1:] --> xoa tat ca layer routing --> lay routing moi
   }
 
@@ -269,7 +282,7 @@ const Map1 = () => {
               </RotatedMarker>
             ))}
 
-            <Routing dataWaypoints={routes} ></Routing>
+            <Routing dataWaypoints={routes} id={id}></Routing>
           </MapContainer>
         </Box>
         <TabPanelItemBin open={openBin} handleClose={handleCloseBin} item={item} ></TabPanelItemBin>
