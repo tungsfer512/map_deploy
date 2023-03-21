@@ -26,6 +26,10 @@ import {
   ManagerItemNew
 } from './feature/Manager';
 
+import {
+  ValidVehicle
+} from './feature/ValidVehicle';
+
 import Login from './feature/Auth/Login';
 import { useSelector } from 'react-redux';
 import { authSelector } from './store/reducers/authSlice';
@@ -91,16 +95,17 @@ const App = () => {
           {(isAdmin() || isManager()) && <Route path="drivers/add" element={<DriverItemNew state={"new"} />} />}
           {(isAdmin() || isManager()) && <Route path="drivers/edit/:driverId" element={<DriverItemNew state={"edit"} />} />}
 
-          {(isAdmin()) && <Route path = "managers" element={<Managers />} />}
-          {(isAdmin()) && <Route path = "managers/:managerId" element={<ManagerItem />} />}
-          {(isAdmin()) && <Route path = "managers/add" element={<ManagerItemNew state={"new"} />} />}
-          {(isAdmin()) && <Route path = "managers/edit/:managerId" element={<ManagerItemNew state={"edit"} />} />}
+          {(isAdmin()) && <Route path="managers" element={<Managers />} />}
+          {(isAdmin()) && <Route path="managers/:managerId" element={<ManagerItem />} />}
+          {(isAdmin()) && <Route path="managers/add" element={<ManagerItemNew state={"new"} />} />}
+          {(isAdmin()) && <Route path="managers/edit/:managerId" element={<ManagerItemNew state={"edit"} />} />}
 
           {(isAdmin() || isManager()) && <Route path="bins" element={<Bins />} />}
           {(isAdmin() || isManager()) && <Route path="bins/:binId" element={<BinItem />} />}
           {(isAdmin() || isManager()) && <Route path="bins/add" element={<BinItemNew state={"new"} />} />}
           {(isAdmin() || isManager()) && <Route path="bins/edit/:binId" element={<BinItemNew state={"edit"} />} />}
 
+          {(isAdmin() || isManager()) && <Route path="alerts" element={<ValidVehicle />} />}
 
           <Route path="*" element={<div>Not Found</div>} />
         </Route>
