@@ -14,11 +14,15 @@ export default function Routing({ dataWaypoints, showWaypoints, id }) {
 
   const waypoints = dataWaypoints.map((item) => L.latLng([item[0], item[1]]));
 
-  var allLeafletElements = document.querySelector(".leaflet-container .leaflet-overlay-pane svg path");
+  var allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg path");
   if (allLeafletElements) {
-    console.log("remove waypoints");
+    console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX4");
     console.log(allLeafletElements);
-    allLeafletElements.remove();
+    let ind = allLeafletElements.length - 1;
+    while (ind >= 0) {
+      allLeafletElements[ind].remove();
+      ind--;
+    }
   }
   if (id == -1) {
     return;
@@ -44,7 +48,7 @@ export default function Routing({ dataWaypoints, showWaypoints, id }) {
   //   }
   //   if (!showWaypoints) {
   //     console.log("remove waypoints");
-  //   }
+  //   } 
   // }, [showWaypoints, dataWaypoints]);
 
 
