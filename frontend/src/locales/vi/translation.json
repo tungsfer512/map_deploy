@@ -39,6 +39,10 @@
         "chartTitle4": "Khối lượng rác và số lần đổ rác trong từng khu vực",
         "chartTitle5": "Sự kiện gần đây"
     },
+    "alerts": {
+        "home": "Trang chủ",
+        "pageName": "Cảnh báo"
+    },
     "vehicles": {
         "home": "Trang chủ",
         "pageName": "Xe chở",
