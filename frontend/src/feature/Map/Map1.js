@@ -38,6 +38,7 @@ const Map1 = () => {
   const [vehicles, setVehicles] = useState([]);
   const [bins, setBins] = useState([]);
   const [routes, setRoutes] = useState([]);
+  const [showWaypoints, setShowWaypoints] = useState(false);
 
   useEffect(() => {
     getBinsData().then((data) => {
@@ -165,10 +166,28 @@ const Map1 = () => {
 
   };
 
-  const handleClickOpen = async (e, id) => {
-    let routeData = await getRoutesByVehicleId(id);
-    console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>");
-    setRoutes(routeData)
+  const handleClickOpen = async (e, vehicle) => {
+    if (showWaypoints) {
+      setShowWaypoints(false);
+      setRoutes([]);
+    }
+    else {
+      setShowWaypoints(true);
+    }
+    let routeData = await getRoutesByVehicleId(vehicle.id);
+    console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", routeData);
+
+    const route = routeData.map((item, index) => {
+      // console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", item);
+      return [
+        item?.demand?.latitude,
+        item?.demand?.longitude
+      ]
+    })
+
+    route.push([vehicle.latitude, vehicle.longitude])
+    console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", route);
+    setRoutes(route)
     // goi api lay routes --> set state cho mang routes --> lay routing machine cho 2 diem 1 --> neu di den diem cuoi thi set lai state mang routes = routes[1:] --> xoa tat ca layer routing --> lay routing moi
   }
 
@@ -221,7 +240,7 @@ const Map1 = () => {
             {!!vehicles && vehicles.map((vehicle) => (
               <RotatedMarker key={vehicle.id} position={[vehicle.latitude, vehicle.longitude]} icon={iconXe} rotationOrigin="center" rotationAngle={vehicle.angle}
                 eventHandlers={{
-                  click: (e) => handleClickOpen(e, vehicle.id),
+                  click: (e) => handleClickOpen(e, vehicle),
                 }}
               >
                 <PopupVehicleMarker vehicle={vehicle} handleClickOpen={handleClickOpenVehicle} />
@@ -234,7 +253,7 @@ const Map1 = () => {
               </RotatedMarker>
             ))}
 
-            <Routing from={[40.848447, -73.856077]} to={[102.45, 105.456]}></Routing>
+            <Routing dataWaypoints={routes} showWaypoints={showWaypoints}></Routing>
           </MapContainer>
         </Box>
         <TabPanelItemBin open={openBin} handleClose={handleCloseBin} item={item} ></TabPanelItemBin>

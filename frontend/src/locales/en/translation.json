@@ -15,8 +15,8 @@
         "vehicle": "Vehicle",
         "driver": "Driver",
         "bin": "Bin",
-        "manager": "Manager"
-
+        "manager": "Manager",
+        "alerts": "Alerts"
     },
     "search": "Search",
     "map" : {

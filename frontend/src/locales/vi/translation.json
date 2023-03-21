@@ -15,7 +15,8 @@
         "vehicle": "Xe chở",
         "driver": "Tài xế",
         "bin": "Thùng rác",
-        "manager": "Quản lý"
+        "manager": "Quản lý",
+        "alerts": "Cảnh báo"
     },
     "search": "Tìm kiếm",
     "map": {

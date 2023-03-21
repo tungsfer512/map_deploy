@@ -8,6 +8,7 @@ import LocalShippingIcon from '@mui/icons-material/LocalShipping';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 import DeleteIcon from '@mui/icons-material/Delete';
 import MenuIcon from '@mui/icons-material/Menu';
+import ReportGmailerrorredIcon from '@mui/icons-material/ReportGmailerrorred';
 import SupervisorAccountIcon from '@mui/icons-material/SupervisorAccount';
 import { useNavigate } from 'react-router-dom';
 
@@ -34,8 +35,10 @@ const getIndex = (path) => {
             return 3;
         case 'bins':
             return 4;
-        case 'managers':
+        case 'alert':
             return 5;
+        case 'managers':
+            return 6;
         default:
             return -1;
     }
@@ -191,12 +194,23 @@ const Sidebar = () => {
                         </ListItemIcon>
                         <ListItemText primary={t('sidebar.bin')} sx={{ display: open ? "block" : "none" }} />
                     </ListItemButton>
+                    <ListItemButton
+                        component={Link}
+                        to={"/alerts"}
+                        selected={selectedIndex === 5}
+                        onClick={(event) => handleListItemClick(event, 5)}
+                    >
+                        <ListItemIcon>
+                            <ReportGmailerrorredIcon />
+                        </ListItemIcon>
+                        <ListItemText primary={t('sidebar.alerts')} sx={{ display: open ? "block" : "none" }} />
+                    </ListItemButton>
                     {isAdmin() &&
                         <ListItemButton
                             component={Link}
                             to={"/managers"}
-                            selected={selectedIndex === 5}
-                            onClick={(event) => handleListItemClick(event, 5)}
+                            selected={selectedIndex === 6}
+                            onClick={(event) => handleListItemClick(event, 6)}
                         >
                             <ListItemIcon>
                                 <SupervisorAccountIcon />
