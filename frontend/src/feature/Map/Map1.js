@@ -1,5 +1,5 @@
 import React, { forwardRef, Fragment, useEffect, useRef, useState } from 'react'
-import { MapContainer, TileLayer, Marker, Polyline, Popup, LayersControl, LayerGroup, useMapEvent, useMap } from "react-leaflet";
+import { MapContainer, TileLayer, Marker, Polyline, Popup, LayersControl, LayerGroup, useMapEvent, useMap, useMapEvents } from "react-leaflet";
 import L from 'leaflet';
 import "leaflet/dist/leaflet.css";
 import Routing from './Routing';
@@ -25,6 +25,56 @@ import TabPanelVehicle from './TabPanelVehicle';
 import TabPanelItemBin from './TabPanelItemBin';
 import axios from 'axios';
 
+let id = -1;
+
+function ZoomHandler() {
+  const [zoomLevel, setZoomLevel] = useState(17); // initial zoom level provided for MapContainer
+  let map = useMap();
+  useMapEvents({
+    zoomend: () => {
+      let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg path");
+      if (allLeafletElements) {
+        console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1");
+        console.log(allLeafletElements);
+        let ind = allLeafletElements.length - 1;
+        while (ind >= 0) {
+          allLeafletElements[ind].remove();
+          ind--;
+        }
+      }
+      id = -1;
+    },
+    zoomstart: () => {
+      let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg path");
+      if (allLeafletElements) {
+        console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX2X");
+        console.log(allLeafletElements);
+        let ind = allLeafletElements.length - 1;
+        while (ind >= 0) {
+          allLeafletElements[ind].remove();
+          ind--;
+        }
+      }
+      id = -1;
+      setZoomLevel(map.getZoom());
+    },
+    zoomlevelschange: () => {
+      let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg path");
+      if (allLeafletElements) {
+        console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX3X");
+        console.log(allLeafletElements);
+        let ind = allLeafletElements.length - 1;
+        while (ind >= 0) {
+          allLeafletElements[ind].remove();
+          ind--;
+        }
+      }
+      id = -1;
+    },
+  });
+  return null
+}
+
 // WebSocket init
 
 const Map1 = () => {
@@ -38,7 +88,7 @@ const Map1 = () => {
   const [vehicles, setVehicles] = useState([]);
   const [bins, setBins] = useState([]);
   const [routes, setRoutes] = useState([]);
-  const [showWaypoints, setShowWaypoints] = useState(false);
+  // const [zoom, setZoom] = useState(-1);
 
   useEffect(() => {
     getBinsData().then((data) => {
@@ -167,27 +217,47 @@ const Map1 = () => {
   };
 
   const handleClickOpen = async (e, vehicle) => {
-    if (showWaypoints) {
-      setShowWaypoints(false);
-      setRoutes([]);
+    // if (showWaypoints) {
+    var allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg path");
+    if (allLeafletElements) {
+      console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+      console.log(allLeafletElements);
+      let ind = allLeafletElements.length - 1;
+      while (ind >= 0) {
+        allLeafletElements[ind].remove();
+        ind--;
+      }
+    }
+    if (id !== vehicle.id) {
+      id = vehicle.id;
+      let routeData = await getRoutesByVehicleId(vehicle.id);
+      console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", routeData);
+
+      const route = routeData.map((item, index) => {
+        // console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", item);
+        return [
+          item?.demand?.latitude,
+          item?.demand?.longitude
+        ]
+      })
+
+      route.push([vehicle.latitude, vehicle.longitude])
+      console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", route);
+      setRoutes(route);
     }
     else {
-      setShowWaypoints(true);
+      let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg path");
+      if (allLeafletElements) {
+        console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        console.log(allLeafletElements);
+        let ind = allLeafletElements.length - 1;
+        while (ind >= 0) {
+          allLeafletElements[ind].remove();
+          ind--;
+        }
+      }
+      id = -1
     }
-    let routeData = await getRoutesByVehicleId(vehicle.id);
-    console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", routeData);
-
-    const route = routeData.map((item, index) => {
-      // console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", item);
-      return [
-        item?.demand?.latitude,
-        item?.demand?.longitude
-      ]
-    })
-
-    route.push([vehicle.latitude, vehicle.longitude])
-    console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", route);
-    setRoutes(route)
     // goi api lay routes --> set state cho mang routes --> lay routing machine cho 2 diem 1 --> neu di den diem cuoi thi set lai state mang routes = routes[1:] --> xoa tat ca layer routing --> lay routing moi
   }
 
@@ -215,6 +285,17 @@ const Map1 = () => {
   const iconBinGreen = new L.Icon({ iconUrl: iconBinGreenUrl, iconSize: [16, 24] })
   const iconBinRed = new L.Icon({ iconUrl: iconBinRedUrl, iconSize: [16, 24] })
   const iconBinYellow = new L.Icon({ iconUrl: iconBinYellowUrl, iconSize: [16, 24] })
+
+  // const map = useMap();
+  // const leafletElement = L.Routing.control({
+  //   waypoints: [],
+  //   routeWhileDragging: true,
+  //   show: false,
+  //   createMarker: () => null,
+  //   lineOptions: {
+  //     styles: [{ color: "red", opacity: 1, weight: 5 }]
+  //   }
+  // }).addTo(map);
 
   return (
     <Fragment>
@@ -253,7 +334,8 @@ const Map1 = () => {
               </RotatedMarker>
             ))}
 
-            <Routing dataWaypoints={routes} showWaypoints={showWaypoints}></Routing>
+            {(id != -1) && <Routing dataWaypoints={routes} id={id}></Routing>}
+            <ZoomHandler></ZoomHandler>
           </MapContainer>
         </Box>
         <TabPanelItemBin open={openBin} handleClose={handleCloseBin} item={item} ></TabPanelItemBin>
