@@ -26,7 +26,7 @@ const server = http.createServer(app);
 
 const wss = new WebSocket.Server({ server: server });
 
-// webSocketServices(wss);
+webSocketServices(wss);
 
 let PORT = process.env.PORT || 8080;
 
