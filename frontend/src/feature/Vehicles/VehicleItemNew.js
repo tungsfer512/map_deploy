@@ -42,9 +42,11 @@ const VehicleItemNew = ({ state }) => {
             width: 0,
             odometer: 0,
             plate: "",
+            code: "",
             tonnage: 0,
             image: "",
             status: '',
+            camera: '',
         }
     );
 
@@ -78,7 +80,7 @@ const VehicleItemNew = ({ state }) => {
             dispatch(postVehicleDataAsync(formData));
         }
         else if (state === "edit") {
-            dispatch(putVehicleDataAsync({formData, vehicleId}));
+            dispatch(putVehicleDataAsync({ formData, vehicleId }));
         }
         navigate("/vehicles");
     }
@@ -130,9 +132,11 @@ const VehicleItemNew = ({ state }) => {
                                 <TextField id="outlined-basic" label={t("vehicles.form.model")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={vehicleItem.model} onChange={handleInputChange} name="model" />
                                 <TextField id="outlined-basic" label={t("vehicles.form.odometer")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={vehicleItem.odometer} onChange={handleInputChange} name="odometer" />
                                 <TextField id="outlined-basic" label={t("vehicles.form.height")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={vehicleItem.height} onChange={handleInputChange} name="height" />
-                                <TextField id="outlined-basic" label={t("vehicles.form?.length")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={vehicleItem?.length} onChange={handleInputChange} name="length" />
+                                <TextField id="outlined-basic" label={t("vehicles.form.length")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={vehicleItem?.length} onChange={handleInputChange} name="length" />
                                 <TextField id="outlined-basic" label={t("vehicles.form.width")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={vehicleItem.width} onChange={handleInputChange} name="width" />
-                                <TextField id="outlined-basic" label={t("vehicles.form.tonnage")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={vehicleItem.tonnage} onChange={handleInputChange} name="width" />
+                                <TextField id="outlined-basic" label={t("vehicles.form.tonnage")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={vehicleItem.tonnage} onChange={handleInputChange} name="tonnage" />
+                                <TextField id="outlined-basic" label="Code" variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} onChange={handleInputChange} name="code" value={vehicleItem ? vehicleItem.code : ""} />
+                                <TextField id="outlined-basic" label="Camera" variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={vehicleItem.camera} onChange={handleInputChange} name="camera" />
 
                             </Box>
 

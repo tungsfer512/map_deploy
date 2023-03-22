@@ -48,6 +48,10 @@ const BinItemNew = ({ state }) => {
             description: '',
             status: '',
             image: "",
+            code: "",
+            camera1: "",
+            camera2: "",
+            camera3: "",
         }
     );
 
@@ -129,12 +133,16 @@ const BinItemNew = ({ state }) => {
                                 <TextField id="outlined-basic" label={t("bins.table.areaId")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.areaId} onChange={handleInputChange} name="areaId" />
                                 <TextField id="outlined-basic" label={t("bins.table.address")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.address} onChange={handleInputChange} name="address" />
                                 <TextField id="outlined-basic" label={t("bins.table.height")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.height} onChange={handleInputChange} name="height" />
-                                <TextField id="outlined-basic" label={t("bins.table?.length")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem?.length} onChange={handleInputChange} name="length" />
+                                <TextField id="outlined-basic" label={t("bins.table.length")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem?.length} onChange={handleInputChange} name="length" />
                                 <TextField id="outlined-basic" label={t("bins.table.width")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.width} onChange={handleInputChange} name="width" />
                                 <TextField id="outlined-basic" label={t("bins.table.maxWeight")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.maxWeight} onChange={handleInputChange} name="maxWeight" />
                                 <TextField id="outlined-basic" label={t("bins.table.color")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.color} onChange={handleInputChange} name="color" />
                                 <TextField id="outlined-basic" label={t("bins.table.material")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.material} onChange={handleInputChange} name="material" />
                                 <TextField id="outlined-basic" label={t("bins.table.brand")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.brand} onChange={handleInputChange} name="brand" />
+                                <TextField id="outlined-basic" label="Code" variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.code} onChange={handleInputChange} name="code" />
+                                <TextField id="outlined-basic" label="Camera 1" variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.camera1} onChange={handleInputChange} name="camera1" />
+                                <TextField id="outlined-basic" label="Camera 2" variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.camera2} onChange={handleInputChange} name="camera2" />
+                                <TextField id="outlined-basic" label="Camera 3" variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.camera3} onChange={handleInputChange} name="camera3" />
 
                             </Box>
 

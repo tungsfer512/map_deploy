@@ -103,7 +103,13 @@ export default function TabPanelVehicle({ open, handleClose, item }) {
                         onClick={handleClose}
                     />
                     <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
-                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example"
+                            sx={{
+                                '& .MuiTabs-flexContainer': {
+                                    flexDirection: { xs: "column", sm: "row" }
+                                }
+                            }}
+                        >
                             <Tab label={t("vehicle")} {...a11yProps(0)} />
                             <Tab label={t("driver")} {...a11yProps(1)} />
                             <Tab label={t("map.events")} {...a11yProps(2)} />
@@ -118,7 +124,7 @@ export default function TabPanelVehicle({ open, handleClose, item }) {
                                 display: 'flex',
                                 flexDirection: 'row',
                                 flexWrap: 'wrap',
-                                justifyContent: 'flex-start',
+                                justifyContent: { xs: 'flex-start', sm: 'space-evenly' },
                                 height: '100%',
                                 width: '100%',
                             }}
@@ -128,12 +134,19 @@ export default function TabPanelVehicle({ open, handleClose, item }) {
                                     display: 'flex',
                                     flexGrow: 1,
                                     flexDirection: 'column',
-                                    flexWrap: 'wrap',
+                                    flexWrap: { xs: 'nowrap', sm: 'wrap' },
                                     height: 230,
                                     pb: 0,
                                     maxWidth: 1200,
                                     overflowX: 'hide',
                                     overflowY: 'auto',
+                                    "& .MuiListItem-root": {
+                                        height: { xs: 60, sm: 40 },
+                                        width: { xs: "100%", sm: 360 },
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                    },
                                     "& .MuiListItemIcon-root": {
                                         minWidth: '32px',
                                     },
@@ -212,7 +225,7 @@ export default function TabPanelVehicle({ open, handleClose, item }) {
                                             <ListItemIcon>
                                                 <StraightenIcon />
                                             </ListItemIcon>
-                                            <ListItemText primary={t('vehicles.form?.length')} secondary={item?.length} />
+                                            <ListItemText primary={t('vehicles.form.length')} secondary={item?.length} />
                                         </ListItem>
                                         <ListItem sx={{ width: 360, height: 40 }}>
                                             <ListItemIcon>
@@ -255,7 +268,7 @@ export default function TabPanelVehicle({ open, handleClose, item }) {
                                 display: 'flex',
                                 flexDirection: 'row',
                                 flexWrap: 'wrap',
-                                justifyContent: 'flex-start',
+                                justifyContent: { xs: 'flex-start', sm: 'space-evenly' },
                                 height: '100%',
                                 width: '100%',
                             }}
@@ -265,12 +278,19 @@ export default function TabPanelVehicle({ open, handleClose, item }) {
                                     display: 'flex',
                                     flexGrow: 1,
                                     flexDirection: 'column',
-                                    flexWrap: 'wrap',
+                                    flexWrap: { xs: 'nowrap', sm: 'wrap' },
                                     height: 230,
                                     pb: 0,
-                                    maxWidth: 800,
+                                    maxWidth: 1200,
                                     overflowX: 'hide',
                                     overflowY: 'auto',
+                                    "& .MuiListItem-root": {
+                                        height: { xs: 60, sm: 40 },
+                                        width: { xs: "100%", sm: 360 },
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        justifyContent: 'space-between',
+                                    },
                                     "& .MuiListItemIcon-root": {
                                         minWidth: '32px',
                                     },

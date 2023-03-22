@@ -9,7 +9,9 @@ import { useEffect } from "react";
 function Header() {
   return (
     <Box>
-      <Stack sx={{ display: 'flex', justifyContent: "space-between", alignItems: "center", py: 1, px: 5 }} spacing={1} direction="row">
+      <Stack sx={{
+        display: 'flex', justifyContent: "space-between", alignItems: "center", py: 1, px: { xs: 0, sm: 5 }
+      }} spacing={1} direction="row">
         <SearchForm />
         {/* if dataSocket then button auto click */}
         <MenuBar />

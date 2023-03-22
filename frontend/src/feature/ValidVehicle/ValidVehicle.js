@@ -19,7 +19,7 @@ import {
 } from '../../components/Box/BoxContainer';
 import { DataTable } from '../../components/DataTable';
 import { useTranslation } from 'react-i18next';
-import { Cell, Pie, PieChart, Tooltip } from 'recharts';
+import { Cell, LabelList, Pie, PieChart, Tooltip } from 'recharts';
 
 const COLORS = ["#00C49F", "#FF8042"];
 
@@ -70,8 +70,18 @@ const ValidVehicle = () => {
                         flexDirection: 'row',
                         flexWrap: 'wrap',
                         gap: 1,
+                        '& .pieChartCustom': {
+                            width: "100% !important",
+                            height: "auto !important",
+                            maxWidth: "400px",
+                            maxHeight: "400px",
+                        },
+                        "& .pieChartCustom>svg": {
+                            width: "100%",
+                            height: "auto",
+                        },
                     }}>
-                        <PieChart width={400} height={400}>
+                        <PieChart width={400} height={400} className="pieChartCustom">
                             <Pie
                                 dataKey="value"
                                 isAnimationActive={true}
@@ -84,6 +94,7 @@ const ValidVehicle = () => {
                                 {validations?.graph?.map((entry, index) => (
                                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                                 ))}
+                                <LabelList dataKey="name" position="inside" />
                             </Pie>
                             <Tooltip />
                         </PieChart>

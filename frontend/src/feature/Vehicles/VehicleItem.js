@@ -149,7 +149,20 @@ const VehicleItem = () => {
                                                 "& .MuiTypography-body2": {
                                                     fontSize: '12px',
                                                     color: '#6f6f6f',
-                                                }
+                                                },
+                                                "& .ipcambin": {
+                                                    WebkitBoxOrient: 'vertical',
+                                                    WebkitLineClamp: 3,
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                    wordBreak: 'break-word',
+                                                },
+                                                "& .MuiListItemText-primary": {
+                                                    minWidth: 'max-content',
+                                                },
+                                                "& .MuiListItemText-multiline": {
+                                                    gap: 1,
+                                                },
                                             }}
                                         >
                                             <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
@@ -158,37 +171,37 @@ const VehicleItem = () => {
                                                 </ListItemIcon>
                                                 <ListItemText primary={t('vehicles.table.id')} secondary={vehicle.id} />
                                             </ListItem>
-                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
+                                            <ListItem sx={{ height: 40 }}>
                                                 <ListItemIcon>
                                                     <ListIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t('vehicles.table.code')} secondary={vehicle.code} />
                                             </ListItem>
-                                            <ListItem sx={{ height: 40 }}>
+                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
                                                 <ListItemIcon>
                                                     <DataThresholdingIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t('vehicles.form.engineId')} secondary={vehicle.engineId} />
                                             </ListItem>
-                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
+                                            <ListItem sx={{ height: 40 }}>
                                                 <ListItemIcon>
                                                     <DataThresholdingIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t('vehicles.form.plate')} secondary={vehicle.plate + ""} />
                                             </ListItem>
-                                            <ListItem sx={{ height: 40 }}>
+                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
                                                 <ListItemIcon>
                                                     <HistoryIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t('vehicles.form.engineType')} secondary={vehicle.engineType + ""} />
                                             </ListItem>
-                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
+                                            <ListItem sx={{ height: 40 }}>
                                                 <ListItemIcon>
                                                     <HistoryIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t('vehicles.form.engineHours')} secondary={vehicle.engineHours + "h"} />
                                             </ListItem>
-                                            <ListItem sx={{ height: 40 }}>
+                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
                                                 <ListItemIcon>
                                                     <DirectionsCarIcon />
                                                 </ListItemIcon>
@@ -200,48 +213,48 @@ const VehicleItem = () => {
                                                 </ListItemIcon>
                                                 <ListItemText primary={t('vehicles.form.position')} secondary={vehicle.latitude.toFixed(6) + ', ' + vehicle.longitude.toFixed(6)} />
                                             </ListItem> */}
-                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
+                                            <ListItem sx={{ height: 40 }}>
                                                 <ListItemIcon>
                                                     <HeightIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t('vehicles.form.height')} secondary={vehicle.height + ""} />
                                             </ListItem>
-                                            <ListItem sx={{ height: 40 }}>
+                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
                                                 <ListItemIcon>
                                                     <StraightenIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={t('vehicles.form?.length')} secondary={vehicle?.length} />
+                                                <ListItemText primary={t('vehicles.form.length')} secondary={vehicle?.length} />
                                             </ListItem>
-                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
+                                            <ListItem sx={{ height: 40 }}>
                                                 <ListItemIcon>
                                                     <WidthFullIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t('vehicles.form.width')} secondary={vehicle.width} />
                                             </ListItem>
-                                            <ListItem sx={{ height: 40 }}>
+                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
                                                 <ListItemIcon>
                                                     <NetworkCheckIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t('vehicles.form.odometer')} secondary={vehicle.odometer + ""} />
                                             </ListItem>
-                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
+                                            <ListItem sx={{ height: 40 }}>
                                                 <ListItemIcon>
                                                     <HeightIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t('vehicles.form.tonnage')} secondary={vehicle.tonnage + ""} />
                                             </ListItem>
 
-                                            <ListItem sx={{ height: 40 }}>
+                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
                                                 <ListItemIcon>
                                                     <AutorenewIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t('vehicles.form.status')} secondary={vehicle.status} />
                                             </ListItem>
-                                            <ListItem sx={{ height: 40 }}>
+                                            <ListItem sx={{ height: 'max-content' }}>
                                                 <ListItemIcon>
                                                     <AutorenewIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={"Camera"} secondary={vehicle.camera} />
+                                                <ListItemText primary={"Camera"} className="ipcambin" secondary={vehicle.camera} />
                                             </ListItem>
                                         </List>
                                     </Box>
