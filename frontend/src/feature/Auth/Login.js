@@ -99,10 +99,10 @@ const Login = () => {
                 transform: 'translate(-50%, -50%)',
                 zIndex: 401,
                 height: 'auto',
-                maxWidth: 480,
+                maxWidth: 568,
                 width: '100%',
                 margin: '0 auto',
-                p: "48px 64px",
+                p: { xs: 2, sm: 4, md: "48px 64px" },
                 bgcolor: '#fff',
                 borderRadius: 4,
             }}>

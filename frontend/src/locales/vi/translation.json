@@ -1,6 +1,6 @@
 {
     "login": {
-        "title": "Đăng nhập vào bản đồ",
+        "title": "Hệ thống tự động giám sát việc thu gom, vận chuyển rác thải và tối ưu hóa đường di chuyển của các xe thu gom rác trong khu công nghiệp",
         "username": "Điện thoại",
         "password": "Mật khẩu",
         "fogotPassword": "Quên mật khẩu?",
@@ -67,7 +67,7 @@
             "odometer": "Công tơ mét",
             "tonnage": "Trọng tải",
             "status": "Trạng thái",
-            "action": "Hành động"
+            "action": "Thao Tác"
         },
         "form": {
             "infomation": "Thông tin xe chở",
@@ -117,7 +117,7 @@
             "gender": "Giới tính",
             "male": "Nam",
             "female": "Nữ",
-            "action": "Hành động"
+            "action": "Thao Tác"
         },
         "form": {
             "infomation": "Thông tin tài xế",
@@ -148,7 +148,7 @@
             "gender": "Giới tính",
             "male": "Nam",
             "female": "Nữ",
-            "action": "Hành động"
+            "action": "Thao Tác"
         },
         "form": {
             "infomation": "Thông tin quản lý",
@@ -186,7 +186,7 @@
             "full": "Đầy",
             "empty": "Trống",
             "mid": "Có rác",
-            "action": "Hành động"
+            "action": "Thao Tác"
         },
         "form": {
             "infomation": "Thông tin thùng rác",
