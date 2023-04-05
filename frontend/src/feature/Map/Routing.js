@@ -8,25 +8,25 @@ L.Marker.prototype.options.icon = L.icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png"
 });
 
-export default function Routing({ dataWaypoints, showWaypoints, id }) {
-  console.log("dataWaypoints", dataWaypoints);
+export default function Routing({ dataWaypoints }) {
+  // console.log("dataWaypoints", dataWaypoints);
   const map = useMap();
 
   const waypoints = dataWaypoints.map((item) => L.latLng([item[0], item[1]]));
 
-  var allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg path");
-  if (allLeafletElements) {
-    console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX4");
-    console.log(allLeafletElements);
-    let ind = allLeafletElements.length - 1;
-    while (ind >= 0) {
-      allLeafletElements[ind].remove();
-      ind--;
-    }
-  }
-  if (id == -1) {
-    return;
-  }
+  // var allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg  path");
+  // if (allLeafletElements) {
+  //   console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX4");
+  //   console.log(allLeafletElements);
+  //   let ind = allLeafletElements.length - 1;
+  //   while (ind >= 0) {
+  //     allLeafletElements[ind].remove();
+  //     ind--;
+  //   }
+  // }
+  // if (id == -1) {
+  //   return;
+  // }
 
   // else {
   console.log("add waypoints");
@@ -40,16 +40,6 @@ export default function Routing({ dataWaypoints, showWaypoints, id }) {
     }
   });
   leafletElement.addTo(map);
-  // }
-
-  // useEffect(() => {
-  //   if (showWaypoints) {
-  //     leafletElement.setWaypoints(waypoints);
-  //   }
-  //   if (!showWaypoints) {
-  //     console.log("remove waypoints");
-  //   } 
-  // }, [showWaypoints, dataWaypoints]);
 
 
 }
