@@ -36,7 +36,7 @@ export default function Routing({ dataWaypoints }) {
     show: false,
     createMarker: () => null,
     lineOptions: {
-      styles: [{ color: "red", opacity: 1, weight: 5 }]
+      styles: [{ color: "#00b0ff", opacity: .6, weight: 4, borderRadius: 10 }]
     }
   });
   leafletElement.addTo(map);
