@@ -94,7 +94,7 @@ const webSocketServices = (wss) => {
                         camera: vehicleData.data.data.url
                     })
                 }
-            }, 2000)
+            }, 1000 * 10)
         } catch (err) {
             console.log(err);
         }
@@ -164,7 +164,7 @@ const webSocketServices = (wss) => {
                         value.send(JSON.stringify(update));
                     }
                 }
-            }, 2000)
+            }, 1000 * 10)
         } catch (err) {
             console.log(err);
         }

@@ -19,6 +19,7 @@ import LanguagePopover from './LanguagePopover';
 
 import { useEffect } from 'react';
 import NotificationPopover from './NotificationPopover';
+import useWindowDimensions from '../useWindowDimensions/useWindowDimensions';
 
 
 
@@ -27,9 +28,10 @@ export default function Appbar() {
     const { t } = useTranslation();
     const user = JSON.parse(localStorage.getItem('user'));
     const [anchorEl, setAnchorEl] = React.useState(null);
-    
+    const { width } = useWindowDimensions();
+
     const open = Boolean(anchorEl);
-    
+
     const handleClick = (event) => {
         setAnchorEl(event.currentTarget);
     };
@@ -37,7 +39,7 @@ export default function Appbar() {
         setAnchorEl(null);
     };
 
-    
+
 
     const dispatch = useDispatch();
     const handleLogout = () => {
@@ -48,10 +50,15 @@ export default function Appbar() {
     }
 
     const navigate = useNavigate();
-    
+
 
     return (
-        <Box>
+        <Box
+            sx={{
+                display: 'flex',
+                alignItems: 'center',
+            }}
+        >
             <LanguagePopover />
 
             <IconButton size="large" aria-label="show 4 new mails" color="inherit">
@@ -70,9 +77,9 @@ export default function Appbar() {
                 aria-haspopup="true"
                 aria-expanded={open ? 'true' : undefined}
                 onClick={handleClick}
-                sx={{ color: "inherit", ml: 2, pr: 1 }}
+                sx={{ color: "inherit", ml: { xs: 0, sm: 2 }, pr: 1 }}
             >
-                {!!user ? user.lastName : 'Hung'}
+                {width > 600 ? (!!user ? user.lastName : 'Hung') : ''}
             </Button>
             <Menu
                 id="basic-menu"

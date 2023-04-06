@@ -152,7 +152,20 @@ const BinItem = () => {
                                                 "& .MuiTypography-body2": {
                                                     fontSize: '12px',
                                                     color: '#6f6f6f',
-                                                }
+                                                },
+                                                "& .ipcambin": {
+                                                    WebkitBoxOrient: 'vertical',
+                                                    WebkitLineClamp: 3,
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis',
+                                                    wordBreak: 'break-word',
+                                                },
+                                                "& .MuiListItemText-primary": {
+                                                    minWidth: 'max-content',
+                                                },
+                                                "& .MuiListItemText-multiline": {
+                                                    gap: 1,
+                                                },
                                             }}
                                         >
                                             <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
@@ -161,95 +174,95 @@ const BinItem = () => {
                                                 </ListItemIcon>
                                                 <ListItemText primary="ID" secondary={bin.id} />
                                             </ListItem>
-                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
+                                            <ListItem sx={{ height: 40 }}>
                                                 <ListItemIcon>
                                                     <ListIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary="Code" secondary={bin.code} />
                                             </ListItem>
-                                            <ListItem sx={{ height: 40 }}>
+                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
                                                 <ListItemIcon>
                                                     <MapIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t("bins.table.areaId")} secondary={bin.areaId} />
                                             </ListItem>
-                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
+                                            <ListItem sx={{ height: 40 }}>
                                                 <ListItemIcon>
                                                     <RoomIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t("bins.form.position")} secondary={bin.latitude.toFixed(6) + ', ' + bin.longitude.toFixed(6)} />
                                             </ListItem>
-                                            <ListItem sx={{ height: 40 }}>
+                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 'max-content' }}>
                                                 <ListItemIcon>
                                                     <RoomIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={t("bins.table.address")} secondary={bin.address} />
+                                                <ListItemText primary={t("bins.table.address")} className="ipcambin" secondary={bin.address} />
                                             </ListItem>
-                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
+                                            <ListItem sx={{ height: 40 }}>
                                                 <ListItemIcon>
                                                     <HeightIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t("bins.table.height")} secondary={bin.height + "m"} />
                                             </ListItem>
-                                            <ListItem sx={{ height: 40 }}>
+                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
                                                 <ListItemIcon>
                                                     <StraightenIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={t("bins.table?.length")} secondary={bin?.length + "m"} />
+                                                <ListItemText primary={t("bins.table.length")} secondary={bin?.length + "m"} />
                                             </ListItem>
-                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
+                                            <ListItem sx={{ height: 40 }}>
                                                 <ListItemIcon>
                                                     <WidthFullIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t("bins.table.width")} secondary={bin.width + "m"} />
                                             </ListItem>
-                                            <ListItem sx={{ height: 40 }}>
+                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
                                                 <ListItemIcon>
                                                     <ScaleIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t("bins.table.maxWeight")} secondary={bin.maxWeight + ''} />
                                             </ListItem>
-                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
+                                            <ListItem sx={{ height: 40 }}>
                                                 <ListItemIcon>
                                                     <ColorLensIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t("bins.table.color")} secondary={bin.color + ''} />
                                             </ListItem>
-                                            <ListItem sx={{ height: 40 }}>
+                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
                                                 <ListItemIcon>
                                                     <AppsIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t("bins.table.material")} secondary={bin.material + ''} />
                                             </ListItem>
-                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
+                                            <ListItem sx={{ height: 40 }}>
                                                 <ListItemIcon>
                                                     <LocalOfferIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t("bins.table.brand")} secondary={bin.brand + ''} />
                                             </ListItem>
-                                            <ListItem sx={{ height: 40 }}>
+                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
                                                 <ListItemIcon>
                                                     <AutorenewIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t("bins.table.status")} secondary={`${t("bins.table." + bin.status)}`} />
                                             </ListItem>
-                                            <ListItem sx={{ height: 40 }}>
+                                            <ListItem sx={{ height: 'max-content' }}>
                                                 <ListItemIcon>
                                                     <AutorenewIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={"Camera 1"} secondary={`${bin.camera1}`} />
+                                                <ListItemText primary={"Camera 1"} className="ipcambin" secondary={`${bin.camera1}`} />
                                             </ListItem>
-                                            <ListItem sx={{ height: 40 }}>
+                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 'max-content' }}>
                                                 <ListItemIcon>
                                                     <AutorenewIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={"Camera 2"} secondary={`${bin.camera2}`} />
+                                                <ListItemText primary={"Camera 2"} className="ipcambin" secondary={String(`${bin.camera2}`)} />
                                             </ListItem>
-                                            <ListItem sx={{ height: 40 }}>
+                                            <ListItem sx={{ height: 'max-content' }}>
                                                 <ListItemIcon>
                                                     <AutorenewIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={"Camera 3"} secondary={`${bin.camera3}`} />
+                                                <ListItemText primary={"Camera 3"} className="ipcambin" secondary={`${bin.camera3}`} />
                                             </ListItem>
                                         </List>
                                     </Box>
@@ -260,8 +273,9 @@ const BinItem = () => {
                         </Paper>
                     </Box>
                 </Fragment>
-            )}
-        </Box>
+            )
+            }
+        </Box >
     )
 }
 

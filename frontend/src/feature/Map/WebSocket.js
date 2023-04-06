@@ -12,8 +12,8 @@ const isDriver = () => {
 
 const auth = JSON.parse(localStorage.getItem('user'));
 
-if(isDriver()) {
-  websocket = new WebSocket(`ws://203.162.10.118:5000?id=vehicle_${auth?.vehicle?.id}`)
+if (isDriver()) {
+  websocket = new WebSocket(`ws://10.20.11.40:5000?id=vehicle_${auth?.vehicle?.id}`)
 }
 
 let connection_resolvers = [];
@@ -34,7 +34,7 @@ websocket.addEventListener('open', () => {
 
 let ws = websocket;
 checkConnection().then(() => {
-    ws = websocket;
+  ws = websocket;
 });
 
 export default ws;

@@ -135,7 +135,13 @@ const DriverItem = () => {
                                                 "& .MuiTypography-body2": {
                                                     fontSize: '12px',
                                                     color: '#6f6f6f',
-                                                }
+                                                },
+                                                "& .MuiListItemText-primary": {
+                                                    minWidth: 'max-content',
+                                                },
+                                                "& .MuiListItemText-multiline": {
+                                                    gap: 1,
+                                                },
                                             }}
                                         >
                                             <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>

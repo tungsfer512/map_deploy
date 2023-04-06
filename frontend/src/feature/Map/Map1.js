@@ -13,7 +13,7 @@ import TabPanelItem from './TabPanelItemBin';
 import { useSnackbar } from 'notistack';
 import { useTranslation } from 'react-i18next';
 
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addNoti, increment } from '../../store/reducers/notiSlice';
 import { getRoutesByVehicleId } from '../../store/reducers/vehicleSlice';
 import ws from './WebSocket';
@@ -25,52 +25,59 @@ import TabPanelVehicle from './TabPanelVehicle';
 import TabPanelItemBin from './TabPanelItemBin';
 import axios from 'axios';
 import { getResetBinWeightAsync } from '../../store/reducers/binSlice';
+import { clearWayPoints, setWayPoints, waypointsSelector } from '../../store/reducers/waypointSlice';
 
 let id = -1;
 
-function ZoomHandler() {
+function ZoomHandler({ waypoints }) {
   const [zoomLevel, setZoomLevel] = useState(17); // initial zoom level provided for MapContainer
-  let map = useMap();
+  const map = useMap();
   useMapEvents({
     zoomend: () => {
-      let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg path");
-      if (allLeafletElements) {
-        console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1");
-        console.log(allLeafletElements);
-        let ind = allLeafletElements.length - 1;
-        while (ind >= 0) {
-          allLeafletElements[ind].remove();
-          ind--;
+      if (waypoints.oldVehicleId === null) {
+        let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg  path");
+        if (allLeafletElements) {
+          console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1");
+          console.log(allLeafletElements);
+          let ind = allLeafletElements.length - 1;
+          while (ind >= 0) {
+            allLeafletElements[ind].remove();
+            ind--;
+          }
         }
+        id = -1;
       }
-      id = -1;
     },
     zoomstart: () => {
-      let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg path");
-      if (allLeafletElements) {
-        console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX2X");
-        console.log(allLeafletElements);
-        let ind = allLeafletElements.length - 1;
-        while (ind >= 0) {
-          allLeafletElements[ind].remove();
-          ind--;
+      if (waypoints.oldVehicleId === null) {
+        let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg  path");
+        if (allLeafletElements) {
+          console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1");
+          console.log(allLeafletElements);
+          let ind = allLeafletElements.length - 1;
+          while (ind >= 0) {
+            allLeafletElements[ind].remove();
+            ind--;
+          }
         }
+        id = -1;
       }
-      id = -1;
       setZoomLevel(map.getZoom());
     },
     zoomlevelschange: () => {
-      let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg path");
-      if (allLeafletElements) {
-        console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXX3X");
-        console.log(allLeafletElements);
-        let ind = allLeafletElements.length - 1;
-        while (ind >= 0) {
-          allLeafletElements[ind].remove();
-          ind--;
+      if (waypoints.oldVehicleId === null) {
+        let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg  path");
+        if (allLeafletElements) {
+          console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1");
+          console.log(allLeafletElements);
+          let ind = allLeafletElements.length - 1;
+          while (ind >= 0) {
+            allLeafletElements[ind].remove();
+            ind--;
+          }
         }
+        id = -1;
       }
-      id = -1;
     },
   });
   return null
@@ -222,9 +229,11 @@ const Map1 = () => {
 
   };
 
+  const waypoints = useSelector(waypointsSelector);
+
   const handleClickOpen = async (e, vehicle) => {
     // if (showWaypoints) {
-    var allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg path");
+    var allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg  path");
     if (allLeafletElements) {
       console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
       console.log(allLeafletElements);
@@ -233,8 +242,9 @@ const Map1 = () => {
         allLeafletElements[ind].remove();
         ind--;
       }
+      dispatch(clearWayPoints());
     }
-    if (id !== vehicle.id) {
+    if (waypoints.oldVehicleId !== vehicle.id) {
       id = vehicle.id;
       let routeData = await getRoutesByVehicleId(vehicle.id);
       console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", routeData);
@@ -250,9 +260,15 @@ const Map1 = () => {
       route.push([vehicle.latitude, vehicle.longitude])
       console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", route);
       setRoutes(route);
+      const payload = {
+        data: route,
+        hideInMap: true,
+        oldVehicleId: vehicle.id,
+      }
+      dispatch(setWayPoints(payload))
     }
     else {
-      let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg path");
+      let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg  path");
       if (allLeafletElements) {
         console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         console.log(allLeafletElements);
@@ -263,9 +279,42 @@ const Map1 = () => {
         }
       }
       id = -1
+      dispatch(clearWayPoints());
+    }
+
+    if (vehicle.id === waypoints.oldVehicleId) {
+      let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg  path");
+      if (allLeafletElements) {
+        console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+        console.log(allLeafletElements);
+        let ind = allLeafletElements.length - 1;
+        while (ind >= 0) {
+          allLeafletElements[ind].remove();
+          ind--;
+        }
+      }
+      id = -1
+      dispatch(clearWayPoints());
     }
     // goi api lay routes --> set state cho mang routes --> lay routing machine cho 2 diem 1 --> neu di den diem cuoi thi set lai state mang routes = routes[1:] --> xoa tat ca layer routing --> lay routing moi
   }
+
+  useEffect(() => {
+    console.log("waypoints", waypoints);
+    if (waypoints.oldVehicleId === null || waypoints.oldVehicleId === id) {
+      let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg  path");
+      if (allLeafletElements) {
+        console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX1");
+        console.log(allLeafletElements);
+        let ind = allLeafletElements.length - 1;
+        while (ind >= 0) {
+          allLeafletElements[ind].remove();
+          ind--;
+        }
+      }
+      id = -1;
+    }
+  }, [waypoints.oldVehicleId])
 
   const handleCloseVehicle = (e) => {
     setOpenVehicle(false);
@@ -291,17 +340,6 @@ const Map1 = () => {
   const iconBinGreen = new L.Icon({ iconUrl: iconBinGreenUrl, iconSize: [16, 24] })
   const iconBinRed = new L.Icon({ iconUrl: iconBinRedUrl, iconSize: [16, 24] })
   const iconBinYellow = new L.Icon({ iconUrl: iconBinYellowUrl, iconSize: [16, 24] })
-
-  // const map = useMap();
-  // const leafletElement = L.Routing.control({
-  //   waypoints: [],
-  //   routeWhileDragging: true,
-  //   show: false,
-  //   createMarker: () => null,
-  //   lineOptions: {
-  //     styles: [{ color: "red", opacity: 1, weight: 5 }]
-  //   }
-  // }).addTo(map);
 
   return (
     <Fragment>
@@ -340,8 +378,8 @@ const Map1 = () => {
               </RotatedMarker>
             ))}
 
-            {(id != -1) && <Routing dataWaypoints={routes} id={id}></Routing>}
-            <ZoomHandler></ZoomHandler>
+            {(waypoints.hideInMap === true) && <Routing dataWaypoints={waypoints.data}></Routing>}
+            <ZoomHandler waypoints={waypoints} ></ZoomHandler>
           </MapContainer>
         </Box>
         <TabPanelItemBin open={openBin} handleClose={handleCloseBin} item={item} ></TabPanelItemBin>

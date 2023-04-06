@@ -5,6 +5,7 @@ import driversReducer from './reducers/driverSlice'
 import managersReducer from './reducers/managerSlice'
 import authReducer from './reducers/authSlice'
 import notiReducer from './reducers/notiSlice'
+import waypointsReducer from './reducers/waypointSlice'
 
 const store = configureStore({
     reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
         managersReducer,
         authReducer,
         notiReducer,
+        waypointsReducer,
     }
 })
 
