@@ -1,36 +1,58 @@
-version: "3.5"
+version: "3.8"
 
 services:
-  backend:
+  mysql_db_map:
+    image: mysql:8.0
+    container_name: mysql_db_map
+    cap_add:
+      - SYS_NICE
+    restart: always
+    environment:
+      # - MYSQL_DATABASE=map_ws_dev
+      - MYSQL_ROOT_PASSWORD=password
+    ports:
+      - '7700:3306'
+    volumes:
+      - mysql_db:/var/lib/mysql
+      - ./backend/src/db/init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      map: null
+
+  backend_map:
     build:
       context: ./backend
       dockerfile: Dockerfile
+    container_name: backend_map
     volumes:
       - ./backend:/backend
-    command: bash -c "npm start"
+    depends_on:
+      - mysql_db_map
+    command: bash -c "npm run setupdb && npm run dev"
     ports:
       - "7000:7000"
     restart: unless-stopped
     networks:
       map: null
 
-  frontend:
+  frontend_map:
     build:
       context: ./frontend
       dockerfile: Dockerfile
+    container_name: frontend_map
     volumes:
       - ./frontend:/frontend
-    command: bash -c "npm start"
     ports:
       - "7777:7777"
     depends_on:
-      - backend
+      - backend_map
     restart: unless-stopped
     networks:
       map: null
 
 volumes:
   build_folder: null
+  mysql_db:
+    driver: local
 
 networks:
   map:
