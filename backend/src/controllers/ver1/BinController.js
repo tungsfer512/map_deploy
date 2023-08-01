@@ -40,7 +40,10 @@ const addNewBin = async (req, res) => {
             image: newBinData.image,
             description: newBinData.description,
             status: 'empty',
-            areaId: newBinData.areaId
+            areaId: newBinData.areaId,
+            camera1: newBinData.camera1,
+            camera2: newBinData.camera2,
+            camera3: newBinData.camera3
         });
         let resData = newBin.dataValues;
         await newBin.save();
@@ -143,7 +146,10 @@ const updateBinById = async (req, res) => {
                 image: newBinData.image,
                 description: newBinData.description,
                 status: 'empty',
-                areaId: newBinData.areaId
+                areaId: newBinData.areaId,
+                camera1: newBinData.camera1,
+                camera2: newBinData.camera2,
+                camera3: newBinData.camera3
             },
             {
                 where: {
