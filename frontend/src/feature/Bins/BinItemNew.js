@@ -34,14 +34,14 @@ const BinItemNew = ({ state }) => {
     const [binItem, setBinItem] = useState(
         {
             id: 0,
-            areaId: 0,
-            latitude: 0,
-            longitude: 0,
-            address: "",
-            height: 0,
-            length: 0,
-            width: 0,
-            maxWeight: 0,
+            companyId: "",
+            latitude: "",
+            longitude: "",
+            // address: "",
+            height: "",
+            length: "",
+            width: "",
+            maxWeight: "",
             color: '',
             material: '',
             brand: '',
@@ -130,8 +130,8 @@ const BinItemNew = ({ state }) => {
                                 <Typography variant="h6" component="h3" fontWeight='bold' gutterBottom>
                                     {t("bins.form.infomation")}
                                 </Typography>
-                                <TextField id="outlined-basic" label={t("bins.table.areaId")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.areaId} onChange={handleInputChange} name="areaId" />
-                                <TextField id="outlined-basic" label={t("bins.table.address")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.address} onChange={handleInputChange} name="address" />
+                                <TextField id="outlined-basic" label={t("bins.table.companyId")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.companyId} onChange={handleInputChange} name="companyId" />
+                                {/* <TextField id="outlined-basic" label={t("bins.table.address")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.address} onChange={handleInputChange} name="address" /> */}
                                 <TextField id="outlined-basic" label={t("bins.table.height")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.height} onChange={handleInputChange} name="height" />
                                 <TextField id="outlined-basic" label={t("bins.table.length")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem?.length} onChange={handleInputChange} name="length" />
                                 <TextField id="outlined-basic" label={t("bins.table.width")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={binItem.width} onChange={handleInputChange} name="width" />
@@ -193,9 +193,6 @@ const BinItemNew = ({ state }) => {
                             </Box>
                         </Box>
                     </Stack>
-
-
-
                 </Box>
             </Fragment >
         </Box >

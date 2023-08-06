@@ -12,24 +12,22 @@ import MaleIcon from '@mui/icons-material/Male';
 import EmailIcon from '@mui/icons-material/Email';
 import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
 import { assetUrl } from '../../ultils/axiosApi';
-import { getManagerDataById } from '../../store/reducers/managerSlice';
+import { getCompanyDataById } from '../../store/reducers/companySlice';
 import { useTranslation } from 'react-i18next';
 
-const ManagerItem = () => {
+const CompanyItem = () => {
     const { t } = useTranslation();
     const navigate = useNavigate();
     const location = useLocation();
     const params = useParams();
 
-    const managerId = parseInt(params.managerId);
+    const companyId = parseInt(params.companyId);
 
-    const [manager, setManager] = useState(
+    const [company, setCompany] = useState(
         {
             id: 0,
-            firstName: "",
-            lastName: "",
-            dob: "",
-            gender: "",
+            name: "",
+            address: "",
             email: "",
             phone: "",
             image: "",
@@ -37,16 +35,16 @@ const ManagerItem = () => {
     );
 
     useEffect(() => {
-        getManagerDataById(managerId).then((result) => {
+        getCompanyDataById(companyId).then((result) => {
             console.log("Result:", result);
-            setManager(result);
+            setCompany(result);
         });
     }, [])
 
 
     return (
         <Box>
-            {manager && (
+            {company && (
                 <Fragment>
                     <Box sx={{
                         height: 'auto',
@@ -58,15 +56,15 @@ const ManagerItem = () => {
                     }}>
                         <Stack direction="row" alignItems="center" justifyContent="space-between">
                             <Typography variant="h5" component="h1" fontWeight='bold' gutterBottom>
-                                {t("managers.managerDetails")}
+                                {t("companies.companyDetails")}
                                 <Breadcrumbs maxItems={3} aria-label="breadcrumb" sx={{ mt: 1 }}>
                                     <Link underline="hover" color="inherit" href="">
-                                        {t("managers.home")}
+                                        {t("companies.home")}
                                     </Link>
-                                    <Link underline="hover" color="inherit" href="/managers">
-                                        {t("managers.pageName")}
+                                    <Link underline="hover" color="inherit" href="/companies">
+                                        {t("companies.pageName")}
                                     </Link>
-                                    <Typography color="text.primary">{manager.firstName + " " + manager.lastName}</Typography>
+                                    <Typography color="text.primary">{company.name}</Typography>
                                 </Breadcrumbs>
                             </Typography>
 
@@ -77,15 +75,15 @@ const ManagerItem = () => {
                         <Paper elevation={0} sx={{ width: { xs: "100%", sm: "100%", md: "100%", lg: "100%", }, height: "auto", p: 2, mt: 2 }}>
                             <Stack direction="row" alignItems="center" justifyContent="space-around" sx={{ mb: 2, pt: 2, flexDirection: { xs: "column", sm: "row", md: "row", lg: "row", } }}>
                                 <Box sx={{ p: 2, width: '100%', maxWidth: 500 }}>
-                                    <img src={`${assetUrl}/user/${manager.image}`} alt={manager.lastName} width="100%" />
+                                    <img src={`${assetUrl}/company/${company.image}`} alt={company.name} width="100%" />
                                 </Box>
                                 <Box sx={{ py: 2, minWidth: 300, width: "100%", maxWidth: 500 }}>
                                     <Box sx={{ textAlign: 'start', mb: 1, }}>
                                         {/* status, speed, weight, latitude, longitude */}
                                         <List
-                                            aria-labelledby="manager-list-subheader"
+                                            aria-labelledby="company-list-subheader"
                                             subheader={
-                                                <ListSubheader component="div" id="manager-list-subheader" sx={{
+                                                <ListSubheader component="div" id="company-list-subheader" sx={{
                                                     fontSize: '1.2rem',
                                                     fontWeight: 'bold',
                                                     color: '#000',
@@ -94,16 +92,16 @@ const ManagerItem = () => {
                                                     justifyContent: 'space-between',
                                                     pr: 0,
                                                 }}>
-                                                    {t("manager")} {manager.plate}
+                                                    {t("company")} {company.plate}
                                                     <Button
                                                         variant='contained'
                                                         aria-label="edit"
                                                         color="warning"
                                                         size="small"
                                                         startIcon={<EditIcon />}
-                                                        onClick={() => navigate(`/managers/edit/${manager.id}`, { state: manager })}
+                                                        onClick={() => navigate(`/companies/edit/${company.id}`, { state: company })}
                                                     >
-                                                        {t("managers.edit")}
+                                                        {t("companies.edit")}
                                                     </Button>
                                                 </ListSubheader>
                                             }
@@ -141,49 +139,31 @@ const ManagerItem = () => {
                                                 <ListItemIcon>
                                                     <ListIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={t("managers.table.id")} secondary={manager.id} />
+                                                <ListItemText primary={t("companies.table.id")} secondary={company.id} />
                                             </ListItem>
                                             <ListItem sx={{ height: 40 }}>
                                                 <ListItemIcon>
                                                     <BadgeIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={t("managers.table.fullname")} secondary={manager.firstName + " " + manager.lastName} />
-                                            </ListItem>
-                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
-                                                <ListItemIcon>
-                                                    <DriveFileRenameOutlineIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary={t("managers.table.firstName")} secondary={manager.firstName} />
-                                            </ListItem>
-                                            <ListItem sx={{ height: 40 }}>
-                                                <ListItemIcon>
-                                                    <DriveFileRenameOutlineIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary={t("managers.table.lastName")} secondary={manager.lastName} />
+                                                <ListItemText primary={t("companies.table.name")} secondary={company.name} />
                                             </ListItem>
                                             <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
                                                 <ListItemIcon>
                                                     <CakeIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={t("managers.table.dob")} secondary={manager.dob} />
-                                            </ListItem>
-                                            <ListItem sx={{ height: 40 }}>
-                                                <ListItemIcon>
-                                                    {manager.gender === "male" ? <MaleIcon /> : <FemaleIcon />}
-                                                </ListItemIcon>
-                                                <ListItemText primary={t("managers.table.gender")} secondary={manager.gender} />
+                                                <ListItemText primary={t("companies.table.address")} secondary={company.address} />
                                             </ListItem>
                                             <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
                                                 <ListItemIcon>
                                                     <EmailIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={t("managers.table.email")} secondary={manager.email} />
+                                                <ListItemText primary={t("companies.table.email")} secondary={company.email} />
                                             </ListItem>
                                             <ListItem sx={{ height: 40 }}>
                                                 <ListItemIcon>
                                                     <ContactPhoneIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={t("managers.table.phone")} secondary={manager.phone} />
+                                                <ListItemText primary={t("companies.table.phone")} secondary={company.phone} />
                                             </ListItem>
                                         </List>
                                     </Box>
@@ -198,4 +178,4 @@ const ManagerItem = () => {
     )
 }
 
-export default ManagerItem
+export default CompanyItem

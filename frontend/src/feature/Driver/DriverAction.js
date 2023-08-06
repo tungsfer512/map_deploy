@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { deleteDriverDataAsync } from '../../store/reducers/driverSlice';
 import { useTranslation } from 'react-i18next';
+import { isAdmin } from "../Auth/Role"
 
 const DriverAction = ({ params }) => {
     const { t } = useTranslation();
@@ -34,16 +35,21 @@ const DriverAction = ({ params }) => {
                     <PreviewIcon />
                 </IconButton>
             </Tooltip>
-            <Tooltip title={t('drivers.edit')}>
-                <IconButton onClick={onEdit}>
-                    <EditIcon />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title={t('drivers.delete')}>
-                <IconButton onClick={onDelete}>
-                    <DeleteIcon />
-                </IconButton>
-            </Tooltip>
+            {
+                isAdmin() &&
+                <>
+                    <Tooltip title={t('drivers.edit')}>
+                        <IconButton onClick={onEdit}>
+                            <EditIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title={t('drivers.delete')}>
+                        <IconButton onClick={onDelete}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
+                </>
+            }
         </Box>
     )
 }

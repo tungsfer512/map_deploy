@@ -1,15 +1,16 @@
-const { ADM_Area, ADM_Bin } = require('../../models/ver1/models');
+const { ADM_Company, ADM_Bin } = require('../../models/ver1/models');
+const uploadFile = require('../uploadFileMiddleware');
+
 // Create
-const addNewArea = async (req, res) => {
+const addNewCompany = async (req, res) => {
     try {
-        let newAreaData = req.body;
-        let newArea = new ADM_Area({
-            acreage: newAreaData.acreage,
-            description: newAreaData.description,
-            status: newAreaData.status
-        });
-        let resData = newArea.dataValues;
-        await newArea.save();
+        await uploadFile(req, res);
+        let newCompanyData = req.body;
+        newCompanyData.image = req?.files?.bin?.[0]?.filename || 'default_company.png';
+        console.log(newCompanyData);
+        let newCompany = new ADM_Company(newCompanyData);
+        let resData = newCompany.dataValues;
+        await newCompany.save();
         return res.status(200).json({
             resCode: 200,
             resMessage: 'OK',
@@ -23,23 +24,23 @@ const addNewArea = async (req, res) => {
     }
 };
 // Delete
-const deleteAreaById = async (req, res) => {
+const deleteCompanyById = async (req, res) => {
     try {
-        let area = await ADM_Area.findOne({
+        let company = await ADM_Company.findOne({
             where: {
-                id: req.params.areaId
+                id: req.params.companyId
             },
             raw: true
         });
-        if (!area) {
+        if (!company) {
             return res.status(404).json({
                 resCode: 404,
-                resMessage: 'Area not found.'
+                resMessage: 'Company not found.'
             });
         }
-        await ADM_Area.destroy({
+        await ADM_Company.destroy({
             where: {
-                id: req.params.areaId
+                id: req.params.companyId
             },
             raw: true
         });
@@ -55,37 +56,35 @@ const deleteAreaById = async (req, res) => {
     }
 };
 // Update
-const updateAreaById = async (req, res) => {
+const updateCompanyById = async (req, res) => {
     try {
-        let area = await ADM_Area.findOne({
+        let company = await ADM_Company.findOne({
             where: {
-                id: req.params.areaId
+                id: req.params.companyId
             },
             raw: true
         });
-        if (!area) {
+        if (!company) {
             return res.status(404).json({
                 resCode: 404,
-                resMessage: 'Area not found.'
+                resMessage: 'Company not found.'
             });
         }
-        let newAreaData = req.body;
-        await ADM_Area.update(
-            {
-                acreage: newAreaData.acreage,
-                description: newAreaData.description,
-                status: newAreaData.status
-            },
+        await uploadFile(req, res);
+        let newCompanyData = req.body;
+        newCompanyData.image = req?.files?.bin?.[0]?.filename || 'default_company.png';
+        console.log(newCompanyData);
+        await ADM_Company.update(newCompanyData,
             {
                 where: {
-                    id: req.params.areaId
+                    id: req.params.companyId
                 },
                 raw: true
             }
         );
-        let resData = await ADM_Area.findOne({
+        let resData = await ADM_Company.findOne({
             where: {
-                id: req.params.areaId
+                id: req.params.companyId
             },
             raw: true
         });
@@ -102,29 +101,21 @@ const updateAreaById = async (req, res) => {
     }
 };
 // Read
-const getAllArea = async (req, res) => {
+const getAllCompany = async (req, res) => {
     try {
-        let areas = await ADM_Area.findAll({
+        let companies = await ADM_Company.findAll({
             raw: true
         });
-        if (!areas) {
+        if (!companies) {
             return res.status(404).json({
                 resCode: 404,
-                resMessage: 'Area not found.'
-            });
-        }
-        for (let i = 0; i < areas.length; i++) {
-            areas[i].bins = await ADM_Bin.findAll({
-                where: {
-                    areaId: areas[i].id
-                },
-                raw: true
+                resMessage: 'Company not found.'
             });
         }
         return res.status(200).json({
             resCode: 200,
             resMessage: 'OK',
-            data: areas
+            data: companies
         });
     } catch (err) {
         return res.status(500).json({
@@ -133,30 +124,24 @@ const getAllArea = async (req, res) => {
         });
     }
 };
-const getAreaById = async (req, res) => {
+const getCompanyById = async (req, res) => {
     try {
-        let area = await ADM_Area.findOne({
+        let company = await ADM_Company.findOne({
             where: {
-                id: req.params.areaId
+                id: req.params.companyId
             },
             raw: true
         });
-        if (!area) {
+        if (!company) {
             return res.status(404).json({
                 resCode: 404,
-                resMessage: 'Area not found.'
+                resMessage: 'Company not found.'
             });
         }
-        area.bins = await ADM_Bin.findAll({
-            where: {
-                areaId: area.id
-            },
-            raw: true
-        });
         return res.status(200).json({
             resCode: 200,
             resMessage: 'OK',
-            data: area
+            data: company
         });
     } catch (err) {
         return res.status(500).json({
@@ -167,9 +152,9 @@ const getAreaById = async (req, res) => {
 };
 
 module.exports = {
-    addNewArea,
-    deleteAreaById,
-    updateAreaById,
-    getAllArea,
-    getAreaById
+    addNewCompany,
+    deleteCompanyById,
+    updateCompanyById,
+    getAllCompany,
+    getCompanyById
 };

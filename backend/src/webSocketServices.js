@@ -62,24 +62,30 @@ const webSocketServices = (wss) => {
             // })
             let vehicles = await ADM_Vehicle.findAll({
                 where: {
-                    id: 1
+                    id: [1, ]
                 },
                 raw: true
             })
+            console.log("________________________");
+            console.log(vehicles);
+            console.log("________________________");
             // let vehicles = []
             setInterval(async () => {
                 for (let vehicle of vehicles) {
                     let vehicleData = await axios.get(`${process.env.STATUS_API}/tracking/${vehicle.id}`);
-                    // console.log(vehicleData.data);
+                    console.log("+++++++++++++++====================");
+                    console.log(vehicleData.data);
+                    console.log("+++++++++++++++====================");
                     if (vehicleData.data.message != "success") {
                         console.log(`request vehicle ${vehicle.id} failed 404`);
                         continue;
                     }
-                    let code = vehicle.code
-                    // console.log('check vehicle code: ' + code);
+                    let id = vehicle.id
+                    // console.log('check vehicle id: ' + id);
                     const update = [
-                        code,
-                        vehicleData.data.data['latitude'],
+                        id,
+                        41.848447,
+                        // vehicleData.data.data['latitude'],
                         vehicleData.data.data['longitude'],
                         vehicleData.data.data.url
                     ];
@@ -88,13 +94,14 @@ const webSocketServices = (wss) => {
                         value.send(JSON.stringify(update));
                     }
                     updatePosition({
-                        latitude: vehicleData.data.data['latitude'],
+                        latitude: 41.848447,
+                        // latitude: vehicleData.data.data['latitude'],
                         longitude: vehicleData.data.data['longitude'],
-                        code: code,
+                        id: id,
                         camera: vehicleData.data.data.url
                     })
                 }
-            }, 1000 * 10)
+            }, 1000 * 60)
         } catch (err) {
             console.log(err);
         }
@@ -105,25 +112,31 @@ const webSocketServices = (wss) => {
             // })
             let bins = await ADM_Bin.findAll({
                 where: {
-                    id: [1, 2]
+                    id: [1, ]
                 },
                 raw: true
             })
+            console.log("________________________");
+            console.log(bins);
+            console.log("________________________");
             // let bins = []
             setInterval(async () => {
                 for (let bin of bins) {
-                    let binData = await axios.get(`${process.env.STATUS_API}/cell/${bin.id}`);
-                    // console.log(binData.data);
+                    // let binData = await axios.get(`${process.env.STATUS_API}/cell/${bin.id}`);
+                    let binData = await axios.get(`${process.env.STATUS_API}/cell/5`);
+                    console.log("+====================");
+                    console.log(binData.data);
+                    console.log("+====================");
                     if (binData.data.message != "success") {
                         console.log(`request bin ${bin.id} failed 404`);
                         continue;
                     }
-                    let code = bin.code
-                    // console.log('check bin code: ' + code);
+                    let id = bin.id
+                    // console.log('check bin id: ' + id);
                     let update = [];
                     if (binData.data.data.weight >= bin.maxWeight - 15) {
                         update = ['alert', {
-                            code: code,
+                            id: id,
                             latitude: bin.latitude,
                             longitude: bin.longitude,
                             weight: binData.data.data.weight,
@@ -131,13 +144,13 @@ const webSocketServices = (wss) => {
                             status: 'full'
                         }, 'bin full', 'bin'];
                         addEvent_Bin_state({
-                            code: code,
+                            id: id,
                             weight: binData.data.data['weight'],
                             status: update.status,
                         })
                     } else if (bin.weight <= 5) {
                         update = ['no-alert', {
-                            code: code,
+                            id: id,
                             latitude: bin.latitude,
                             longitude: bin.longitude,
                             weight: binData.data.data.weight,
@@ -145,13 +158,13 @@ const webSocketServices = (wss) => {
                             status: 'empty',
                         }, 'bin empty', 'bin'];
                         addEvent_Bin_state({
-                            code: code,
+                            id: id,
                             weight: binData.data.data['weight'],
                             status: update.status,
                         })
                     } else {
                         update = ['no-alert', {
-                            code: code,
+                            id: id,
                             latitude: bin.latitude,
                             longitude: bin.longitude,
                             weight: binData.data.data.weight,
@@ -164,7 +177,7 @@ const webSocketServices = (wss) => {
                         value.send(JSON.stringify(update));
                     }
                 }
-            }, 1000 * 10)
+            }, 1000 * 60)
         } catch (err) {
             console.log(err);
         }

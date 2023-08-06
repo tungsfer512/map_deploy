@@ -19,6 +19,7 @@ import {
 import { DataTable } from '../../components/DataTable';
 import VehicleAction from './VehicleAction';
 import { useTranslation } from 'react-i18next';
+import { isAdmin } from "../Auth/Role"
 
 
 const Vehicles = () => {
@@ -52,7 +53,7 @@ const Vehicles = () => {
         { field: 'model', headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.model")}`, minWidth: 200 },
         { field: 'engineType', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.engineType")}`, minWidth: 150, flex: 1, sortable: false },
         {
-            field: 'odometer', headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.odometer")}`, minWidth: 100, sortable: false,
+            field: 'odometer', headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.odometer")}`, minWidth: 150, sortable: false,
             renderCell: (params) => (
                 `${params.value} Km`
             ),
@@ -91,13 +92,16 @@ const Vehicles = () => {
 
                         {/* Add custom button to the toolbar */}
                         {/* a link to /problems/Add */}
-                        <Button
-                            variant="contained"
-                            startIcon={<AddIcon />}
-                            onClick={() => navigate('/vehicles/add')}
-                        >
-                            {t("vehicles.add")}
-                        </Button>
+                        {
+                            isAdmin(user.role) &&
+                            <Button
+                                variant="contained"
+                                startIcon={<AddIcon />}
+                                onClick={() => navigate('/vehicles/add')}
+                            >
+                                {t("vehicles.add")}
+                            </Button>
+                        }
                     </BoxStack>
 
 

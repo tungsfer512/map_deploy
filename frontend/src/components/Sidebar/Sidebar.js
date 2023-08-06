@@ -35,9 +35,9 @@ const getIndex = (path) => {
             return 3;
         case 'bins':
             return 4;
-        case 'alerts':
+        case 'companies':
             return 5;
-        case 'managers':
+        case 'alerts':
             return 6;
         default:
             return -1;
@@ -194,30 +194,30 @@ const Sidebar = () => {
                         </ListItemIcon>
                         <ListItemText primary={t('sidebar.bin')} sx={{ display: open ? "block" : "none" }} />
                     </ListItemButton>
+                    {isAdmin() &&
+                        <ListItemButton
+                            component={Link}
+                            to={"/companies"}
+                            selected={selectedIndex === 5}
+                            onClick={(event) => handleListItemClick(event, 5)}
+                        >
+                            <ListItemIcon>
+                                <SupervisorAccountIcon />
+                            </ListItemIcon>
+                            <ListItemText primary={t('sidebar.company')} sx={{ display: open ? "block" : "none" }} />
+                        </ListItemButton>
+                    }
                     <ListItemButton
                         component={Link}
                         to={"/alerts"}
-                        selected={selectedIndex === 5}
-                        onClick={(event) => handleListItemClick(event, 5)}
+                        selected={selectedIndex === 6}
+                        onClick={(event) => handleListItemClick(event, 6)}
                     >
                         <ListItemIcon>
                             <ReportGmailerrorredIcon />
                         </ListItemIcon>
                         <ListItemText primary={t('sidebar.alerts')} sx={{ display: open ? "block" : "none" }} />
                     </ListItemButton>
-                    {isAdmin() &&
-                        <ListItemButton
-                            component={Link}
-                            to={"/managers"}
-                            selected={selectedIndex === 6}
-                            onClick={(event) => handleListItemClick(event, 6)}
-                        >
-                            <ListItemIcon>
-                                <SupervisorAccountIcon />
-                            </ListItemIcon>
-                            <ListItemText primary={t('sidebar.manager')} sx={{ display: open ? "block" : "none" }} />
-                        </ListItemButton>
-                    }
                 </List>
             </SidebarBox>
         </Stack>

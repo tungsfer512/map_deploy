@@ -114,7 +114,12 @@ export const bins = [
     },
 ]
 
-export const getBinsData = async () => {
-    const response = await axios.get("/bins", { headers: { token: token } });
+export const getBinsData = async (companyId) => {
+    let response = null;
+    if (companyId === undefined || companyId === null) {
+        response = await axios.get("/bins", { headers: { token: token } });
+    } else {
+        response = await axios.get(`/bins?companyId=${companyId}`, { headers: { token: token } });
+    }
     return response.data.data;
 }

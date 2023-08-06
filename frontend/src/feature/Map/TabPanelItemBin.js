@@ -188,17 +188,28 @@ export default function TabPanelItemBin({ open, handleClose, item }) {
                             >
                                 {/* for in item */}
                                 <>
-                                    <ListItem sx={{ width: 360, backgroundColor: '#f5f5f5', height: 40 }}>
+                                    <ListItem sx={{ width: 360, height: 40 }}>
                                         <ListItemIcon>
                                             <ListIcon />
                                         </ListItemIcon>
                                         <ListItemText primary="ID" secondary={item.id} />
                                     </ListItem>
-                                    <ListItem sx={{ width: 360, height: 40 }}>
+                                    <ListItem sx={{ width: 360, backgroundColor: '#f5f5f5', height: 40 }}>
+                                        <ListItemIcon>
+                                            <ListIcon />
+                                        </ListItemIcon>
+                                        <ListItemText primary={t("bins.table.weight")} secondary={`${(item.weight/1000).toFixed(3)} Kg`} />
+                                    </ListItem>
+                                    <ListItem style={{ height: "auto" }} sx={{ width: 360, height: 40 }}>
                                         <ListItemIcon>
                                             <MapIcon />
                                         </ListItemIcon>
-                                        <ListItemText primary={t("bins.table.areaId")} secondary={item.areaId} />
+                                        <ListItemText
+                                            primary={t("bins.table.company")}
+                                            secondary={
+                                                item.company.map((company) => (<div>{company.id + " - " + company.name}</div>))
+                                            }
+                                        ></ListItemText>
                                     </ListItem>
                                     <ListItem sx={{ width: 360, backgroundColor: '#f5f5f5', height: 40 }}>
                                         <ListItemIcon>
@@ -206,12 +217,12 @@ export default function TabPanelItemBin({ open, handleClose, item }) {
                                         </ListItemIcon>
                                         <ListItemText primary={t("bins.form.position")} secondary={item.latitude.toFixed(6) + ', ' + item.longitude.toFixed(6)} />
                                     </ListItem>
-                                    <ListItem sx={{ width: 360, height: 40 }}>
+                                    {/* <ListItem sx={{ width: 360, height: 40 }}>
                                         <ListItemIcon>
                                             <RoomIcon />
                                         </ListItemIcon>
                                         <ListItemText primary={t("bins.table.address")} secondary={item.address} />
-                                    </ListItem>
+                                    </ListItem> */}
                                     <ListItem sx={{ width: 360, backgroundColor: '#f5f5f5', height: 40 }}>
                                         <ListItemIcon>
                                             <HeightIcon />

@@ -16,6 +16,7 @@ const DataTable = ({ rows, columns }) => {
 
     return (
         <DataGrid
+            getRowHeight={() => 'auto'}
             localeText={{
                 // Root
                 noRowsLabel: t('table.noRowsLabel'),
@@ -39,7 +40,7 @@ const DataTable = ({ rows, columns }) => {
                 toolbarFiltersTooltipHide: t("table.toolbarFiltersTooltipHide"),
                 toolbarFiltersTooltipShow: t("table.toolbarFiltersTooltipShow"),
                 toolbarFiltersTooltipActive: t("table.toolbarFiltersTooltipActive"),
-                    
+
 
                 // Quick filter toolbar  t("table.toolbar"),
                 toolbarQuickFilterPlaceholder: t("table.toolbarQuickFilterPlaceholder"),
@@ -54,95 +55,95 @@ const DataTable = ({ rows, columns }) => {
                 // toolbarExportExcel: t("table.toolbarExportExcel"),
 
                 // Columns panel text
-                columnsPanelTextFieldLabel:t("table.columnsPanelTextFieldLabel"),
-                columnsPanelTextFieldPlaceholder:t("table.columnsPanelTextFieldPlaceholder"),
-                columnsPanelDragIconLabel:t("table.columnsPanelDragIconLabel"),
-                columnsPanelShowAllButton:t("table.columnsPanelShowAllButton"),
-                columnsPanelHideAllButton:t("table.columnsPanelHideAllButton"),
+                columnsPanelTextFieldLabel: t("table.columnsPanelTextFieldLabel"),
+                columnsPanelTextFieldPlaceholder: t("table.columnsPanelTextFieldPlaceholder"),
+                columnsPanelDragIconLabel: t("table.columnsPanelDragIconLabel"),
+                columnsPanelShowAllButton: t("table.columnsPanelShowAllButton"),
+                columnsPanelHideAllButton: t("table.columnsPanelHideAllButton"),
 
                 // Filter panel text
-                filterPanelAddFilter:t("table.filterPanelAddFilter"),
-                filterPanelDeleteIconLabel:t("table.filterPanelDeleteIconLabel"),
+                filterPanelAddFilter: t("table.filterPanelAddFilter"),
+                filterPanelDeleteIconLabel: t("table.filterPanelDeleteIconLabel"),
                 // t("table.//"),
-                filterPanelOperators:t("table.filterPanelOperators"),
+                filterPanelOperators: t("table.filterPanelOperators"),
 
                 // t("table.//"),
-                filterPanelOperatorAnd:t("table.filterPanelOperatorAnd"),
-                filterPanelOperatorOr:t("table.filterPanelOperatorOr"),
-                filterPanelColumns:t("table.filterPanelColumns"),
-                filterPanelInputLabel:t("table.filterPanelInputLabel"),
-                filterPanelInputPlaceholder:t("table.filterPanelInputPlaceholder"),
+                filterPanelOperatorAnd: t("table.filterPanelOperatorAnd"),
+                filterPanelOperatorOr: t("table.filterPanelOperatorOr"),
+                filterPanelColumns: t("table.filterPanelColumns"),
+                filterPanelInputLabel: t("table.filterPanelInputLabel"),
+                filterPanelInputPlaceholder: t("table.filterPanelInputPlaceholder"),
 
                 // Filter operators text
-                filterOperatorContains:t("table.filterOperatorContains"),
-                filterOperatorEquals:t("table.filterOperatorEquals"),
-                filterOperatorStartsWith:t("table.filterOperatorStartsWith"),
-                filterOperatorEndsWith:t("table.filterOperatorEndsWith"),
-                filterOperatorIs:t("table.filterOperatorIs"),
-                filterOperatorNot:t("table.filterOperatorNot"),
-                filterOperatorAfter:t("table.filterOperatorAfter"),
-                filterOperatorOnOrAfter:t("table.filterOperatorOnOrAfter"),
-                filterOperatorBefore:t("table.filterOperatorBefore"),
-                filterOperatorOnOrBefore:t("table.filterOperatorOnOrBefore"),
-                filterOperatorIsEmpty:t("table.filterOperatorIsEmpty"),
-                filterOperatorIsNotEmpty:t("table.filterOperatorIsNotEmpty"),
+                filterOperatorContains: t("table.filterOperatorContains"),
+                filterOperatorEquals: t("table.filterOperatorEquals"),
+                filterOperatorStartsWith: t("table.filterOperatorStartsWith"),
+                filterOperatorEndsWith: t("table.filterOperatorEndsWith"),
+                filterOperatorIs: t("table.filterOperatorIs"),
+                filterOperatorNot: t("table.filterOperatorNot"),
+                filterOperatorAfter: t("table.filterOperatorAfter"),
+                filterOperatorOnOrAfter: t("table.filterOperatorOnOrAfter"),
+                filterOperatorBefore: t("table.filterOperatorBefore"),
+                filterOperatorOnOrBefore: t("table.filterOperatorOnOrBefore"),
+                filterOperatorIsEmpty: t("table.filterOperatorIsEmpty"),
+                filterOperatorIsNotEmpty: t("table.filterOperatorIsNotEmpty"),
                 // t("table.//"),
 
                 // Filter values text
-                filterValueAny:t("table.filterValueAny"),
-                filterValueTrue:t("table.filterValueTrue"),
-                filterValueFalse:t("table.filterValueFalse"),
+                filterValueAny: t("table.filterValueAny"),
+                filterValueTrue: t("table.filterValueTrue"),
+                filterValueFalse: t("table.filterValueFalse"),
 
                 // Column menu text
-                columnMenuLabel:t("table.columnMenuLabel"),
-                columnMenuShowColumns:t("table.columnMenuShowColumns"),
-                columnMenuFilter:t("table.columnMenuFilter"),
-                columnMenuHideColumn:t("table.columnMenuHideColumn"),
-                columnMenuUnsort:t("table.columnMenuUnsort"),
-                columnMenuSortAsc:t("table.columnMenuSortAsc"),
-                columnMenuSortDesc:t("table.columnMenuSortDesc"),
+                columnMenuLabel: t("table.columnMenuLabel"),
+                columnMenuShowColumns: t("table.columnMenuShowColumns"),
+                columnMenuFilter: t("table.columnMenuFilter"),
+                columnMenuHideColumn: t("table.columnMenuHideColumn"),
+                columnMenuUnsort: t("table.columnMenuUnsort"),
+                columnMenuSortAsc: t("table.columnMenuSortAsc"),
+                columnMenuSortDesc: t("table.columnMenuSortDesc"),
 
                 // Column header text
-                columnHeaderFiltersTooltipActive:t("table.columnHeaderFiltersTooltipActive"),
-              
-                columnHeaderFiltersLabel:t("table.columnHeaderFiltersLabel"),
-                columnHeaderSortIconLabel:t("table.columnHeaderSortIconLabel"),
+                columnHeaderFiltersTooltipActive: t("table.columnHeaderFiltersTooltipActive"),
+
+                columnHeaderFiltersLabel: t("table.columnHeaderFiltersLabel"),
+                columnHeaderSortIconLabel: t("table.columnHeaderSortIconLabel"),
 
                 // Rows selected footer text
-                footerRowSelected:t("table.footerRowSelected"),
-             
+                footerRowSelected: t("table.footerRowSelected"),
+
 
                 // Total row amount footer text
-                footerTotalRows:t("table.footerTotalRows"),
+                footerTotalRows: t("table.footerTotalRows"),
 
                 // Total visible row amount footer text
-                footerTotalVisibleRows:t("table.footerTotalVisibleRows"),
-                 
+                footerTotalVisibleRows: t("table.footerTotalVisibleRows"),
+
 
                 // Checkbox selection text
-                checkboxSelectionHeaderName:t("table.checkboxSelectionHeaderName"),
+                checkboxSelectionHeaderName: t("table.checkboxSelectionHeaderName"),
                 // t("table.//"),
                 // t("table.//"),
                 // t("table.//"),
                 // t("table.//"),
 
                 // Boolean cell text
-                booleanCellTrueLabel:t("table.booleanCellTrueLabel"),
-                booleanCellFalseLabel:t("table.booleanCellFalseLabel"),
+                booleanCellTrueLabel: t("table.booleanCellTrueLabel"),
+                booleanCellFalseLabel: t("table.booleanCellFalseLabel"),
 
                 // Actions cell more text
-                actionsCellMore:t("table.actionsCellMore"),
+                actionsCellMore: t("table.actionsCellMore"),
 
                 // Column pinning text
-                pinToLeft:t("table.pinToLeft"),
-                pinToRight:t("table.pinToRight"),
-                unpin:t("table.unpin"),
+                pinToLeft: t("table.pinToLeft"),
+                pinToRight: t("table.pinToRight"),
+                unpin: t("table.unpin"),
 
                 // Tree Data
-                treeDataGroupingHeaderName:t("table.treeDataGroupingHeaderName"),
-                treeDataExpand:t("table.treeDataExpand"),
-                treeDataCollapse:t("table.treeDataCollapse"),
-                filterOperatorIsAnyOf : t("table.filterOperatorIsAnyOf"),
+                treeDataGroupingHeaderName: t("table.treeDataGroupingHeaderName"),
+                treeDataExpand: t("table.treeDataExpand"),
+                treeDataCollapse: t("table.treeDataCollapse"),
+                filterOperatorIsAnyOf: t("table.filterOperatorIsAnyOf"),
             }}
             rows={rows}
             columns={columns}

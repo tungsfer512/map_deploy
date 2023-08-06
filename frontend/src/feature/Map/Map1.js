@@ -26,7 +26,7 @@ import TabPanelItemBin from './TabPanelItemBin';
 import axios from 'axios';
 import { getResetBinWeightAsync } from '../../store/reducers/binSlice';
 import { clearWayPoints, setWayPoints, waypointsSelector } from '../../store/reducers/waypointSlice';
-
+import { isStaff } from '../Auth/Role';
 let id = -1;
 
 function ZoomHandler({ waypoints }) {
@@ -96,12 +96,23 @@ const Map1 = () => {
   const [vehicles, setVehicles] = useState([]);
   const [bins, setBins] = useState([]);
   const [routes, setRoutes] = useState([]);
+  const [openVehicle, setOpenVehicle] = useState(false);
+  const [openBin, setOpenBin] = useState(false);
+  const [item, setItem] = useState({});
+
   // const [zoom, setZoom] = useState(-1);
 
   useEffect(() => {
-    getBinsData().then((data) => {
-      setBins(data);
-    });
+    if (!isStaff()) {
+      getBinsData().then((data) => {
+        setBins(data);
+      });
+    } else {
+      const user = localStorage.getItem('user')
+      getBinsData(JSON.parse(user)?.companyId).then((data) => {
+        setBins(data);
+      });
+    }
   }, []);
 
   useEffect(() => {
@@ -148,7 +159,7 @@ const Map1 = () => {
         dispatch(addNoti(data));
         dispatch(increment());
       }
-      else if (data[0] !== "alert") {
+      else {
         setData(data);
       }
       // const angle = _getAngle(position[0], position[1], data[1], data[2]);
@@ -156,50 +167,64 @@ const Map1 = () => {
       //   setPosition([data[1], data[2]]);
       //   setHeading(angle);
       // }
+      // setItem(item);
     }
   }, []);
 
-  if (!!vehicles && vehicles?.length > 0) {
-    let vehicle = vehicles.find(item => item.code.toString() === data[0]);
-    if (vehicle) {
-      let oldLat = vehicle.latitude;
-      let oldLong = vehicle.longitude;
-      const angle = _getAngle(oldLat, oldLong, data[1], data[2]);
-      if (Math.abs(angle) !== 90) {
-        const vehicleData = {
-          ...vehicle,
-          latitude: data[1],
-          longitude: data[2],
-          camera: data[3],
-          angle: angle
-        }
-        const vehiclesUpdate = [...vehicles.filter(item => item.id.toString() !== data[0]), vehicleData];
-        for (let bin of bins) {
-          if (bin.status === "full") {
-            let binCoor = L.latLng(bin.latitude, bin.longitude);
-            let vehicleCoor = L.latLng(data[1], data[2]);
-            let distance = binCoor.distanceTo(vehicleCoor);
-            if (distance < 5) {
-              dispatch(getResetBinWeightAsync(bin.id));
-              console.log("reset bin weight");
+  useEffect(() => {
+    if (data[0] !== "alert" && data[0] !== "no-alert") {
+      if (!!vehicles && vehicles?.length > 0) {
+        let vehicle = vehicles.find(item => item.id.toString() === data[0].toString());
+        if (vehicle) {
+          let oldLat = vehicle.latitude;
+          let oldLong = vehicle.longitude;
+          const angle = _getAngle(oldLat, oldLong, data[1], data[2]);
+          if (Math.abs(angle) !== 90) {
+            console.log("data4-----------____----__---__---___--___---------");
+            const vehicleData = {
+              ...vehicle,
+              latitude: data[1],
+              longitude: data[2],
+              camera: data[3],
+              angle: angle
             }
+            const vehiclesUpdate = [...vehicles.filter(item => item.id.toString() !== data[0].toString()), vehicleData];
+            for (let bin of bins) {
+              if (bin.status === "full") {
+                let binCoor = L.latLng(bin.latitude, bin.longitude);
+                let vehicleCoor = L.latLng(data[1], data[2]);
+                let distance = binCoor.distanceTo(vehicleCoor);
+                if (distance < 5) {
+                  dispatch(getResetBinWeightAsync(bin.id));
+                  console.log("reset bin weight");
+                }
+              }
+            }
+            setVehicles(vehiclesUpdate);
+          } else {
+            console.log("data5-----------____----__---__---___--___---------");
+            const vehicleData = {
+              ...vehicle,
+              camera: data[3],
+            }
+            const vehiclesUpdate = [...vehicles.filter(item => item.id.toString() !== data[0].toString()), vehicleData];
+            setVehicles(vehiclesUpdate);
           }
         }
-        setVehicles(vehiclesUpdate);
       }
     }
-  }
+  }, [data]);
 
   useEffect(() => {
     if (dataAlert[0] === "alert" || dataAlert[0] === "no-alert") {
       if (!!bins && bins?.length > 0) {
-        let bin = bins.find(item => item.code.toString() === dataAlert[1].code.toString());
+        let bin = bins.find(item => item.id.toString() === dataAlert[1].id.toString());
         if (bin) {
           const binData = {
             ...bin,
             status: dataAlert[1].status
           }
-          const binsUpdate = [...bins.filter(item => item.code.toString() !== dataAlert[1].code.toString()), binData];
+          const binsUpdate = [...bins.filter(item => item.id.toString() !== dataAlert[1].id.toString()), binData];
           setBins(binsUpdate);
           console.log("update bin in map");
         }
@@ -217,11 +242,8 @@ const Map1 = () => {
     // }
   }, [dataAlert]);
 
-  const [openVehicle, setOpenVehicle] = useState(false);
-  const [openBin, setOpenBin] = useState(false);
-  const [item, setItem] = useState({});
-
   const handleClickOpenVehicle = (e, item) => {
+    console.log("click open vehicle", item);
     setOpenVehicle(true);
     setItem(item);
     if (openBin) setOpenBin(false);
@@ -232,43 +254,10 @@ const Map1 = () => {
   const waypoints = useSelector(waypointsSelector);
 
   const handleClickOpen = async (e, vehicle) => {
+    handleClickOpenVehicle(e, vehicle);
     // if (showWaypoints) {
-    var allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg  path");
-    if (allLeafletElements) {
-      console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-      console.log(allLeafletElements);
-      let ind = allLeafletElements.length - 1;
-      while (ind >= 0) {
-        allLeafletElements[ind].remove();
-        ind--;
-      }
-      dispatch(clearWayPoints());
-    }
-    if (waypoints.oldVehicleId !== vehicle.id) {
-      id = vehicle.id;
-      let routeData = await getRoutesByVehicleId(vehicle.id);
-      console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", routeData);
-
-      const route = routeData.map((item, index) => {
-        // console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", item);
-        return [
-          item?.demand?.latitude,
-          item?.demand?.longitude
-        ]
-      })
-
-      route.push([vehicle.latitude, vehicle.longitude])
-      console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", route);
-      setRoutes(route);
-      const payload = {
-        data: route,
-        hideInMap: true,
-        oldVehicleId: vehicle.id,
-      }
-      dispatch(setWayPoints(payload))
-    }
-    else {
-      let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg  path");
+    try {
+      var allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg  path");
       if (allLeafletElements) {
         console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
         console.log(allLeafletElements);
@@ -277,26 +266,64 @@ const Map1 = () => {
           allLeafletElements[ind].remove();
           ind--;
         }
+        dispatch(clearWayPoints());
       }
-      id = -1
-      dispatch(clearWayPoints());
-    }
+      if (waypoints.oldVehicleId !== vehicle.id) {
+        id = vehicle.id;
+        let routeData = await getRoutesByVehicleId(vehicle.id);
+        console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", routeData);
 
-    if (vehicle.id === waypoints.oldVehicleId) {
-      let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg  path");
-      if (allLeafletElements) {
-        console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
-        console.log(allLeafletElements);
-        let ind = allLeafletElements.length - 1;
-        while (ind >= 0) {
-          allLeafletElements[ind].remove();
-          ind--;
+        const route = routeData.map((item, index) => {
+          // console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", item);
+          return [
+            item?.demand?.latitude,
+            item?.demand?.longitude
+          ]
+        })
+
+        route.push([vehicle.latitude, vehicle.longitude])
+        console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", route);
+        setRoutes(route);
+        const payload = {
+          data: route,
+          hideInMap: true,
+          oldVehicleId: vehicle.id,
         }
+        dispatch(setWayPoints(payload))
       }
-      id = -1
-      dispatch(clearWayPoints());
+      else {
+        let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg  path");
+        if (allLeafletElements) {
+          console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+          console.log(allLeafletElements);
+          let ind = allLeafletElements.length - 1;
+          while (ind >= 0) {
+            allLeafletElements[ind].remove();
+            ind--;
+          }
+        }
+        id = -1
+        dispatch(clearWayPoints());
+      }
+
+      if (vehicle.id === waypoints.oldVehicleId) {
+        let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg  path");
+        if (allLeafletElements) {
+          console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX");
+          console.log(allLeafletElements);
+          let ind = allLeafletElements.length - 1;
+          while (ind >= 0) {
+            allLeafletElements[ind].remove();
+            ind--;
+          }
+        }
+        id = -1
+        dispatch(clearWayPoints());
+      }
+      // goi api lay routes --> set state cho mang routes --> lay routing machine cho 2 diem 1 --> neu di den diem cuoi thi set lai state mang routes = routes[1:] --> xoa tat ca layer routing --> lay routing moi
+    } catch (err) {
+      console.log(err);
     }
-    // goi api lay routes --> set state cho mang routes --> lay routing machine cho 2 diem 1 --> neu di den diem cuoi thi set lai state mang routes = routes[1:] --> xoa tat ca layer routing --> lay routing moi
   }
 
   useEffect(() => {
@@ -345,7 +372,7 @@ const Map1 = () => {
     <Fragment>
       <Box sx={{ position: 'relative', with: '100%' }}>
         <Box sx={{ height: "calc(100vh - 64px - 5px)" }}>
-          <MapContainer center={[21.023396, 105.850094]} zoom={17} style={{ height: "inherit" }} scrollWheelZoom={true}
+          <MapContainer center={[41.248447, -73.856077]} zoom={9} style={{ height: "inherit" }} scrollWheelZoom={true}
 
           >
             <LayersControl position="topright">
@@ -368,13 +395,18 @@ const Map1 = () => {
                   click: (e) => handleClickOpen(e, vehicle),
                 }}
               >
-                <PopupVehicleMarker vehicle={vehicle} handleClickOpen={handleClickOpenVehicle} />
+                {/* <PopupVehicleMarker vehicle={vehicle} handleClickOpen={handleClickOpenVehicle} /> */}
               </RotatedMarker>
             ))}
 
             {!!bins && bins.map((bin) => (
-              <RotatedMarker key={bin.id} position={[bin.latitude, bin.longitude]} icon={bin.status === "full" ? iconBinRed : bin.status === "empty" ? iconBinGreen : iconBinYellow}>
-                <PopupBinMarker bin={bin} handleClickOpen={handleClickOpenBin} />
+              <RotatedMarker key={bin.id} position={[bin.latitude, bin.longitude]} icon={bin.status === "full" ? iconBinRed : bin.status === "empty" ? iconBinGreen : iconBinYellow}
+                eventHandlers={{
+                  click: (e) => handleClickOpenBin(e, bin),
+                }}
+              >
+                {/* <PopupBinMarker bin={bin} handleClickOpen={handleClickOpenBin} /> */}
+
               </RotatedMarker>
             ))}
 

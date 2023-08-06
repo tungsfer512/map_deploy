@@ -11,10 +11,10 @@ const addEvent_Bin_state = async (data) => {
     try {
         await ADM_Bin.update(
             { status: data.status, weight: data.weight },
-            { where: { code: data.code }, raw: true }
+            { where: { id: data.id }, raw: true }
         );
         const bin = await ADM_Bin.findOne({
-            where: { code: data.code },
+            where: { id: data.id },
             raw: true
         });
         const log = new LOG_Bin_State(
@@ -38,7 +38,7 @@ const updatePosition = async (data) => {
     try {
         let vehicle = await ADM_Vehicle.findOne({
             where: {
-                code: data.code
+                id: data.id
             },
             raw: true
         })
@@ -48,7 +48,7 @@ const updatePosition = async (data) => {
             },
             {
                 where: {
-                    code: data.code
+                    id: data.id
                 },
                 raw: true
             })

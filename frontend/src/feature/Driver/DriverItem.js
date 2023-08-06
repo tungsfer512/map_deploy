@@ -15,6 +15,7 @@ import { assetUrl } from '../../ultils/axiosApi';
 import { getDriverDataById } from '../../store/reducers/driverSlice';
 import DriverStateLog from './DriverStateLog';
 import { useTranslation } from 'react-i18next';
+import { isAdmin } from "../Auth/Role"
 
 const DriverItem = () => {
     const { t } = useTranslation();
@@ -67,7 +68,7 @@ const DriverItem = () => {
                                     <Link underline="hover" color="inherit" href="/drivers">
                                         {t("drivers.pageName")}
                                     </Link>
-                                    <Typography color="text.primary">{driver.firstName + " " + driver.lastName}</Typography>
+                                    <Typography color="text.primary">{driver.lastName + " " + driver.firstName}</Typography>
                                 </Breadcrumbs>
                             </Typography>
 
@@ -78,7 +79,7 @@ const DriverItem = () => {
                         <Paper elevation={0} sx={{ width: { xs: "100%", sm: "100%", md: "100%", lg: "100%", }, height: "auto", p: 2, mt: 2 }}>
                             <Stack direction="row" alignItems="center" justifyContent="space-around" sx={{ mb: 2, pt: 2, flexDirection: { xs: "column", sm: "row", md: "row", lg: "row", } }}>
                                 <Box sx={{ p: 2, width: '100%', maxWidth: 500 }}>
-                                    <img src={`${assetUrl}/user/${driver.image}`} alt={driver.lastName} width="100%" />
+                                    <img src={`${assetUrl}/user/${driver.image}`} alt={driver.firstName} width="100%" />
                                 </Box>
                                 <Box sx={{ py: 2, minWidth: 300, width: "100%", maxWidth: 500 }}>
                                     <Box sx={{ textAlign: 'start', mb: 1, }}>
@@ -96,16 +97,19 @@ const DriverItem = () => {
                                                     pr: 0,
                                                 }}>
                                                     {t("driver")} {driver.plate}
-                                                    <Button
-                                                        variant='contained'
-                                                        aria-label="edit"
-                                                        color="warning"
-                                                        size="small"
-                                                        startIcon={<EditIcon />}
-                                                        onClick={() => navigate(`/drivers/edit/${driver.id}`, { state: driver })}
-                                                    >
-                                                        {t("drivers.edit")}
-                                                    </Button>
+                                                    {
+                                                        isAdmin() &&
+                                                        <Button
+                                                            variant='contained'
+                                                            aria-label="edit"
+                                                            color="warning"
+                                                            size="small"
+                                                            startIcon={<EditIcon />}
+                                                            onClick={() => navigate(`/drivers/edit/${driver.id}`, { state: driver })}
+                                                        >
+                                                            {t("drivers.edit")}
+                                                        </Button>
+                                                    }
                                                 </ListSubheader>
                                             }
                                             sx={{
@@ -154,19 +158,19 @@ const DriverItem = () => {
                                                 <ListItemIcon>
                                                     <BadgeIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={t("drivers.table.fullname")} secondary={driver.firstName + " " + driver.lastName} />
-                                            </ListItem>
-                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
-                                                <ListItemIcon>
-                                                    <DriveFileRenameOutlineIcon />
-                                                </ListItemIcon>
-                                                <ListItemText primary={t("drivers.table.firstName")} secondary={driver.firstName} />
+                                                <ListItemText primary={t("drivers.table.fullname")} secondary={driver.lastName + " " + driver.firstName} />
                                             </ListItem>
                                             <ListItem sx={{ height: 40 }}>
                                                 <ListItemIcon>
                                                     <DriveFileRenameOutlineIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t("drivers.table.lastName")} secondary={driver.lastName} />
+                                            </ListItem>
+                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
+                                                <ListItemIcon>
+                                                    <DriveFileRenameOutlineIcon />
+                                                </ListItemIcon>
+                                                <ListItemText primary={t("drivers.table.firstName")} secondary={driver.firstName} />
                                             </ListItem>
                                             <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
                                                 <ListItemIcon>
@@ -197,7 +201,7 @@ const DriverItem = () => {
                                 </Box>
                             </Stack>
 
-                            <DriverStateLog driverId={driverId} />
+                            {/* <DriverStateLog driverId={driverId} /> */}
                         </Paper>
                     </Box>
                 </Fragment>

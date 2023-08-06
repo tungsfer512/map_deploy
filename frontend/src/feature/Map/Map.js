@@ -36,7 +36,7 @@ const Map = () => {
   const [data, setData] = useState([]);
   const [dataAlert, setDataAlert] = useState([]);
   const [vehicle, setVehicle] = useState(
-     !!auth?.vehicle ? auth?.vehicle : {}
+    !!auth?.vehicle ? auth?.vehicle : {}
   );
   const [bins, setBins] = useState([]);
 
@@ -100,7 +100,7 @@ const Map = () => {
 
   }, []);
 
-    // useEffect(() => {
+  // useEffect(() => {
   //   const script = document.createElement('script');
 
   //   script.src = "https://cdn.jsdelivr.net/npm/hls.js@latest";
@@ -139,7 +139,7 @@ const Map = () => {
   // }
 
   // console.log('vehicles', vehicles);
-  if (!!vehicle && vehicle !== {}) {
+  if (!!vehicle && vehicle) {
     console.log(data);
     if (data?.length > 0) {
       let oldLat = vehicle.latitude;
@@ -215,7 +215,7 @@ const Map = () => {
     <Fragment>
       <Box sx={{ position: 'relative', with: '100%' }}>
         <Box sx={{ height: "calc(100vh - 64px - 5px)" }}>
-          <MapContainer center={vehicle !== {} ? [auth?.bins[0].latitude, auth?.bins[0].longitude] : [21.023396, 105.850094]} zoom={17} style={{ height: "inherit" }} scrollWheelZoom={true}
+          <MapContainer center={vehicle ? [auth?.bins[0].latitude, auth?.bins[0].longitude] : [21.023396, 105.850094]} zoom={17} style={{ height: "inherit" }} scrollWheelZoom={true}
 
           >
             <LayersControl position="topright">
@@ -234,17 +234,22 @@ const Map = () => {
 
 
             <RotatedMarker key={vehicle.id} position={[vehicle?.latitude, vehicle?.longitude]} icon={iconXe} rotationOrigin="center" rotationAngle={vehicle.angle}
-            // eventHandlers={{
-            //   click: (e) => { handleClickOpen(e) },
-            // }}
+              eventHandlers={{
+                click: (e) => { handleClickOpen(e) },
+              }}
             >
-              <PopupVehicleMarker vehicle={vehicle} handleClickOpen={handleClickOpen} />
+              {/* <PopupVehicleMarker vehicle={vehicle} handleClickOpen={handleClickOpen} /> */}
             </RotatedMarker>
 
 
             {!!bins && bins.map((bin) => (
-              <RotatedMarker key={bin.id} position={[bin.latitude, bin.longitude]} icon={bin.status === "full" ? iconBinRed : bin.status === "empty" ? iconBinGreen : iconBinYellow}>
-                <PopupBinMarker bin={bin} handleClickOpen={handleClickOpen} />
+              <RotatedMarker key={bin.id} position={[bin.latitude, bin.longitude]} icon={bin.status === "full" ? iconBinRed : bin.status === "empty" ? iconBinGreen : iconBinYellow}
+                eventHandlers={{
+                  click: (e) => { handleClickOpen(e) },
+                }}
+              >
+
+                {/* <PopupBinMarker bin={bin} handleClickOpen={handleClickOpen} /> */}
               </RotatedMarker>
             ))}
 

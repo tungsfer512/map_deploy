@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { deleteVehicleDataAsync } from '../../store/reducers/vehicleSlice';
 import { useTranslation } from 'react-i18next';
+import { isAdmin } from "../Auth/Role"
 
 const VehicleAction = ({ params }) => {
     const {t} = useTranslation();
@@ -34,16 +35,21 @@ const VehicleAction = ({ params }) => {
                     <PreviewIcon />
                 </IconButton>
             </Tooltip>
-            <Tooltip title={t("vehicles.edit")}>
-                <IconButton onClick={onEdit}>
-                    <EditIcon />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title={t("vehicles.delete")}>
-                <IconButton onClick={onDelete}>
-                    <DeleteIcon />
-                </IconButton>
-            </Tooltip>
+            {
+                isAdmin() &&
+                <>
+                    <Tooltip title={t("vehicles.edit")}>
+                        <IconButton onClick={onEdit}>
+                            <EditIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title={t("vehicles.delete")}>
+                        <IconButton onClick={onDelete}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
+                </>
+            }
         </Box>
     )
 }
