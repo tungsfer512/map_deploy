@@ -34,9 +34,9 @@ const verify_Token_Admin = (req, res, next) => {
         }
     });
 };
-const verify_Token_Manager_Admin = (req, res, next) => {
+const verify_Token_Company_staff_Admin = (req, res, next) => {
     verify_Token(req, res, () => {
-        if (req.user.role === 'admin' || req.user.role === 'manager') {
+        if (req.user.role === 'admin' || req.user.role === 'company_staff') {
             next();
         } else {
             return res.status(403).json({
@@ -58,12 +58,12 @@ const verify_Token_UserId_Admin = (req, res, next) => {
         }
     });
 };
-const verify_Token_UserId_Manager_Admin = (req, res, next) => {
+const verify_Token_UserId_Company_staff_Admin = (req, res, next) => {
     verify_Token(req, res, () => {
         if (
             req.user.id == req.params.userId ||
             req.user.role === 'admin' ||
-            req.user.role === 'manager'
+            req.user.role === 'company_staff'
         ) {
             next();
         } else {
@@ -79,6 +79,6 @@ module.exports = {
     verify_Token,
     verify_Token_Admin,
     verify_Token_UserId_Admin,
-    verify_Token_Manager_Admin,
-    verify_Token_UserId_Manager_Admin
+    verify_Token_Company_staff_Admin,
+    verify_Token_UserId_Company_staff_Admin
 };

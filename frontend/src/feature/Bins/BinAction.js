@@ -7,6 +7,7 @@ import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { deleteBinDataAsync } from '../../store/reducers/binSlice';
 import { useTranslation } from 'react-i18next';
+import { isAdmin } from "../Auth/Role"
 
 const BinAction = ({ params }) => {
     const {t} = useTranslation();
@@ -34,16 +35,21 @@ const BinAction = ({ params }) => {
                     <PreviewIcon />
                 </IconButton>
             </Tooltip>
-            <Tooltip title={t("bins.edit")}>
-                <IconButton onClick={onEdit}>
-                    <EditIcon />
-                </IconButton>
-            </Tooltip>
-            <Tooltip title={t("bins.delete")}>
-                <IconButton onClick={onDelete}>
-                    <DeleteIcon />
-                </IconButton>
-            </Tooltip>
+            {
+                isAdmin() &&
+                <>
+                    <Tooltip title={t("bins.edit")}>
+                        <IconButton onClick={onEdit}>
+                            <EditIcon />
+                        </IconButton>
+                    </Tooltip>
+                    <Tooltip title={t("bins.delete")}>
+                        <IconButton onClick={onDelete}>
+                            <DeleteIcon />
+                        </IconButton>
+                    </Tooltip>
+                </>
+            }
         </Box>
     )
 }

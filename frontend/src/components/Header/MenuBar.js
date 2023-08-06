@@ -70,7 +70,7 @@ export default function Appbar() {
             <NotificationPopover />
 
             <Button startIcon={<Avatar sx={{ bgcolor: deepOrange[500], width: 24, height: 24 }}>
-                {user?.lastName?.charAt(0)}
+                {user?.firstName?.charAt(0)}
             </Avatar>}
                 id="basic-button"
                 aria-controls={open ? 'basic-menu' : undefined}
@@ -79,7 +79,7 @@ export default function Appbar() {
                 onClick={handleClick}
                 sx={{ color: "inherit", ml: { xs: 0, sm: 2 }, pr: 1 }}
             >
-                {width > 600 ? (!!user ? user.lastName : 'Hung') : ''}
+                {width > 600 ? (!!user ? user.firstName : 'Hung') : ''}
             </Button>
             <Menu
                 id="basic-menu"

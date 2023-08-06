@@ -21,6 +21,7 @@ import { getBinDataById } from '../../store/reducers/binSlice';
 import BinStateLog from './BinStateLog';
 import { useTranslation } from 'react-i18next';
 import { getStatus } from './constant';
+import { isAdmin } from "../Auth/Role"
 
 const BinItem = () => {
     const { t } = useTranslation();
@@ -34,10 +35,10 @@ const BinItem = () => {
         {
             id: 0,
             code: "",
-            areaId: 0,
+            // areaId: 0,
             latitude: 0,
             longitude: 0,
-            address: "",
+            // address: "",
             height: 0,
             length: 0,
             width: 0,
@@ -51,6 +52,7 @@ const BinItem = () => {
             camera1: "",
             camera2: "",
             camera3: "",
+            company: []
         }
     );
 
@@ -113,16 +115,19 @@ const BinItem = () => {
                                                     pr: 0,
                                                 }}>
                                                     {t("bin")} {bin.id}
-                                                    <Button
-                                                        variant='contained'
-                                                        aria-label="edit"
-                                                        color="warning"
-                                                        size="small"
-                                                        startIcon={<EditIcon />}
-                                                        onClick={() => navigate(`/bins/edit/${bin.id}`, { state: bin })}
-                                                    >
-                                                        {t("bins.edit")}
-                                                    </Button>
+                                                    {
+                                                        isAdmin() &&
+                                                        <Button
+                                                            variant='contained'
+                                                            aria-label="edit"
+                                                            color="warning"
+                                                            size="small"
+                                                            startIcon={<EditIcon />}
+                                                            onClick={() => navigate(`/bins/edit/${bin.id}`, { state: bin })}
+                                                        >
+                                                            {t("bins.edit")}
+                                                        </Button>
+                                                    }
                                                 </ListSubheader>
                                             }
                                             sx={{
@@ -180,11 +185,16 @@ const BinItem = () => {
                                                 </ListItemIcon>
                                                 <ListItemText primary="Code" secondary={bin.code} />
                                             </ListItem>
-                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
+                                            <ListItem style={{height: "auto"}} sx={{ backgroundColor: '#f5f5f5', height: 40 }}>
                                                 <ListItemIcon>
                                                     <MapIcon />
                                                 </ListItemIcon>
-                                                <ListItemText primary={t("bins.table.areaId")} secondary={bin.areaId} />
+                                                <ListItemText
+                                                    primary={t("bins.table.company")}
+                                                    secondary={
+                                                        bin.company.map((company) => (<div>{company.id + " - " + company.name}</div>))
+                                                    }
+                                                ></ListItemText>
                                             </ListItem>
                                             <ListItem sx={{ height: 40 }}>
                                                 <ListItemIcon>
@@ -192,12 +202,12 @@ const BinItem = () => {
                                                 </ListItemIcon>
                                                 <ListItemText primary={t("bins.form.position")} secondary={bin.latitude.toFixed(6) + ', ' + bin.longitude.toFixed(6)} />
                                             </ListItem>
-                                            <ListItem sx={{ backgroundColor: '#f5f5f5', height: 'max-content' }}>
+                                            {/* <ListItem sx={{ backgroundColor: '#f5f5f5', height: 'max-content' }}>
                                                 <ListItemIcon>
                                                     <RoomIcon />
                                                 </ListItemIcon>
                                                 <ListItemText primary={t("bins.table.address")} className="ipcambin" secondary={bin.address} />
-                                            </ListItem>
+                                            </ListItem> */}
                                             <ListItem sx={{ height: 40 }}>
                                                 <ListItemIcon>
                                                     <HeightIcon />
@@ -269,7 +279,7 @@ const BinItem = () => {
                                 </Box>
                             </Stack>
 
-                            <BinStateLog binId={binId} />
+                            {/* <BinStateLog binId={binId} /> */}
                         </Paper>
                     </Box>
                 </Fragment>

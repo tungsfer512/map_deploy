@@ -21,13 +21,6 @@ const addNewVehicle = async (req, res) => {
         console.log(newVehicleData);
         if (
             !newVehicleData.engineHours ||
-            !newVehicleData.engineId ||
-            !newVehicleData.engineType ||
-            !newVehicleData.model ||
-            !newVehicleData.height ||
-            !newVehicleData.length ||
-            !newVehicleData.width ||
-            !newVehicleData.odometer ||
             !newVehicleData.plate ||
             !newVehicleData.tonnage
         ) {
@@ -36,23 +29,17 @@ const addNewVehicle = async (req, res) => {
                 resMessage: 'Missing input value(s).'
             });
         }
-        let newVehicle = new ADM_Vehicle({
-            engineHours: newVehicleData.engineHours,
-            engineId: newVehicleData.engineId,
-            engineType: newVehicleData.engineType,
-            model: newVehicleData.model,
-            height: newVehicleData.height,
-            length: newVehicleData.length,
-            width: newVehicleData.width,
-            odometer: newVehicleData.odometer,
-            plate: newVehicleData.plate,
-            tonnage: newVehicleData.tonnage,
-            image: newVehicleData.image,
-            description: newVehicleData?.description,
-            status: 'off'
-        });
+        newVehicleData.status = 'on';
+
+        let newVehicle = new ADM_Vehicle(newVehicleData);
         let resData = newVehicle.dataValues;
         await newVehicle.save();
+        if(!newVehicleData?.latitude) {
+            newVehicleData.latitude = 21.028511;
+        }
+        if(!newVehicleData?.longitude) {
+            newVehicleData.longitude = 105.804817;
+        }
         let newVehiclePosition = new SUP_Vehicle_Position({
             latitude: newVehicleData?.latitude,
             longitude: newVehicleData?.longitude,
@@ -127,13 +114,6 @@ const updateVehicleById = async (req, res) => {
         }
         if (
             !newVehicleData.engineHours ||
-            !newVehicleData.engineId ||
-            !newVehicleData.engineType ||
-            !newVehicleData.model ||
-            !newVehicleData.height ||
-            !newVehicleData.length ||
-            !newVehicleData.width ||
-            !newVehicleData.odometer ||
             !newVehicleData.plate ||
             !newVehicleData.tonnage
         ) {
@@ -142,22 +122,7 @@ const updateVehicleById = async (req, res) => {
                 resMessage: 'Missing input value(s).'
             });
         }
-        await ADM_Vehicle.update(
-            {
-                engineHours: newVehicleData.engineHours,
-                engineId: newVehicleData.engineId,
-                engineType: newVehicleData.engineType,
-                model: newVehicleData.model,
-                height: newVehicleData.height,
-                length: newVehicleData.length,
-                width: newVehicleData.width,
-                odometer: newVehicleData.odometer,
-                plate: newVehicleData.plate,
-                tonnage: newVehicleData.tonnage,
-                image: newVehicleData.image,
-                description: newVehicleData?.description,
-                status: newVehicleData?.status
-            },
+        await ADM_Vehicle.update(newVehicleData,
             {
                 where: {
                     id: req.params.vehicleId
@@ -244,14 +209,6 @@ const getVehicleById = async (req, res) => {
                 resMessage: 'Vehicle not found.'
             });
         }
-        let vehiclePosition = await SUP_Vehicle_Position.findOne({
-            where: {
-                vehicleId: vehicle.id
-            },
-            raw: true
-        });
-        vehicle.latitude = vehiclePosition.latitude;
-        vehicle.longitude = vehiclePosition.longitude;
         return res.status(200).json({
             resCode: 200,
             resMessage: 'OK',
@@ -321,9 +278,9 @@ const getVehicleValidation = async (req, res) => {
         let valids = vehicles.filter(vehicle => vehicle.status === 'valid')
         let invalids = vehicles.filter(vehicle => vehicle.status === 'invalid')
         let resData = {
-            'graph':[
-                {'name': 'Valid', 'value': valids.length},
-                {'name': 'Invalid', 'value': invalids.length}
+            'graph': [
+                { 'name': 'Valid', 'value': valids.length },
+                { 'name': 'Invalid', 'value': invalids.length }
             ],
             'data': vehicles
         }
@@ -657,13 +614,13 @@ let getRoutesByVehicleId = async (req, res) => {
 
         resData.sort((a, b) => {
             if (a.stop_number > b.stop_number)
-            return 1
+                return 1
             if (a.stop_number < b.stop_number)
-            return -1
+                return -1
             if (a.demand_id > b.demand_id)
-            return 1
+                return 1
             if (a.demand_id < b.demand_id)
-            return -1
+                return -1
         })
         return res.status(200).json({
             resCode: 200,
@@ -672,7 +629,7 @@ let getRoutesByVehicleId = async (req, res) => {
         });
 
     } catch (err) {
-        console.log("err",  err)
+        console.log("err", err)
         return res.status(500).json({
             resCode: 500,
             resMessage: err

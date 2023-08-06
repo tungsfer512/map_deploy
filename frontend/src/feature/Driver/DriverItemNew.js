@@ -133,8 +133,8 @@ const DriverItemNew = ({ state }) => {
                 <Typography variant="h6" component="h3" fontWeight='bold' gutterBottom>
                   {t("drivers.form.infomation")}
                 </Typography>
-                <TextField id="outlined-basic" label={t("drivers.table.firstName")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={driverItem.firstName} onChange={handleInputChange} name="firstName" />
                 <TextField id="outlined-basic" label={t("drivers.table.lastName")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={driverItem.lastName} onChange={handleInputChange} name="lastName" />
+                <TextField id="outlined-basic" label={t("drivers.table.firstName")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={driverItem.firstName} onChange={handleInputChange} name="firstName" />
                 <TextField id="outlined-basic" label={t("drivers.table.email")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={driverItem.email} onChange={handleInputChange} name="email" />
                 <TextField id="outlined-basic" label={t("drivers.table.phone")} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={driverItem.phone} onChange={handleInputChange} name="phone" />
                 <TextField id="outlined-basic" label={t("login.password")} type={"password"} variant="outlined" sx={{ width: '100%', mb: 2, mt: 1 }} value={driverItem.password} onChange={handleInputChange} name="password" />

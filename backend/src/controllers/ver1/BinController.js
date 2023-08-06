@@ -1,4 +1,4 @@
-const { ADM_Bin, ADM_Area } = require('../../models/ver1/models');
+const { ADM_Bin, ADM_Company, ADM_Bin_Company } = require('../../models/ver1/models');
 const uploadFile = require('../uploadFileMiddleware');
 
 // Create
@@ -11,42 +11,36 @@ const addNewBin = async (req, res) => {
         if (
             !newBinData.latitude ||
             !newBinData.longitude ||
-            !newBinData.address ||
-            !newBinData.height ||
-            !newBinData.length ||
-            !newBinData.width ||
             !newBinData.maxWeight ||
-            !newBinData.color ||
-            !newBinData.material ||
-            !newBinData.brand ||
-            !newBinData.areaId
+            !newBinData.camera1 ||
+            !newBinData.camera2 ||
+            !newBinData.camera3 ||
+            !newBinData.companyId
         ) {
             return res.status(400).json({
                 resCode: 400,
                 resMessage: 'Missing input value(s).'
             });
         }
-        let newBin = new ADM_Bin({
-            latitude: newBinData.latitude,
-            longitude: newBinData.longitude,
-            address: newBinData.address,
-            height: newBinData.height,
-            length: newBinData.length,
-            width: newBinData.width,
-            maxWeight: newBinData.maxWeight,
-            color: newBinData.color,
-            material: newBinData.material,
-            brand: newBinData.brand,
-            image: newBinData.image,
-            description: newBinData.description,
-            status: 'empty',
-            areaId: newBinData.areaId,
-            camera1: newBinData.camera1,
-            camera2: newBinData.camera2,
-            camera3: newBinData.camera3
-        });
+        newBinData.status = 'empty';
+        let newBin = new ADM_Bin(newBinData);
         let resData = newBin.dataValues;
         await newBin.save();
+
+        let companyIds = newBinData.companyId.split(',');
+        for (let i = 0; i < companyIds.length; i++) {
+            let newBinCompany = new ADM_Bin_Company({
+                binId: Number(resData.id),
+                companyId: Number(companyIds[i])
+            });
+            await newBinCompany.save();
+        }      
+        resData.company = await ADM_Company.findAll({
+            where: {
+                id: companyIds
+            },
+            raw: true
+        });
         return res.status(200).json({
             resCode: 200,
             resMessage: 'OK',
@@ -116,41 +110,18 @@ const updateBinById = async (req, res) => {
         if (
             !newBinData.latitude ||
             !newBinData.longitude ||
-            !newBinData.address ||
-            !newBinData.height ||
-            !newBinData.length ||
-            !newBinData.width ||
             !newBinData.maxWeight ||
-            !newBinData.color ||
-            !newBinData.material ||
-            !newBinData.brand ||
-            !newBinData.areaId
+            !newBinData.camera1 ||
+            !newBinData.camera2 ||
+            !newBinData.camera3 ||
+            !newBinData.companyId
         ) {
             return res.status(400).json({
                 resCode: 400,
                 resMessage: 'Missing input value(s).'
             });
         }
-        await ADM_Bin.update(
-            {
-                latitude: newBinData.latitude,
-                longitude: newBinData.longitude,
-                address: newBinData.address,
-                height: newBinData.height,
-                length: newBinData.length,
-                width: newBinData.width,
-                maxWeight: newBinData.maxWeight,
-                color: newBinData.color,
-                material: newBinData.material,
-                brand: newBinData.brand,
-                image: newBinData.image,
-                description: newBinData.description,
-                status: 'empty',
-                areaId: newBinData.areaId,
-                camera1: newBinData.camera1,
-                camera2: newBinData.camera2,
-                camera3: newBinData.camera3
-            },
+        await ADM_Bin.update(newBinData,
             {
                 where: {
                     id: req.params.binId
@@ -158,9 +129,33 @@ const updateBinById = async (req, res) => {
                 raw: true
             }
         );
+
+        let companyIds = newBinData.companyId.split(',');
+        for (let i = 0; i < companyIds.length; i++) {
+            let binCompany = await ADM_Bin_Company.findOne({
+                where: {
+                    binId: req.params.binId,
+                    companyId: Number(companyIds[i])
+                },
+                raw: true
+            });
+            if (!binCompany) {
+                let newBinCompany = new ADM_Bin_Company({
+                    binId: Number(req.params.binId),
+                    companyId: Number(companyIds[i])
+                });
+                await newBinCompany.save();
+            }
+        }      
         let resData = await ADM_Bin.findOne({
             where: {
                 id: req.params.binId
+            },
+            raw: true
+        });
+        resData.company = await ADM_Company.findAll({
+            where: {
+                id: companyIds
             },
             raw: true
         });
@@ -189,11 +184,32 @@ const getAllBin = async (req, res) => {
             });
         }
         for (let i = 0; i < bins.length; i++) {
-            bins[i].area = await ADM_Area.findOne({
+            let binCompany = await ADM_Bin_Company.findAll({
                 where: {
-                    id: bins[i].areaId
+                    binId: bins[i].id
                 },
                 raw: true
+            });
+            let companyIds = [];
+            for (let j = 0; j < binCompany.length; j++) {
+                companyIds.push(binCompany[j].companyId);
+            }
+            bins[i].company = await ADM_Company.findAll({
+                where: {
+                    id: companyIds
+                },
+                raw: true
+            });
+        }
+        console.log("____________________", req?.query);
+        if (req.query.companyId) {
+            console.log("____________________", req.query.companyId);
+            bins = bins.filter((bin) => {
+                let companyIds = [];
+                for (let i = 0; i < bin.company.length; i++) {
+                    companyIds.push(bin.company[i].id);
+                }
+                return companyIds.includes(Number(req.query.companyId));
             });
         }
         return res.status(200).json({
@@ -222,9 +238,19 @@ const getBinById = async (req, res) => {
                 resMessage: 'ADM_Bin not found.'
             });
         }
-        bin.area = await ADM_Area.findOne({
+        let binCompany = await ADM_Bin_Company.findAll({
             where: {
-                id: bin.areaId
+                binId: bin.id
+            },
+            raw: true
+        });
+        let companyIds = [];
+        for (let j = 0; j < binCompany.length; j++) {
+            companyIds.push(binCompany[j].companyId);
+        }
+        bin.company = await ADM_Company.findAll({
+            where: {
+                id: companyIds
             },
             raw: true
         });

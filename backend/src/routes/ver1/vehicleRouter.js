@@ -7,7 +7,7 @@ let vehicleRouter = express.Router();
 
 vehicleRouter.post(
     '/add',
-    MiddlewareController.verify_Token_Manager_Admin,
+    MiddlewareController.verify_Token_Company_staff_Admin,
     VehicleController.addNewVehicle
 );
 vehicleRouter.put(
@@ -17,7 +17,7 @@ vehicleRouter.put(
 );
 vehicleRouter.delete(
     '/delete/:vehicleId',
-    MiddlewareController.verify_Token_Manager_Admin,
+    MiddlewareController.verify_Token_Company_staff_Admin,
     VehicleController.deleteVehicleById
 );
 vehicleRouter.post(
@@ -42,7 +42,7 @@ vehicleRouter.get(
 );
 vehicleRouter.get(
     '/',
-    MiddlewareController.verify_Token_Manager_Admin,
+    MiddlewareController.verify_Token_Company_staff_Admin,
     VehicleController.getAllVehicle
 );
 

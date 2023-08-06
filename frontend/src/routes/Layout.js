@@ -9,7 +9,7 @@ const Layout = () => {
   return (
     <Stack direction='row' sx={{ minWidth: { xs: 300, md: 600 } }}>
       <ConnectSocket>
-        {!!auth && (auth.role.includes('admin') || auth.role.includes('manager')) && <Sidebar />}
+        {!!auth && (auth.role.includes('admin') || auth.role.includes('company')) && <Sidebar />}
         <PageWrapper />
       </ConnectSocket>
     </Stack>

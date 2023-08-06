@@ -21,10 +21,10 @@ import {
   DriverItemNew
 } from './feature/Driver';
 import {
-  Managers,
-  ManagerItem,
-  ManagerItemNew
-} from './feature/Manager';
+  Companies,
+  CompanyItem,
+  CompanyItemNew
+} from './feature/Companies';
 
 import {
   ValidVehicle
@@ -56,10 +56,10 @@ const App = () => {
     }
   }
 
-  const isManager = () => {
+  const isCompany = () => {
     const user = localStorage.getItem('user')
     if (user) {
-      return !!user && JSON.parse(user).role.includes('manager');
+      return !!user && JSON.parse(user).role.includes('company_staff');
     } else {
       return false
     }
@@ -83,29 +83,29 @@ const App = () => {
           <Route index element={isDriver() ? <Map /> : <Map1 />} />
           <Route path="map" element={isDriver() ? <Map /> : <Map1 />} />
 
-          {(isAdmin() || isManager()) && <Route path="dashboard" element={<Dashboard />} />}
+          {(isAdmin() || isCompany()) && <Route path="dashboard" element={<Dashboard />} />}
 
-          {(isAdmin() || isManager()) && <Route path="vehicles" element={<Vehicles />} />}
-          {(isAdmin() || isManager()) && <Route path="vehicles/:vehicleId" element={<VehicleItem />} />}
-          {(isAdmin() || isManager()) && <Route path="vehicles/add" element={<VehicleItemNew state={"new"} />} />}
-          {(isAdmin() || isManager()) && <Route path="vehicles/edit/:vehicleId" element={<VehicleItemNew state={"edit"} />} />}
+          {(isAdmin() || isCompany()) && <Route path="vehicles" element={<Vehicles />} />}
+          {(isAdmin() || isCompany()) && <Route path="vehicles/:vehicleId" element={<VehicleItem />} />}
+          {(isAdmin()) && <Route path="vehicles/add" element={<VehicleItemNew state={"new"} />} />}
+          {(isAdmin()) && <Route path="vehicles/edit/:vehicleId" element={<VehicleItemNew state={"edit"} />} />}
 
-          {(isAdmin() || isManager()) && <Route path="drivers" element={<Drivers />} />}
-          {(isAdmin() || isManager()) && <Route path="drivers/:driverId" element={<DriverItem />} />}
-          {(isAdmin() || isManager()) && <Route path="drivers/add" element={<DriverItemNew state={"new"} />} />}
-          {(isAdmin() || isManager()) && <Route path="drivers/edit/:driverId" element={<DriverItemNew state={"edit"} />} />}
+          {(isAdmin() || isCompany()) && <Route path="drivers" element={<Drivers />} />}
+          {(isAdmin() || isCompany()) && <Route path="drivers/:driverId" element={<DriverItem />} />}
+          {(isAdmin()) && <Route path="drivers/add" element={<DriverItemNew state={"new"} />} />}
+          {(isAdmin()) && <Route path="drivers/edit/:driverId" element={<DriverItemNew state={"edit"} />} />}
 
-          {(isAdmin()) && <Route path="managers" element={<Managers />} />}
-          {(isAdmin()) && <Route path="managers/:managerId" element={<ManagerItem />} />}
-          {(isAdmin()) && <Route path="managers/add" element={<ManagerItemNew state={"new"} />} />}
-          {(isAdmin()) && <Route path="managers/edit/:managerId" element={<ManagerItemNew state={"edit"} />} />}
+          {(isAdmin()) && <Route path="companies" element={<Companies />} />}
+          {(isAdmin()) && <Route path="companies/:companyId" element={<CompanyItem />} />}
+          {(isAdmin()) && <Route path="companies/add" element={<CompanyItemNew state={"new"} />} />}
+          {(isAdmin()) && <Route path="companies/edit/:companyId" element={<CompanyItemNew state={"edit"} />} />}
 
-          {(isAdmin() || isManager()) && <Route path="bins" element={<Bins />} />}
-          {(isAdmin() || isManager()) && <Route path="bins/:binId" element={<BinItem />} />}
-          {(isAdmin() || isManager()) && <Route path="bins/add" element={<BinItemNew state={"new"} />} />}
-          {(isAdmin() || isManager()) && <Route path="bins/edit/:binId" element={<BinItemNew state={"edit"} />} />}
+          {(isAdmin() || isCompany()) && <Route path="bins" element={<Bins />} />}
+          {(isAdmin() || isCompany()) && <Route path="bins/:binId" element={<BinItem />} />}
+          {(isAdmin()) && <Route path="bins/add" element={<BinItemNew state={"new"} />} />}
+          {(isAdmin()) && <Route path="bins/edit/:binId" element={<BinItemNew state={"edit"} />} />}
 
-          {(isAdmin() || isManager()) && <Route path="alerts" element={<ValidVehicle />} />}
+          {(isAdmin() || isCompany()) && <Route path="alerts" element={<ValidVehicle />} />}
 
           <Route path="*" element={<div>Not Found</div>} />
         </Route>

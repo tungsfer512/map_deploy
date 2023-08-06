@@ -1,4 +1,4 @@
-const { ADM_User, ADM_Area, ADM_Task, ADM_Bin, ADM_Vehicle, SUP_Vehicle_Position } = require('../../models/ver1/models');
+const { ADM_User, ADM_Company, ADM_Task, ADM_Bin, ADM_Vehicle, SUP_Vehicle_Position } = require('../../models/ver1/models');
 const bcrypt = require('bcrypt');
 const uploadFile = require('../uploadFileMiddleware');
 
@@ -7,7 +7,6 @@ const addNewDriver = async (req, res) => {
     try {
         await uploadFile(req, res);
         let newDriverData = req.body;
-        newDriverData.role = 'driver';
         newDriverData.image =
             req?.files?.user?.[0]?.filename || 'default_user.png';
         if (
@@ -16,8 +15,7 @@ const addNewDriver = async (req, res) => {
             !newDriverData.email ||
             !newDriverData.firstName ||
             !newDriverData.lastName ||
-            !newDriverData.gender ||
-            !newDriverData.dob
+            !newDriverData.gender
         ) {
             return res.status(400).json({
                 resCode: 400,
@@ -35,19 +33,10 @@ const addNewDriver = async (req, res) => {
         }
         let salt = await bcrypt.genSalt(10);
         let encodedPassword = await bcrypt.hash(newDriverData.password, salt);
-        let newDriver = new ADM_User({
-            phone: newDriverData.phone,
-            password: encodedPassword,
-            email: newDriverData.email,
-            firstName: newDriverData.firstName,
-            lastName: newDriverData.lastName,
-            gender: newDriverData.gender,
-            dob: newDriverData.dob,
-            image: newDriverData.image,
-            description: newDriverData?.description,
-            status: 'off',
-            role: newDriverData.role
-        });
+        newDriverData.password = encodedPassword;
+        newDriverData.role = 'driver';
+        newDriverData.status = 'on';
+        let newDriver = new ADM_User(newDriverData);
         let resData = newDriver.dataValues;
         await newDriver.save();
         delete resData.password;
@@ -131,8 +120,7 @@ const updateDriverById = async (req, res) => {
             !newDriverData.email ||
             !newDriverData.firstName ||
             !newDriverData.lastName ||
-            !newDriverData.gender ||
-            !newDriverData.dob
+            !newDriverData.gender
         ) {
             return res.status(400).json({
                 resCode: 400,
@@ -141,18 +129,9 @@ const updateDriverById = async (req, res) => {
         }
         let salt = await bcrypt.genSalt(10);
         let encodedPassword = await bcrypt.hash(newDriverData.password, salt);
+        newDriverData.password = encodedPassword;
         await ADM_User.update(
-            {
-                password: encodedPassword,
-                email: newDriverData.email,
-                firstName: newDriverData.firstName,
-                lastName: newDriverData.lastName,
-                gender: newDriverData.gender,
-                dob: newDriverData.dob,
-                image: newDriverData.image,
-                description: newDriverData?.description,
-                status: newDriverData?.status
-            },
+            newDriverData,
             {
                 where: {
                     id: req.params.userId,
@@ -232,49 +211,10 @@ const getDriverById = async (req, res) => {
                 resMessage: 'ADM_User not found.'
             });
         }
-        let task = await ADM_Task.findOne({
-            where: {
-                driverId: driver.id,
-                status: 'on'
-            },
-            raw: true
-        });
-        let area = await ADM_Area.findOne({
-            where: {
-                id: task.areaId
-            },
-            raw: true
-        })
-        let bins = await ADM_Bin.findAll({
-            where: {
-                areaId: task.areaId
-            },
-            raw: true
-        })
-        let vehicle = await ADM_Vehicle.findOne({
-            where: {
-                id: task.vehicleId
-            },
-            raw: true
-        })
-        let vehiclePosition = await SUP_Vehicle_Position.findOne({
-            where: {
-                vehicleId: vehicle.id
-            },
-            raw: true
-        });
-        vehicle.latitude = vehiclePosition.latitude;
-        vehicle.longitude = vehiclePosition.longitude;
-        let resData = {
-            ...driver,
-            area: area,
-            bins: bins,
-            vehicle: vehicle
-        };
         return res.status(200).json({
             resCode: 200,
             resMessage: 'OK',
-            data: resData
+            data: driver
         });
     } catch (err) {
         return res.status(500).json({
@@ -284,28 +224,27 @@ const getDriverById = async (req, res) => {
     }
 };
 // Create
-const addNewManager = async (req, res) => {
+const addNewCompany_staff = async (req, res) => {
     try {
         await uploadFile(req, res);
-        let newManagerData = req.body;
-        newManagerData.role = 'manager';
-        newManagerData.image =
+        let newCompany_staffData = req.body;
+        newCompany_staffData.image =
             req?.files?.user?.[0]?.filename || 'default_user.png';
         if (
-            !newManagerData.phone ||
-            !newManagerData.password ||
-            !newManagerData.email ||
-            !newManagerData.firstName ||
-            !newManagerData.lastName ||
-            !newManagerData.gender ||
-            !newManagerData.dob
+            !newCompany_staffData.phone ||
+            !newCompany_staffData.password ||
+            !newCompany_staffData.email ||
+            !newCompany_staffData.firstName ||
+            !newCompany_staffData.lastName ||
+            !newCompany_staffData.gender ||
+            !newCompany_staffData.companyId
         ) {
             return res.status(400).json({
                 resCode: 400,
                 resMessage: 'Missing input value(s).'
             });
         }
-        let isPhoneExist = await isPhoneExisted(newManagerData.phone);
+        let isPhoneExist = await isPhoneExisted(newCompany_staffData.phone);
         if (isPhoneExist) {
             return res.status(400).json({
                 resCode: 400,
@@ -314,22 +253,19 @@ const addNewManager = async (req, res) => {
             });
         }
         let salt = await bcrypt.genSalt(10);
-        let encodedPassword = await bcrypt.hash(newManagerData.password, salt);
-        let newManager = new ADM_User({
-            phone: newManagerData.phone,
-            password: encodedPassword,
-            email: newManagerData.email,
-            firstName: newManagerData.firstName,
-            lastName: newManagerData.lastName,
-            gender: newManagerData.gender,
-            dob: newManagerData.dob,
-            image: newManagerData.image,
-            description: newManagerData?.description,
-            status: 'off',
-            role: newManagerData.role
+        let encodedPassword = await bcrypt.hash(newCompany_staffData.password, salt);
+        newCompany_staffData.password = encodedPassword;
+        newCompany_staffData.status = 'on';
+        newCompany_staffData.role = 'company_staff';
+        let newCompany_staff = new ADM_User(newCompany_staffData);
+        let resData = newCompany_staff.dataValues;
+        await newCompany_staff.save();
+        resData.company = await ADM_Company.findOne({
+            where: {
+                id: newCompany_staffData.companyId
+            },
+            raw: true
         });
-        let resData = newManager.dataValues;
-        await newManager.save();
         delete resData.password;
         return res.status(200).json({
             resCode: 200,
@@ -344,19 +280,19 @@ const addNewManager = async (req, res) => {
     }
 };
 // Delete
-const deleteManagerById = async (req, res) => {
+const deleteCompany_staffById = async (req, res) => {
     try {
-        let manager = await ADM_User.findOne({
+        let company_staff = await ADM_User.findOne({
             attributes: {
                 exclude: ['password']
             },
             where: {
                 id: req.params.userId,
-                role: 'manager'
+                role: 'company_staff'
             },
             raw: true
         });
-        if (!manager) {
+        if (!company_staff) {
             return res.status(404).json({
                 resCode: 404,
                 resMessage: 'ADM_User not found.'
@@ -365,7 +301,7 @@ const deleteManagerById = async (req, res) => {
         await ADM_User.destroy({
             where: {
                 id: req.params.userId,
-                role: 'manager'
+                role: 'company_staff'
             },
             raw: true
         });
@@ -381,38 +317,38 @@ const deleteManagerById = async (req, res) => {
     }
 };
 // Update
-const updateManagerById = async (req, res) => {
+const updateCompany_staffById = async (req, res) => {
     try {
-        let manager = await ADM_User.findOne({
+        let company_staff = await ADM_User.findOne({
             attributes: {
                 exclude: ['password']
             },
             where: {
                 id: req.params.userId,
-                role: 'manager'
+                role: 'company_staff'
             },
             raw: true
         });
-        if (!manager) {
+        if (!company_staff) {
             return res.status(404).json({
                 resCode: 404,
                 resMessage: 'ADM_User not found.'
             });
         }
         await uploadFile(req, res);
-        let newManagerData = req.body;
+        let newCompany_staffData = req.body;
         if (req.files == undefined) {
-            newManagerData.image = manager.image;
+            newCompany_staffData.image = company_staff.image;
         } else {
-            newManagerData.image = req?.files?.user?.[0]?.filename;
+            newCompany_staffData.image = req?.files?.user?.[0]?.filename;
         }
         if (
-            !newManagerData.password ||
-            !newManagerData.email ||
-            !newManagerData.firstName ||
-            !newManagerData.lastName ||
-            !newManagerData.gender ||
-            !newManagerData.dob
+            !newCompany_staffData.password ||
+            !newCompany_staffData.email ||
+            !newCompany_staffData.firstName ||
+            !newCompany_staffData.lastName ||
+            !newCompany_staffData.gender ||
+            !newCompany_staffData.companyId
         ) {
             return res.status(400).json({
                 resCode: 400,
@@ -420,23 +356,14 @@ const updateManagerById = async (req, res) => {
             });
         }
         let salt = await bcrypt.genSalt(10);
-        let encodedPassword = await bcrypt.hash(newManagerData.password, salt);
-        await ADM_User.update(
-            {
-                password: encodedPassword,
-                email: newManagerData.email,
-                firstName: newManagerData.firstName,
-                lastName: newManagerData.lastName,
-                gender: newManagerData.gender,
-                dob: newManagerData.dob,
-                description: newManagerData?.description,
-                status: newManagerData?.status,
-                image: newManagerData.image
-            },
+        let encodedPassword = await bcrypt.hash(newCompany_staffData.password, salt);
+        newCompany_staffData.password = encodedPassword;
+        newCompany_staffData.role = 'company_staff';
+        await ADM_User.update(newCompany_staffData,
             {
                 where: {
                     id: req.params.userId,
-                    role: 'manager'
+                    role: 'company_staff'
                 },
                 raw: true
             }
@@ -447,7 +374,13 @@ const updateManagerById = async (req, res) => {
             },
             where: {
                 id: req.params.userId,
-                role: 'manager'
+                role: 'company_staff'
+            },
+            raw: true
+        });
+        resData.company = await ADM_Company.findOne({
+            where: {
+                id: newCompany_staffData.companyId
             },
             raw: true
         });
@@ -465,27 +398,36 @@ const updateManagerById = async (req, res) => {
     }
 };
 // Read
-const getAllManager = async (req, res) => {
+const getAllCompany_staff = async (req, res) => {
     try {
-        let managers = await ADM_User.findAll({
+        let company_staffs = await ADM_User.findAll({
             attributes: {
                 exclude: ['password']
             },
             where: {
-                role: 'manager'
+                role: 'company_staff'
             },
             raw: true
         });
-        if (!managers) {
+        if (!company_staffs) {
             return res.status(404).json({
                 resCode: 404,
                 resMessage: 'ADM_User not found.'
             });
         }
+        for (let i = 0; i < company_staffs.length; i++) {
+            let company = await ADM_Company.findOne({
+                where: {
+                    id: company_staffs[i].companyId
+                },
+                raw: true
+            });
+            company_staffs[i].company = company;
+        }
         return res.status(200).json({
             resCode: 200,
             resMessage: 'OK',
-            data: managers
+            data: company_staffs
         });
     } catch (err) {
         return res.status(500).json({
@@ -494,28 +436,34 @@ const getAllManager = async (req, res) => {
         });
     }
 };
-const getManagerById = async (req, res) => {
+const getCompany_staffById = async (req, res) => {
     try {
-        let manager = await ADM_User.findOne({
+        let company_staff = await ADM_User.findOne({
             attributes: {
                 exclude: ['password']
             },
             where: {
                 id: req.params.userId,
-                role: 'manager'
+                role: 'company_staff'
             },
             raw: true
         });
-        if (!manager) {
+        if (!company_staff) {
             return res.status(404).json({
                 resCode: 404,
                 resMessage: 'ADM_User not found.'
             });
         }
+        company_staff.company = await ADM_Company.findOne({
+            where: {
+                id: company_staff.companyId
+            },
+            raw: true
+        });
         return res.status(200).json({
             resCode: 200,
             resMessage: 'OK',
-            data: manager
+            data: company_staff
         });
     } catch (err) {
         return res.status(500).json({
@@ -554,8 +502,7 @@ const updateAdminById = async (req, res) => {
             !newAdminData.email ||
             !newAdminData.firstName ||
             !newAdminData.lastName ||
-            !newAdminData.gender ||
-            !newAdminData.dob
+            !newAdminData.gender
         ) {
             return res.status(400).json({
                 resCode: 400,
@@ -564,18 +511,8 @@ const updateAdminById = async (req, res) => {
         }
         let salt = await bcrypt.genSalt(10);
         let encodedPassword = await bcrypt.hash(newAdminData.password, salt);
-        await ADM_User.update(
-            {
-                password: encodedPassword,
-                email: newAdminData.email,
-                firstName: newAdminData.firstName,
-                lastName: newAdminData.lastName,
-                gender: newAdminData.gender,
-                dob: newAdminData.dob,
-                description: newAdminData?.description,
-                status: newAdminData?.status,
-                image: newAdminData.image
-            },
+        newAdminData.password = encodedPassword;
+        await ADM_User.update(newAdminData,
             {
                 where: {
                     id: req.params.userId,
@@ -666,11 +603,11 @@ module.exports = {
     updateDriverById,
     getAllDriver,
     getDriverById,
-    addNewManager,
-    deleteManagerById,
-    updateManagerById,
-    getAllManager,
-    getManagerById,
+    addNewCompany_staff,
+    deleteCompany_staffById,
+    updateCompany_staffById,
+    getAllCompany_staff,
+    getCompany_staffById,
     updateAdminById,
     getAdminById
 };

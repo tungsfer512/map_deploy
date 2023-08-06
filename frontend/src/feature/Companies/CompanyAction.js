@@ -5,26 +5,26 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import React from 'react'
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { deleteManagerDataAsync } from '../../store/reducers/managerSlice';
+import { deleteCompanyDataAsync } from '../../store/reducers/companySlice';
 import { useTranslation } from 'react-i18next';
 
-const ManagerAction = ({ params }) => {
+const CompanyAction = ({ params }) => {
     const { t } = useTranslation();
     const dispatch = useDispatch()
     const navigate = useNavigate()
     const onPreview = (e) => {
         const currentRow = params.row;
-        navigate(`/managers/${currentRow.id}`, { state: currentRow });
+        navigate(`/companies/${currentRow.id}`, { state: currentRow });
     };
 
     const onEdit = (e) => {
-        const manager = params.row;
-        navigate(`/managers/edit/${manager.id}`, { state: manager });
+        const company = params.row;
+        navigate(`/companies/edit/${company.id}`, { state: company });
     };
 
     const onDelete = (e) => {
-        const managerId = params.row.id;
-        dispatch(deleteManagerDataAsync(managerId))
+        const companyId = params.row.id;
+        dispatch(deleteCompanyDataAsync(companyId))
         window.location.reload();
     };
     return (
@@ -48,4 +48,4 @@ const ManagerAction = ({ params }) => {
     )
 }
 
-export default ManagerAction
+export default CompanyAction
