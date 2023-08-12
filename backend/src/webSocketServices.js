@@ -57,15 +57,15 @@ const webSocketServices = (wss) => {
             console.log(err);
         }
         try {
-            // let vehicles = await ADM_Vehicle.findAll({
-            //     raw: true
-            // })
             let vehicles = await ADM_Vehicle.findAll({
-                where: {
-                    id: [1, ]
-                },
                 raw: true
             })
+            // let vehicles = await ADM_Vehicle.findAll({
+            //     where: {
+            //         id: [1, ]
+            //     },
+            //     raw: true
+            // })
             console.log("________________________");
             console.log(vehicles);
             console.log("________________________");
@@ -78,14 +78,17 @@ const webSocketServices = (wss) => {
                     console.log("+++++++++++++++====================");
                     if (vehicleData.data.message != "success") {
                         console.log(`request vehicle ${vehicle.id} failed 404`);
+                        for (const [key, value] of Object.entries(admins)) {
+                            value.send(JSON.stringify(['alert_api', 'Lỗi khi gọi API lấy thông tin xe hiện tại']));
+                        }
                         continue;
                     }
                     let id = vehicle.id
                     // console.log('check vehicle id: ' + id);
                     const update = [
                         id,
-                        41.848447,
-                        // vehicleData.data.data['latitude'],
+                        // 41.848447,
+                        vehicleData.data.data['latitude'],
                         vehicleData.data.data['longitude'],
                         vehicleData.data.data.url
                     ];
@@ -94,8 +97,8 @@ const webSocketServices = (wss) => {
                         value.send(JSON.stringify(update));
                     }
                     updatePosition({
-                        latitude: 41.848447,
-                        // latitude: vehicleData.data.data['latitude'],
+                        // latitude: 41.848447,
+                        latitude: vehicleData.data.data['latitude'],
                         longitude: vehicleData.data.data['longitude'],
                         id: id,
                         camera: vehicleData.data.data.url
@@ -107,28 +110,31 @@ const webSocketServices = (wss) => {
         }
         // event bin status
         try {
-            // let bins = await ADM_Bin.findAll({
-            //     raw: true
-            // })
             let bins = await ADM_Bin.findAll({
-                where: {
-                    id: [1, ]
-                },
                 raw: true
             })
+            // let bins = await ADM_Bin.findAll({
+            //     where: {
+            //         id: [1, ]
+            //     },
+            //     raw: true
+            // })
             console.log("________________________");
             console.log(bins);
             console.log("________________________");
             // let bins = []
             setInterval(async () => {
                 for (let bin of bins) {
-                    // let binData = await axios.get(`${process.env.STATUS_API}/cell/${bin.id}`);
-                    let binData = await axios.get(`${process.env.STATUS_API}/cell/5`);
+                    let binData = await axios.get(`${process.env.STATUS_API}/cell/${bin.id}`);
+                    // let binData = await axios.get(`${process.env.STATUS_API}/cell/5`);
                     console.log("+====================");
                     console.log(binData.data);
                     console.log("+====================");
                     if (binData.data.message != "success") {
                         console.log(`request bin ${bin.id} failed 404`);
+                        for (const [key, value] of Object.entries(admins)) {
+                            value.send(JSON.stringify(['alert_api', 'Lỗi khi gọi API lấy thông tin thùng rác']));
+                        }
                         continue;
                     }
                     let id = bin.id
@@ -140,7 +146,7 @@ const webSocketServices = (wss) => {
                             latitude: bin.latitude,
                             longitude: bin.longitude,
                             weight: binData.data.data.weight,
-                            // updatedAt: bin.updatedAt,
+                            updatedAt: bin.updatedAt,
                             status: 'full'
                         }, 'bin full', 'bin'];
                         addEvent_Bin_state({
@@ -171,6 +177,11 @@ const webSocketServices = (wss) => {
                             // updatedAt: bin.updatedAt,
                             status: 'half',
                         }, 'bin half', 'bin'];
+                        addEvent_Bin_state({
+                            id: id,
+                            weight: binData.data.data['weight'],
+                            status: update.status,
+                        })
                     }
                     for (const [key, value] of Object.entries(admins)) {
                         // console.log('check sending bin info to admin: ', update);

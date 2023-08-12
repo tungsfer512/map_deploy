@@ -118,6 +118,7 @@ export default function TabPanelVehicle({ open, handleClose, item }) {
                             <Tab label={t("map.sendRequest")} {...a11yProps(3)} />
                             {/* <Tab label={t("map.cameras")} {...a11yProps(4)} onClick={() => handleViewCamera(1)} /> */}
                             <Tab label={t("map.cameras")} {...a11yProps(4)} />
+                            <Tab label={t("map.routes")} {...a11yProps(5)} />
                         </Tabs>
                     </Box>
                     <TabPanel value={value} index={0}>
@@ -384,9 +385,6 @@ export default function TabPanelVehicle({ open, handleClose, item }) {
                     <TabPanel value={value} index={3}>
                         Send require
                     </TabPanel>
-                    {/* <TabPanel value={value} index={4}>
-                        <video id='video1' height={"360px"} width={"640px"} muted controls></video>
-                    </TabPanel> */}
                     <TabPanel value={value} index={4}>
                         {/* <ReactPlayer
                             url={item.camera}
@@ -405,6 +403,9 @@ export default function TabPanelVehicle({ open, handleClose, item }) {
                             }}
                         /> */}
                         <img src={item.camera} height={"90vh"} width={"100%"}></img>
+                    </TabPanel>
+                    <TabPanel value={value} index={5}>
+                        Routes
                     </TabPanel>
                 </Box>
             </Box>

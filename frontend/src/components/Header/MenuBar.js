@@ -79,7 +79,7 @@ export default function Appbar() {
                 onClick={handleClick}
                 sx={{ color: "inherit", ml: { xs: 0, sm: 2 }, pr: 1 }}
             >
-                {width > 600 ? (!!user ? user.firstName : 'Hung') : ''}
+                {width > 600 ? (!!user ? user.lastName + " " + user.firstName : 'Dang Ngoc Hung') : ''}
             </Button>
             <Menu
                 id="basic-menu"

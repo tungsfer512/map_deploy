@@ -21,6 +21,7 @@ import RotatedMarker from './RotatedMarker';
 import PopupVehicleMarker from './PopupVehicleMarker';
 import PopupBinMarker from './PopupBinMarker';
 import AlertContent from './AlertContent';
+import AlertAPIContent from './AlertAPIContent';
 import TabPanelVehicle from './TabPanelVehicle';
 import TabPanelItemBin from './TabPanelItemBin';
 import axios from 'axios';
@@ -99,6 +100,8 @@ const Map1 = () => {
   const [openVehicle, setOpenVehicle] = useState(false);
   const [openBin, setOpenBin] = useState(false);
   const [item, setItem] = useState({});
+  const [itemBin, setItemBin] = useState({});
+  const [itemVehicle, setItemVehicle] = useState({});
 
   // const [zoom, setZoom] = useState(-1);
 
@@ -135,10 +138,37 @@ const Map1 = () => {
       else if (data[0] === "alert") {
         enqueueSnackbar(JSON.stringify(data),
           {
-            variant: "error",
+            variant: "warning",
             anchorOrigin: {
               vertical: "bottom",
               horizontal: "left",
+            },
+            autoHideDuration: 3000,
+            content: (key, message) => (
+              <Alert
+                key={key}
+                message={message}
+                severity="warning"
+                color="warning"
+                onClose={() => closeSnackbar(key)}
+                sx={{ width: "250px" }}
+                icon={false}
+              >
+                <AlertContent data={data} />
+              </Alert>
+            ),
+          });
+        setDataAlert(data);
+        dispatch(addNoti(data));
+        dispatch(increment());
+      }
+      else if (data[0] === 'alert_api') {
+        enqueueSnackbar(JSON.stringify(data),
+          {
+            variant: "error",
+            anchorOrigin: {
+              vertical: "top",
+              horizontal: "right",
             },
             autoHideDuration: 3000,
             content: (key, message) => (
@@ -151,13 +181,10 @@ const Map1 = () => {
                 sx={{ width: "250px" }}
                 icon={false}
               >
-                <AlertContent data={data} />
+                <AlertAPIContent data={data[1]} />
               </Alert>
             ),
           });
-        setDataAlert(data);
-        dispatch(addNoti(data));
-        dispatch(increment());
       }
       else {
         setData(data);
@@ -201,6 +228,7 @@ const Map1 = () => {
               }
             }
             setVehicles(vehiclesUpdate);
+            setItemVehicle(vehicleData);
           } else {
             console.log("data5-----------____----__---__---___--___---------");
             const vehicleData = {
@@ -209,6 +237,7 @@ const Map1 = () => {
             }
             const vehiclesUpdate = [...vehicles.filter(item => item.id.toString() !== data[0].toString()), vehicleData];
             setVehicles(vehiclesUpdate);
+            setItemVehicle(vehicleData);
           }
         }
       }
@@ -226,6 +255,7 @@ const Map1 = () => {
           }
           const binsUpdate = [...bins.filter(item => item.id.toString() !== dataAlert[1].id.toString()), binData];
           setBins(binsUpdate);
+          setItemBin(binData)
           console.log("update bin in map");
         }
       }
@@ -245,7 +275,7 @@ const Map1 = () => {
   const handleClickOpenVehicle = (e, item) => {
     console.log("click open vehicle", item);
     setOpenVehicle(true);
-    setItem(item);
+    setItemVehicle(item);
     if (openBin) setOpenBin(false);
 
 
@@ -254,7 +284,6 @@ const Map1 = () => {
   const waypoints = useSelector(waypointsSelector);
 
   const handleClickOpen = async (e, vehicle) => {
-    handleClickOpenVehicle(e, vehicle);
     // if (showWaypoints) {
     try {
       var allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg  path");
@@ -270,26 +299,50 @@ const Map1 = () => {
       }
       if (waypoints.oldVehicleId !== vehicle.id) {
         id = vehicle.id;
-        let routeData = await getRoutesByVehicleId(vehicle.id);
-        console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", routeData);
+        try {
+          let routeData = await getRoutesByVehicleId(vehicle.id);
+          const route = routeData.map((item, index) => {
+            // console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", item);
+            return [
+              item?.demand?.latitude,
+              item?.demand?.longitude
+            ]
+          })
 
-        const route = routeData.map((item, index) => {
-          // console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", item);
-          return [
-            item?.demand?.latitude,
-            item?.demand?.longitude
-          ]
-        })
-
-        route.push([vehicle.latitude, vehicle.longitude])
-        console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", route);
-        setRoutes(route);
-        const payload = {
-          data: route,
-          hideInMap: true,
-          oldVehicleId: vehicle.id,
+          route.push([vehicle.latitude, vehicle.longitude])
+          console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", route);
+          setRoutes(route);
+          const payload = {
+            data: route,
+            hideInMap: true,
+            oldVehicleId: vehicle.id,
+          }
+          dispatch(setWayPoints(payload))
+        } catch (err) {
+          console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", err);
+          enqueueSnackbar(JSON.stringify(['alert_api', 'Lỗi khi gọi API lấy tuyến đường đi của xe hiện tại']),
+            {
+              variant: "error",
+              anchorOrigin: {
+                vertical: "top",
+                horizontal: "right",
+              },
+              autoHideDuration: 3000,
+              content: (key, message) => (
+                <Alert
+                  key={key}
+                  message={message}
+                  severity="error"
+                  color="error"
+                  onClose={() => closeSnackbar(key)}
+                  sx={{ width: "250px" }}
+                  icon={false}
+                >
+                  <AlertAPIContent data={'Lỗi khi gọi API lấy tuyến đường đi của xe hiện tại'} />
+                </Alert>
+              ),
+            });
         }
-        dispatch(setWayPoints(payload))
       }
       else {
         let allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg  path");
@@ -321,6 +374,11 @@ const Map1 = () => {
         dispatch(clearWayPoints());
       }
       // goi api lay routes --> set state cho mang routes --> lay routing machine cho 2 diem 1 --> neu di den diem cuoi thi set lai state mang routes = routes[1:] --> xoa tat ca layer routing --> lay routing moi
+      let item_x = {
+        ...vehicle,
+        routes: ["A", "B", "C", "D"]
+      }
+      handleClickOpenVehicle(e, item_x);
     } catch (err) {
       console.log(err);
     }
@@ -345,18 +403,18 @@ const Map1 = () => {
 
   const handleCloseVehicle = (e) => {
     setOpenVehicle(false);
-    setItem({});
+    setItemVehicle({});
   };
 
   const handleClickOpenBin = (e, item) => {
     setOpenBin(true);
-    setItem(item);
+    setItemBin(item);
     if (openVehicle) setOpenVehicle(false);
   };
 
   const handleCloseBin = (e) => {
     setOpenBin(false);
-    setItem({});
+    setItemBin({});
   };
 
   const iconxeUrl = green_vehicle;
@@ -392,7 +450,13 @@ const Map1 = () => {
             {!!vehicles && vehicles.map((vehicle) => (
               <RotatedMarker key={vehicle.id} position={[vehicle.latitude, vehicle.longitude]} icon={iconXe} rotationOrigin="center" rotationAngle={vehicle.angle}
                 eventHandlers={{
-                  click: (e) => handleClickOpen(e, vehicle),
+                  click: (e) => {
+                    if (!openVehicle) {
+                      return handleClickOpen(e, vehicle)
+                    } else {
+                      return handleCloseVehicle(e)
+                    }
+                  }
                 }}
               >
                 {/* <PopupVehicleMarker vehicle={vehicle} handleClickOpen={handleClickOpenVehicle} /> */}
@@ -402,7 +466,13 @@ const Map1 = () => {
             {!!bins && bins.map((bin) => (
               <RotatedMarker key={bin.id} position={[bin.latitude, bin.longitude]} icon={bin.status === "full" ? iconBinRed : bin.status === "empty" ? iconBinGreen : iconBinYellow}
                 eventHandlers={{
-                  click: (e) => handleClickOpenBin(e, bin),
+                  click: (e) => {
+                    if (!openBin) {
+                      return handleClickOpenBin(e, bin)
+                    } else {
+                      return handleCloseBin(e)
+                    }
+                  }
                 }}
               >
                 {/* <PopupBinMarker bin={bin} handleClickOpen={handleClickOpenBin} /> */}
@@ -414,8 +484,8 @@ const Map1 = () => {
             <ZoomHandler waypoints={waypoints} ></ZoomHandler>
           </MapContainer>
         </Box>
-        <TabPanelItemBin open={openBin} handleClose={handleCloseBin} item={item} ></TabPanelItemBin>
-        <TabPanelVehicle open={openVehicle} handleClose={handleCloseVehicle} item={item} ></TabPanelVehicle>
+        <TabPanelItemBin open={openBin} handleClose={handleCloseBin} item={itemBin} ></TabPanelItemBin>
+        <TabPanelVehicle open={openVehicle} handleClose={handleCloseVehicle} item={itemVehicle} ></TabPanelVehicle>
       </Box>
     </Fragment>
   )
