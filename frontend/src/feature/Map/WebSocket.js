@@ -1,6 +1,7 @@
 import { BASE_URL_SOCKET } from "../../ultils/socketApi";
 
 let websocket = new WebSocket(BASE_URL_SOCKET)
+
 const isDriver = () => {
   const user = localStorage.getItem('user')
   if (user) {

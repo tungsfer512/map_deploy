@@ -1,10 +1,15 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit'
 import axios from 'axios'
-import {BASE_URL, token} from '../../ultils/axiosApi';
+import { BASE_URL, token } from '../../ultils/axiosApi';
 
 // get all bins
-export const getBinsDataAsync = createAsyncThunk('bins/getAllBins', async () => {
-    const response = await axios.get('/bins', { headers: { token: token } });
+export const getBinsDataAsync = createAsyncThunk('bins/getAllBins', async (companyId) => {
+    let response = null;
+    if (companyId === undefined || companyId === null) {
+        response = await axios.get('/bins', { headers: { token: token } });
+    } else {
+        response = await axios.get(`/bins?companyId=${companyId}`, { headers: { token: token } });
+    }
     return response.data.data;
 })
 

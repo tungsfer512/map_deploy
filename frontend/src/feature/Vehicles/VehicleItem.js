@@ -22,6 +22,7 @@ import { useState } from 'react';
 import { getVehicleDataById, getVehicleStateLog } from '../../store/reducers/vehicleSlice';
 import VehicleStateLog from './VehicleStateLog';
 import { useTranslation } from 'react-i18next';
+import { isAdmin } from "../Auth/Role"
 
 const VehicleItem = () => {
     const { t } = useTranslation();
@@ -110,16 +111,19 @@ const VehicleItem = () => {
                                                     pr: 0,
                                                 }}>
                                                     {t("vehicle")} {vehicle.plate}
-                                                    <Button
-                                                        variant='contained'
-                                                        aria-label="edit"
-                                                        color="warning"
-                                                        size="small"
-                                                        startIcon={<EditIcon />}
-                                                        onClick={() => navigate(`/vehicles/edit/${vehicle.id}`, { state: vehicle })}
-                                                    >
-                                                        {t('vehicles.edit')}
-                                                    </Button>
+                                                    {
+                                                        isAdmin() &&
+                                                        <Button
+                                                            variant='contained'
+                                                            aria-label="edit"
+                                                            color="warning"
+                                                            size="small"
+                                                            startIcon={<EditIcon />}
+                                                            onClick={() => navigate(`/vehicles/edit/${vehicle.id}`, { state: vehicle })}
+                                                        >
+                                                            {t('vehicles.edit')}
+                                                        </Button>
+                                                    }
                                                 </ListSubheader>
                                             }
                                             sx={{
@@ -261,7 +265,7 @@ const VehicleItem = () => {
                                 </Box>
                             </Stack>
 
-                            <VehicleStateLog vehicleId={vehicleId} />
+                            {/* <VehicleStateLog vehicleId={vehicleId} /> */}
                         </Paper>
                     </Box>
                 </Fragment>

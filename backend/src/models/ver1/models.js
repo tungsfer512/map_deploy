@@ -2,14 +2,18 @@ const { DataTypes, Sequelize } = require('sequelize');
 const dotenv = require('dotenv');
 dotenv.config();
 
+const db_conf = {
+    host: process.env.DB_HOST,
+    dialect: process.env.DB_DIALECT,
+    port: process.env.DB_PORT,
+    logging: true,
+}
+
 const sequelize = new Sequelize(
     process.env.DB_NAME,
     process.env.DB_USER,
     process.env.DB_PASSWORD,
-    {
-        host: process.env.DB_HOST,
-        dialect: 'mysql'
-    }
+    db_conf
 );
 
 const ADM_Vehicle = sequelize.define(
@@ -21,49 +25,64 @@ const ADM_Vehicle = sequelize.define(
             primaryKey: true
         },
         code: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         engineHours: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         engineId: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         engineType: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         model: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         height: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         length: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         width: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         odometer: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         plate: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         tonnage: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         image: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         description: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         status: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         }, 
         camera: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         }
     },
     {
@@ -81,38 +100,59 @@ const ADM_User = sequelize.define(
             primaryKey: true
         },
         phone: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         password: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         email: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         firstName: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         lastName: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         gender: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         dob: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         image: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         role: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         description: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         status: {
-            type: DataTypes.TEXT
-        }
+            type: DataTypes.TEXT,
+            allowNullL: true,
+        },
+        companyId: {
+            type: DataTypes.INTEGER,
+            allowNullL: true,
+            references: {
+                model: 'adm_company',
+                key: 'id'
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL'
+        },
     },
     {
         tableName: 'adm_user',
@@ -120,26 +160,45 @@ const ADM_User = sequelize.define(
     }
 );
 
-const ADM_Area = sequelize.define(
-    'adm_area',
+const ADM_Company = sequelize.define(
+    'adm_company',
     {
         id: {
             type: DataTypes.INTEGER,
             autoIncrement: true,
             primaryKey: true
         },
-        acreage: {
-            type: DataTypes.DOUBLE
+        name: {
+            type: DataTypes.TEXT,
+            allowNullL: true,
+        },
+        email: {
+            type: DataTypes.TEXT,
+            allowNullL: true,
+        },
+        phone: {
+            type: DataTypes.TEXT,
+            allowNullL: true,
+        },
+        image: {
+            type: DataTypes.TEXT,
+            allowNullL: true,
+        },
+        address: {
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         description: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         status: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         }
     },
     {
-        tableName: 'adm_area',
+        tableName: 'adm_company',
         timestamps: true
     }
 );
@@ -153,67 +212,76 @@ const ADM_Bin = sequelize.define(
             primaryKey: true
         },
         latitude: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         longitude: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         address: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         height: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         length: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         width: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         weight: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         maxWeight: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         color: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         material: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         brand: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         code: {
             type: DataTypes.TEXT,
+            allowNullL: true,
         },
         image: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         description: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         status: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         camera1: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         camera2: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         camera3: {
-            type: DataTypes.TEXT
-        },
-        areaId: {
-            type: DataTypes.INTEGER,
-            references: {
-                model: 'adm_area',
-                key: 'id'
-            },
-            onUpdate: 'CASCADE',
-            onDelete: 'SET NULL'
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
     },
     {
@@ -232,6 +300,7 @@ const ADM_Task = sequelize.define(
         },
         driverId: {
             type: DataTypes.INTEGER,
+            allowNullL: true,
             references: {
                 model: 'adm_user',
                 key: 'id'
@@ -241,6 +310,7 @@ const ADM_Task = sequelize.define(
         },
         vehicleId: {
             type: DataTypes.INTEGER,
+            allowNullL: true,
             references: {
                 model: 'adm_vehicle',
                 key: 'id'
@@ -248,24 +318,70 @@ const ADM_Task = sequelize.define(
             onUpdate: 'CASCADE',
             onDelete: 'SET NULL'
         },
-        areaId: {
+        companyId: {
             type: DataTypes.INTEGER,
+            allowNullL: true,
             references: {
-                model: 'adm_area',
+                model: 'adm_company',
                 key: 'id'
             },
             onUpdate: 'CASCADE',
             onDelete: 'SET NULL'
         },
         description: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         status: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         }
     },
     {
         tableName: 'adm_task',
+        timestamps: true
+    }
+);
+
+const ADM_Bin_Company = sequelize.define(
+    'adm_bin_company',
+    {
+        id: {
+            type: DataTypes.INTEGER,
+            autoIncrement: true,
+            primaryKey: true
+        },
+        binId: {
+            type: DataTypes.INTEGER,
+            allowNullL: true,
+            references: {
+                model: 'adm_bin',
+                key: 'id'
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL'
+        },
+        companyId: {
+            type: DataTypes.INTEGER,
+            allowNullL: true,
+            references: {
+                model: 'adm_company',
+                key: 'id'
+            },
+            onUpdate: 'CASCADE',
+            onDelete: 'SET NULL'
+        },
+        description: {
+            type: DataTypes.TEXT,
+            allowNullL: true,
+        },
+        status: {
+            type: DataTypes.TEXT,
+            allowNullL: true,
+        }
+    },
+    {
+        tableName: 'adm_bin_company',
         timestamps: true
     }
 );
@@ -279,22 +395,28 @@ const LOG_Bin_State = sequelize.define(
             primaryKey: true
         },
         latitude: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         longitude: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         weight: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         description: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         status: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         binId: {
             type: DataTypes.INTEGER,
+            allowNullL: true,
             references: {
                 model: 'adm_bin',
                 key: 'id'
@@ -318,37 +440,48 @@ const LOG_Vehicle_Work = sequelize.define(
             primaryKey: true
         },
         latitude: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         longitude: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         altitude: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         speed: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         angle: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         odometer: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         engineHours: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         fuel: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         description: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         status: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         vehicleId: {
             type: DataTypes.INTEGER,
+            allowNullL: true,
             references: {
                 model: 'adm_vehicle',
                 key: 'id'
@@ -358,6 +491,7 @@ const LOG_Vehicle_Work = sequelize.define(
         },
         driverId: {
             type: DataTypes.INTEGER,
+            allowNullL: true,
             references: {
                 model: 'adm_user',
                 key: 'id'
@@ -367,6 +501,7 @@ const LOG_Vehicle_Work = sequelize.define(
         },
         binStateId: {
             type: DataTypes.INTEGER,
+            allowNullL: true,
             references: {
                 model: 'log_bin_state',
                 key: 'id'
@@ -390,31 +525,40 @@ const SUP_Vehicle_State = sequelize.define(
             primaryKey: true
         },
         latitude: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         longitude: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         altitude: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         speed: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         angle: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         state: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         description: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         status: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         vehicleId: {
             type: DataTypes.INTEGER,
+            allowNullL: true,
             references: {
                 model: 'adm_vehicle',
                 key: 'id'
@@ -424,6 +568,7 @@ const SUP_Vehicle_State = sequelize.define(
         },
         driverId: {
             type: DataTypes.INTEGER,
+            allowNullL: true,
             references: {
                 model: 'adm_user',
                 key: 'id'
@@ -447,13 +592,16 @@ const SUP_Vehicle_Position = sequelize.define(
             primaryKey: true
         },
         latitude: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         longitude: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         vehicleId: {
             type: DataTypes.INTEGER,
+            allowNullL: true,
             references: {
                 model: 'adm_vehicle',
                 key: 'id'
@@ -477,34 +625,44 @@ const SUP_Vehicle_Trouble = sequelize.define(
             primaryKey: true
         },
         latitude: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         longitude: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         altitude: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         speed: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         angle: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         fuel: {
-            type: DataTypes.DOUBLE
+            type: DataTypes.DOUBLE,
+            allowNullL: true,
         },
         trouble: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         description: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         status: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         vehicleId: {
             type: DataTypes.INTEGER,
+            allowNullL: true,
             references: {
                 model: 'adm_vehicle',
                 key: 'id'
@@ -514,6 +672,7 @@ const SUP_Vehicle_Trouble = sequelize.define(
         },
         driverId: {
             type: DataTypes.INTEGER,
+            allowNullL: true,
             references: {
                 model: 'adm_user',
                 key: 'id'
@@ -545,16 +704,20 @@ const VALID_Vehicle = sequelize.define(
             allowNull: true
         },
         plate: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         model: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         status: {
-            type: DataTypes.TEXT
+            type: DataTypes.TEXT,
+            allowNullL: true,
         },
         binId: {
             type: DataTypes.INTEGER,
+            allowNullL: true,
             references: {
                 model: 'adm_bin',
                 key: 'id'
@@ -578,9 +741,10 @@ module.exports = {
     createDB,
     ADM_Vehicle,
     ADM_User,
-    ADM_Area,
+    ADM_Company,
     ADM_Bin,
     ADM_Task,
+    ADM_Bin_Company,
     LOG_Bin_State,
     LOG_Vehicle_Work,
     SUP_Vehicle_State,

@@ -7,7 +7,7 @@ let binRouter = express.Router();
 
 binRouter.post(
     '/add',
-    MiddlewareController.verify_Token_Manager_Admin,
+    MiddlewareController.verify_Token_Company_staff_Admin,
     BinController.addNewBin
 );
 binRouter.put(
@@ -27,7 +27,7 @@ binRouter.get(
 );
 binRouter.get(
     '/',
-    MiddlewareController.verify_Token_Manager_Admin,
+    MiddlewareController.verify_Token_Company_staff_Admin,
     BinController.getAllBin
 );
 

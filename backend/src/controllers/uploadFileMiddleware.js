@@ -10,6 +10,8 @@ let storage = multer.diskStorage({
             cb(null, './uploads/user');
         } else if (file.fieldname === 'vehicle') {
             cb(null, './uploads/vehicle');
+        } else if (file.fieldname === 'company') {
+            cb(null, './uploads/company');
         }
     },
     filename: (req, file, cb) => {
@@ -19,6 +21,8 @@ let storage = multer.diskStorage({
             cb(null, 'user_' + Date.now() + path.extname(file.originalname));
         } else if (file.fieldname === 'vehicle') {
             cb(null, 'vehicle_' + Date.now() + path.extname(file.originalname));
+        } else if (file.fieldname === 'company') {
+            cb(null, 'company_' + Date.now() + path.extname(file.originalname));
         }
     }
 });
@@ -28,7 +32,8 @@ let uploadFile = multer({
 }).fields([
     { name: 'bin', maxCount: 1 },
     { name: 'user', maxCount: 1 },
-    { name: 'vehicle', maxCount: 1 }
+    { name: 'vehicle', maxCount: 1 },
+    { name: 'company', maxCount: 1 }
 ]);
 
 let uploadFileMiddleware = util.promisify(uploadFile);

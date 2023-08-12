@@ -15,6 +15,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useNavigate } from 'react-router-dom';
 import DriverAction from './DriverAction';
 import { useTranslation } from 'react-i18next';
+import { isAdmin } from "../Auth/Role"
 
 const Drivers = () => {
   const { t } = useTranslation();
@@ -49,8 +50,8 @@ const Drivers = () => {
       )
     },
     { field: 'email', headerClassName: 'super-app-theme--header', headerName: `${t("drivers.table.email")}`, minWidth: 160, flex: 1, sortable: false },
-    { field: 'firstName', headerClassName: 'super-app-theme--header', headerName: `${t("drivers.table.firstName")}`, minWidth: 120, flex: 1, sortable: true, },
-    { field: 'lastName', headerClassName: 'super-app-theme--header', headerName: `${t("drivers.table.lastName")}`, minWidth: 100, flex: 1, sortable: true, },
+    { field: 'lastName', headerClassName: 'super-app-theme--header', headerName: `${t("drivers.table.lastName")}`, minWidth: 120, flex: 1, sortable: true, },
+    { field: 'firstName', headerClassName: 'super-app-theme--header', headerName: `${t("drivers.table.firstName")}`, minWidth: 100, flex: 1, sortable: true, },
     { field: 'dob', headerClassName: 'super-app-theme--header', headerName: `${t("drivers.table.dob")}`, minWidth: 120, flex: 1, sortable: true, },
     { field: 'phone', headerClassName: 'super-app-theme--header', headerName: `${t("drivers.table.phone")}`, minWidth: 120, flex: 1, sortable: false, },
     {
@@ -86,13 +87,16 @@ const Drivers = () => {
 
             {/* Add custom button to the toolbar */}
             {/* a link to /problems/Add */}
-            <Button
-              variant="contained"
-              startIcon={<AddIcon />}
-              onClick={() => navigate('/drivers/add')}
-            >
-              {t("drivers.add")}
-            </Button>
+            {
+              isAdmin() &&
+              <Button
+                variant="contained"
+                startIcon={<AddIcon />}
+                onClick={() => navigate('/drivers/add')}
+              >
+                {t("drivers.add")}
+              </Button>
+            }
           </BoxStack>
 
 

@@ -3,7 +3,7 @@ const {
     ADM_Task,
     ADM_User,
     ADM_Vehicle,
-    ADM_Area
+    ADM_Company
 } = require('../../models/ver1/models');
 const Op = Sequelize.Op;
 
@@ -14,20 +14,14 @@ const addNewTask = async (req, res) => {
         if (
             !newTaskData.driverId ||
             !newTaskData.vehicleId ||
-            !newTaskData.areaId
+            !newTaskData.companyId
         ) {
             return res.status(400).json({
                 resCode: 400,
                 resMessage: 'Missing input value(s).'
             });
         }
-        let newTask = new ADM_Task({
-            driverId: newTaskData.driverId,
-            vehicleId: newTaskData.vehicleId,
-            areaId: newTaskData.areaId,
-            description: newTaskData?.description,
-            status: newTaskData?.status
-        });
+        let newTask = new ADM_Task(newTaskData);
         let resData = newTask.dataValues;
         await newTask.save();
         return res.status(200).json({
@@ -93,21 +87,14 @@ const updateTaskById = async (req, res) => {
         if (
             !newTaskData.driverId ||
             !newTaskData.vehicleId ||
-            !newTaskData.areaId
+            !newTaskData.companyId
         ) {
             return res.status(400).json({
                 resCode: 400,
                 resMessage: 'Missing input value(s).'
             });
         }
-        await ADM_Task.update(
-            {
-                driverId: newTaskData.driverId,
-                vehicleId: newTaskData.vehicleId,
-                areaId: newTaskData.areaId,
-                description: newTaskData.description,
-                status: newTaskData.status
-            },
+        await ADM_Task.update(newTaskData,
             {
                 where: {
                     id: req.params.taskId
@@ -190,9 +177,9 @@ const getAllTask = async (req, res) => {
                 },
                 raw: true
             });
-            tasks[i].area = await ADM_Area.findOne({
+            tasks[i].company = await ADM_Company.findOne({
                 where: {
-                    id: tasks[i].areaId
+                    id: tasks[i].companyId
                 },
                 raw: true
             });
@@ -231,9 +218,9 @@ const getTop10TaskByUserId = async (req, res) => {
                 },
                 raw: true
             });
-            tasks[i].area = await ADM_Area.findOne({
+            tasks[i].company = await ADM_Company.findOne({
                 where: {
-                    id: tasks[i].areaId
+                    id: tasks[i].companyId
                 },
                 raw: true
             });
@@ -276,9 +263,9 @@ const getTaskById = async (req, res) => {
             },
             raw: true
         });
-        task.area = await ADM_Area.findOne({
+        task.company = await ADM_Company.findOne({
             where: {
-                id: task.areaId
+                id: task.companyId
             },
             raw: true
         });

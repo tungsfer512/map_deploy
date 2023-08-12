@@ -15,6 +15,7 @@ import { useLocation, useNavigate } from 'react-router-dom';
 import BinAction from './BinAction';
 import { useTranslation } from 'react-i18next';
 import { getStatus } from './constant';
+import { isAdmin, isStaff } from "../Auth/Role"
 
 
 const Bins = () => {
@@ -23,7 +24,12 @@ const Bins = () => {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        dispatch(getBinsDataAsync());
+        if (!isStaff()) {
+            dispatch(getBinsDataAsync());
+        } else {
+            const user = localStorage.getItem('user')
+            dispatch(getBinsDataAsync(JSON.parse(user)?.companyId));
+        }
     }, [dispatch]);
 
     const user = JSON.parse(localStorage.getItem('user'));
@@ -38,14 +44,23 @@ const Bins = () => {
         console.log(event);
         console.log(location.pathname);
         navigate(`/bins/${param.row.id}`, { state: param.row });
-
     };
 
     const columns = [
         { field: 'id', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("bins.table.id")}`, minWidth: 70, sortable: false, },
         { field: 'code', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("bins.table.code")}`, minWidth: 70, sortable: false, },
-        { field: 'areaId', headerClassName: 'super-app-theme--header', headerName: `${t("bins.table.areaId")}`, minWidth: 100 },
-        { field: 'address', headerClassName: 'super-app-theme--header', headerName: `${t("bins.table.address")}`, flex: 1, minWidth: 200, sortable: false },
+        {
+            field: 'company', headerClassName: 'super-app-theme--header', headerName: `${t("bins.table.company")}`, minWidth: 300,
+            renderCell: (params) => {
+                console.log(params.value);
+                return <div>
+                    {
+                        params.value.map((company) => (<div>{company.id + " - " + company.name}</div>))
+                    }
+                </div>
+            }
+        },
+        // { field: 'address', headerClassName: 'super-app-theme--header', headerName: `${t("bins.table.address")}`, flex: 1, minWidth: 200, sortable: false },
         { field: 'latitude', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("bins.table.latitude")}`, minWidth: 100, flex: 1, sortable: true },
         { field: 'longitude', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("bins.table.longitude")}`, minWidth: 100, flex: 1, sortable: false },
         {
@@ -85,16 +100,17 @@ const Bins = () => {
 
                         {/* Add custom button to the toolbar */}
                         {/* a link to /problems/Add */}
-                        <Button
-                            variant="contained"
-                            startIcon={<AddIcon />}
-                            onClick={() => navigate('/bins/add')}
-                        >
-                            {t("bins.add")}
-                        </Button>
+                        {
+                            isAdmin(user) &&
+                            <Button
+                                variant="contained"
+                                startIcon={<AddIcon />}
+                                onClick={() => navigate('/bins/add')}
+                            >
+                                {t("bins.add")}
+                            </Button>
+                        }
                     </BoxStack>
-
-
                     <DataTable rows={bins} columns={columns} />
                 </BoxTitle>
             </BoxContainer>
