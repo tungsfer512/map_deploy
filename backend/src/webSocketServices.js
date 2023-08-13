@@ -88,6 +88,7 @@ const webSocketServices = (wss) => {
                     const update = [
                         id,
                         // 41.848447,
+                        // 40.329447, -73.866077,
                         vehicleData.data.data['latitude'],
                         vehicleData.data.data['longitude'],
                         vehicleData.data.data.url
@@ -97,9 +98,10 @@ const webSocketServices = (wss) => {
                         value.send(JSON.stringify(update));
                     }
                     updatePosition({
-                        // latitude: 41.848447,
-                        latitude: vehicleData.data.data['latitude'],
-                        longitude: vehicleData.data.data['longitude'],
+                        latitude: 40.329447, 
+                        longitude: -73.866077,
+                        // latitude: vehicleData.data.data['latitude'],
+                        // longitude: vehicleData.data.data['longitude'],
                         id: id,
                         camera: vehicleData.data.data.url
                     })
@@ -140,7 +142,7 @@ const webSocketServices = (wss) => {
                     let id = bin.id
                     // console.log('check bin id: ' + id);
                     let update = [];
-                    if (binData.data.data.weight >= bin.maxWeight - 15) {
+                    if (binData.data.data.weight >= bin.maxWeight - 15000) {
                         update = ['alert', {
                             id: id,
                             latitude: bin.latitude,

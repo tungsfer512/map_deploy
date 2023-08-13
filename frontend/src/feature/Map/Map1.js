@@ -228,7 +228,9 @@ const Map1 = () => {
               }
             }
             setVehicles(vehiclesUpdate);
-            setItemVehicle(vehicleData);
+            if (data[0]?.toString() === itemVehicle?.id?.toString()) {
+              setItemVehicle(vehicleData);
+            }
           } else {
             console.log("data5-----------____----__---__---___--___---------");
             const vehicleData = {
@@ -236,8 +238,10 @@ const Map1 = () => {
               camera: data[3],
             }
             const vehiclesUpdate = [...vehicles.filter(item => item.id.toString() !== data[0].toString()), vehicleData];
+            if (data[0]?.toString() === itemVehicle?.id?.toString()) {
+              setItemVehicle(vehicleData);
+            }
             setVehicles(vehiclesUpdate);
-            setItemVehicle(vehicleData);
           }
         }
       }
@@ -254,8 +258,10 @@ const Map1 = () => {
             status: dataAlert[1].status
           }
           const binsUpdate = [...bins.filter(item => item.id.toString() !== dataAlert[1].id.toString()), binData];
+          if (dataAlert[1]?.id?.toString() === itemBin?.id?.toString()) {
+            setItemBin(binData)
+          }
           setBins(binsUpdate);
-          setItemBin(binData)
           console.log("update bin in map");
         }
       }
@@ -467,11 +473,10 @@ const Map1 = () => {
               <RotatedMarker key={bin.id} position={[bin.latitude, bin.longitude]} icon={bin.status === "full" ? iconBinRed : bin.status === "empty" ? iconBinGreen : iconBinYellow}
                 eventHandlers={{
                   click: (e) => {
-                    if (!openBin) {
-                      return handleClickOpenBin(e, bin)
-                    } else {
+                    if (itemBin?.id?.toString() === bin?.id?.toString()) {
                       return handleCloseBin(e)
                     }
+                    return handleClickOpenBin(e, bin)
                   }
                 }}
               >
