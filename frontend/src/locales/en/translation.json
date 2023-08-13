@@ -26,6 +26,7 @@
         "cameras1": "Camera 1",
         "cameras2": "Camera 2",
         "cameras3": "Camera 3",
+        "routes": "Current routes",
         "noEvent": "No event",
         "sendRequest": "Send Request"
     },

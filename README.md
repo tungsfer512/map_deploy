@@ -1,6 +1,6 @@
 # Map
 
-Các công nghệ được sử dụng trong dự án: [ExpressJS](https://expressjs.com/), [ReactJS](https://react.dev/), [Material UI](https://mui.com/), [MySQL](https://www.mysql.com/), [Websocket](https://www.npmjs.com/package/ws)
+Các công nghệ được sử dụng trong dự án: [ExpressJS](https://expressjs.com/), [ReactJS](https://react.dev/), [Material UI](https://mui.com/), [PostgreSQL](https://www.postgresql.org/), [Websocket](https://www.npmjs.com/package/ws)
 
 Có thế khởi chạy dự án bằng 2 cách:
 
@@ -34,10 +34,10 @@ docker compose build
 docker compose up -d
 ```
 
-Sau khi khởi chạy dự án, lúc này dự án vẫn chưa có dữ liệu, để tạo dữ liệu mẫu, chạy lệnh sau:
+Sau khi khởi chạy dự án, cần đợi postgres container khởi động xong, sau đó restart lại container `backend` để kết nối tới database. Lúc này dự án vẫn chưa có dữ liệu, để khởi tạo dữ liệu mẫu, chạy lệnh sau:
 
 ```bash
-exec -i mysql_db_map mysql -uroot -ppassword map_ws_dev < backend/src/db/map.sql
+docker exec -i db psql map_db < db/db_postgres.sql
 ```
 
 #### Dừng dự án
@@ -51,7 +51,7 @@ docker compose down
 ### Yêu cầu
 
 - [NodeJS](https://nodejs.org/en/) phiên bản 12 trở lên
-- [MySQL](https://www.mysql.com/) phiên bản 8 trở lên
+- [PostgreSQL](https://www.postgresql.org/) phiên bản 12 trở lên
 
 ### Cài đặt
 
@@ -72,7 +72,7 @@ npm install
 npm run setupdb
 ```
 
-- Tạo dữ liệu mẫu trong database với file `backend/src/db/map.sql`
+- Tạo dữ liệu mẫu trong database với file `db/db_postgres.sql`
 
 - Khởi chạy server (Development)
 
@@ -106,7 +106,10 @@ npm start
 
 ### Database
 
-- Cổng kết nối: `3308`
+- Cổng kết nối:
+  - Docker container: `7700:5432`
+  - Local: `5432`
+- Dữ liệu mẫu: `db/db_postgres.sql`
 
 ### Backend
 
@@ -115,3 +118,72 @@ npm start
 ### Frontend
 
 - Địa chỉ: [http://localhost:7777](http://localhost:7777)
+
+### Tài khoản mặc định khi sử dụng dwux liệu mẫu
+
+<table>
+  <thead>
+    <tr>
+      <th>Role</th>
+      <th>Số điện thoại</th>
+      <th>Mật khẩu</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Admin</td>
+      <td>0123456789</td>
+      <td>123456</td>
+    </tr>
+    <tr>
+      <td>Company</td>
+      <td>0123456785</td>
+      <td>123456</td>
+    </tr>
+    <tr>
+      <td>Company</td>
+      <td>0123456786</td>
+      <td>123456</td>
+    </tr>
+    <tr>
+      <td>Company</td>
+      <td>0123456787</td>
+      <td>123456</td>
+    </tr>
+    <tr>
+      <td>Company</td>
+      <td>0123456788</td>
+      <td>123456</td>
+    </tr>
+    <tr>
+      <td>Company</td>
+      <td>0123456779</td>
+      <td>123456</td>
+    </tr>
+    <tr>
+      <td>Driver</td>
+      <td>0123456780</td>
+      <td>123456</td>
+    </tr>
+    <tr>
+      <td>Driver</td>
+      <td>0123456781</td>
+      <td>123456</td>
+    </tr>
+    <tr>
+      <td>Driver</td>
+      <td>0123456782</td>
+      <td>123456</td>
+    </tr>
+    <tr>
+      <td>Driver</td>
+      <td>0123456783</td>
+      <td>123456</td>
+    </tr>
+    <tr>
+      <td>Driver</td>
+      <td>0123456784</td>
+      <td>123456</td>
+    </tr>
+  </tbody>
+</table>
