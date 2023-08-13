@@ -46,12 +46,12 @@ const Drivers = () => {
     {
       field: 'fullname', headerClassName: 'super-app-theme--header', headerName: `${t("drivers.table.fullname")}`, minWidth: 160, flex: 1, sortable: true,
       renderCell: (params) => (
-        `${params.row.firstName} ${params.row.lastName}`
+        `${params.row.lastName} ${params.row.firstName}`
       )
     },
     { field: 'email', headerClassName: 'super-app-theme--header', headerName: `${t("drivers.table.email")}`, minWidth: 160, flex: 1, sortable: false },
-    { field: 'lastName', headerClassName: 'super-app-theme--header', headerName: `${t("drivers.table.lastName")}`, minWidth: 120, flex: 1, sortable: true, },
-    { field: 'firstName', headerClassName: 'super-app-theme--header', headerName: `${t("drivers.table.firstName")}`, minWidth: 100, flex: 1, sortable: true, },
+    // { field: 'lastName', headerClassName: 'super-app-theme--header', headerName: `${t("drivers.table.lastName")}`, minWidth: 120, flex: 1, sortable: true, },
+    // { field: 'firstName', headerClassName: 'super-app-theme--header', headerName: `${t("drivers.table.firstName")}`, minWidth: 100, flex: 1, sortable: true, },
     { field: 'dob', headerClassName: 'super-app-theme--header', headerName: `${t("drivers.table.dob")}`, minWidth: 120, flex: 1, sortable: true, },
     { field: 'phone', headerClassName: 'super-app-theme--header', headerName: `${t("drivers.table.phone")}`, minWidth: 120, flex: 1, sortable: false, },
     {
