@@ -3,7 +3,7 @@ version: "3.8"
 services:
 
   db:
-    image: postgres
+    image: postgres:14.2
     container_name: db
     env_file:
       - ./db/.env.db
@@ -24,6 +24,7 @@ services:
     container_name: backend
     volumes:
       - ./backend:/backend
+      - /backend/node_modules/
     depends_on:
       - db
     command: bash -c "npm run setupdb && npm run dev"
@@ -41,6 +42,8 @@ services:
     container_name: frontend
     volumes:
       - ./frontend:/frontend
+      - /frontend/node_modules/
+    command: bash -c "npm run start"
     ports:
       - "7777:7777"
     depends_on:
