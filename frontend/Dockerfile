@@ -1,6 +1,7 @@
 FROM node:16.16.0
 WORKDIR /frontend
-COPY . .
-RUN npm install -f
+COPY package.* ./
+RUN npm install
+COPY . /frontend/
 EXPOSE 7777
-CMD ["npm", "start"]
+CMD [ "npm", "run", "start" ]
