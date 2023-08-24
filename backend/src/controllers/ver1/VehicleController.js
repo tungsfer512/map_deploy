@@ -34,10 +34,10 @@ const addNewVehicle = async (req, res) => {
         let newVehicle = new ADM_Vehicle(newVehicleData);
         let resData = newVehicle.dataValues;
         await newVehicle.save();
-        if(!newVehicleData?.latitude) {
+        if (!newVehicleData?.latitude) {
             newVehicleData.latitude = 21.028511;
         }
-        if(!newVehicleData?.longitude) {
+        if (!newVehicleData?.longitude) {
             newVehicleData.longitude = 105.804817;
         }
         let newVehiclePosition = new SUP_Vehicle_Position({
@@ -227,7 +227,6 @@ const checkVehicle = async (req, res) => {
         let vehicleData = req.body;
         if (
             !vehicleData.plate ||
-            !vehicleData.model ||
             !vehicleData.latitude ||
             !vehicleData.longitude ||
             !vehicleData.binId
@@ -240,7 +239,6 @@ const checkVehicle = async (req, res) => {
         let vehicle = await ADM_Vehicle.findOne({
             where: {
                 plate: vehicleData.plate,
-                model: vehicleData.model,
             },
             raw: true
         });
@@ -248,7 +246,6 @@ const checkVehicle = async (req, res) => {
             latitude: vehicleData.latitude,
             longitude: vehicleData.longitude,
             plate: vehicleData.plate,
-            model: vehicleData.model,
             binId: vehicleData.binId,
             status: "valid",
         })
@@ -299,51 +296,51 @@ const getVehicleValidation = async (req, res) => {
 
 let getRoutesByVehicleId = async (req, res) => {
     try {
-        let vehicle = await ADM_Vehicle.findOne({
-            where: {
-                id: req.params.vehicleId
-            },
-            raw: true
-        });
-        if (!vehicle) {
-            return res.status(404).json({
-                resCode: 404,
-                resMessage: 'Vehicle not found.'
-            });
-        }
-        let latLng = await SUP_Vehicle_Position.findOne({
-            where: {
-                vehicleId: vehicle.id
-            },
-            raw: true
-        })
-        let bins = await ADM_Bin.findAll({ raw: true })
-        let demand = []
-        for (let bin of bins) {
-            demand.push({
-                "id": bin.id,
-                "quantity": bin.weight,
-                "latitude": bin.latitude,
-                "longitude": bin.longitude
-            })
-        }
-        console.log(demand);
-        let sendRes = await axios.post(
-            process.env.ROUTES_API,
-            {
-                "stack_id": 1,
-                "origin": {
-                    "id": vehicle.id,
-                    "latitude": latLng.latitude,
-                    "longitude": latLng.longitude
-                },
-                "unit": "kg",
-                "vehicle_capacity": vehicle.tonnage,
-                "demand": demand
-            }
-        )
-        console.log(sendRes.data, "check dataa");
-        let routesResponse = sendRes.data;
+        // let vehicle = await ADM_Vehicle.findOne({
+        //     where: {
+        //         id: req.params.vehicleId
+        //     },
+        //     raw: true
+        // });
+        // if (!vehicle) {
+        //     return res.status(404).json({
+        //         resCode: 404,
+        //         resMessage: 'Vehicle not found.'
+        //     });
+        // }
+        // let latLng = await SUP_Vehicle_Position.findOne({
+        //     where: {
+        //         vehicleId: vehicle.id
+        //     },
+        //     raw: true
+        // })
+        // let bins = await ADM_Bin.findAll({ raw: true })
+        // let demand = []
+        // for (let bin of bins) {
+        //     demand.push({
+        //         "id": bin.id,
+        //         "quantity": bin.weight,
+        //         "latitude": bin.latitude,
+        //         "longitude": bin.longitude
+        //     })
+        // }
+        // console.log(demand);
+        // let sendRes = await axios.post(
+        //     process.env.ROUTES_API,
+        //     {
+        //         "stack_id": 1,
+        //         "origin": {
+        //             "id": vehicle.id,
+        //             "latitude": latLng.latitude,
+        //             "longitude": latLng.longitude
+        //         },
+        //         "unit": "kg",
+        //         "vehicle_capacity": vehicle.tonnage,
+        //         "demand": demand
+        //     }
+        // )
+        // console.log(sendRes.data, "check dataa");
+        // let routesResponse = sendRes.data;
         // let routesResponse = {
         //     "demand": [
         //         {
@@ -598,30 +595,138 @@ let getRoutesByVehicleId = async (req, res) => {
         //     "unit": "kg",
         //     "vehicle_capacity": 40
         // }
-        let demandData = routesResponse.demand;
-        demandData.sort((a, b) => {
-            if (a.id < b.id)
-                return -1
-            if (a.id > b.id)
-                return 1
-        })
-        let resData = routesResponse.routes;
+        // let demandData = routesResponse.demand;
+        // demandData.sort((a, b) => {
+        //     if (a.id < b.id)
+        //         return -1
+        //     if (a.id > b.id)
+        //         return 1
+        // })
+        // let resData = routesResponse.routes;
 
-        for (let xxx of resData) {
-            let teDemand = demandData.find(a => a.id == xxx.demand_id)
-            xxx.demand = teDemand
-        }
+        // for (let xxx of resData) {
+        //     let teDemand = demandData.find(a => a.id == xxx.demand_id)
+        //     xxx.demand = teDemand
+        // }
 
-        resData.sort((a, b) => {
-            if (a.stop_number > b.stop_number)
-                return 1
-            if (a.stop_number < b.stop_number)
-                return -1
-            if (a.demand_id > b.demand_id)
-                return 1
-            if (a.demand_id < b.demand_id)
-                return -1
-        })
+        // resData.sort((a, b) => {
+        //     if (a.stop_number > b.stop_number)
+        //         return 1
+        //     if (a.stop_number < b.stop_number)
+        //         return -1
+        //     if (a.demand_id > b.demand_id)
+        //         return 1
+        //     if (a.demand_id < b.demand_id)
+        //         return -1
+        // })
+        let resData = [
+            {
+                "demand_id": 1,
+                "depot_id": 1,
+                "stop_number": 1,
+                "vehicle_id": 1,
+                "demand": {
+                    "id": 1,
+                    "latitude": 21.234219,
+                    "longitude": 105.811371,
+                    "quantity": 1
+                },
+                "company": "Công ty TNHH Kyoei Việt Nam (Nhà máy 1)"
+            },
+            {
+                "demand_id": 8,
+                "depot_id": 8,
+                "stop_number": 8,
+                "vehicle_id": 1,
+                "demand": {
+                    "id": 8,
+                    "latitude": 21.231383,
+                    "longitude": 105.812283,
+                    "quantity": 8
+                },
+                "company": "Công Ty TNHH Asahi Denso Việt Nam"
+            },
+            {
+                "demand_id": 10,
+                "depot_id": 10,
+                "stop_number": 10,
+                "vehicle_id": 10,
+                "demand": {
+                    "id": 10,
+                    "latitude": 21.232842,
+                    "longitude": 105.808382,
+                    "quantity": 10
+                },
+                "company": "Công Ty TNHH Honest Việt Nam"
+            },
+            {
+                "demand_id": 2,
+                "depot_id": 2,
+                "stop_number": 2,
+                "vehicle_id": 1,
+                "demand": {
+                    "id": 2,
+                    "latitude": 21.228549,
+                    "longitude": 105.819898,
+                    "quantity": 2
+                },
+                "company": "Công Ty Cổ Phần Thép Đặc Biệt Pro-Vision"
+            },
+            {
+                "demand_id": 6,
+                "depot_id": 6,
+                "stop_number": 6,
+                "vehicle_id": 1,
+                "demand": {
+                    "id": 6,
+                    "latitude": 21.229033,
+                    "longitude": 105.820180,
+                    "quantity": 6
+                },
+                "company": "Công Ty TNHH Hamagasu Việt Nam"
+            },
+            {
+                "demand_id": 3,
+                "depot_id": 3,
+                "stop_number": 3,
+                "vehicle_id": 1,
+                "demand": {
+                    "id": 3,
+                    "latitude": 21.231058,
+                    "longitude": 105.820840,
+                    "quantity": 3
+                },
+                "company": "Công Ty TNHH Kishiro Việt Nam"
+            },
+            {
+                "demand_id": 4,
+                "depot_id": 4,
+                "stop_number": 4,
+                "vehicle_id": 1,
+                "demand": {
+                    "id": 4,
+                    "latitude": 21.233656,
+                    "longitude": 105.816368,
+                    "quantity": 4
+                },
+                "company": "Công ty Nội Bài"
+            },
+            {
+                "demand_id": 9,
+                "depot_id": 9,
+                "stop_number": 9,
+                "vehicle_id": 1,
+                "demand": {
+                    "id": 9,
+                    "latitude": 21.235909,
+                    "longitude": 105.811281,
+                    "quantity": 9
+                },
+                "company": "Công Ty TNHH Tenma Việt Nam"
+            }
+        ]
+        // 1-8-10-2-6-3-4-9
+
         return res.status(200).json({
             resCode: 200,
             resMessage: 'OK Got Routes',

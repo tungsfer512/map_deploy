@@ -37,7 +37,7 @@ docker compose up -d
 Sau khi khởi chạy dự án, cần đợi postgres container khởi động xong, sau đó restart lại container `backend` để kết nối tới database. Lúc này dự án vẫn chưa có dữ liệu, để khởi tạo dữ liệu mẫu, chạy lệnh sau:
 
 ```bash
-docker exec -i db psql map_db < db/db_postgres.sql
+docker exec -i db psql -U postgres map_db < db/db_postgres.sql
 ```
 
 #### Dừng dự án

@@ -14,8 +14,7 @@ const addNewBin = async (req, res) => {
             !newBinData.maxWeight ||
             !newBinData.camera1 ||
             !newBinData.camera2 ||
-            !newBinData.camera3 ||
-            !newBinData.companyId
+            !newBinData.camera3
         ) {
             return res.status(400).json({
                 resCode: 400,
@@ -113,8 +112,7 @@ const updateBinById = async (req, res) => {
             !newBinData.maxWeight ||
             !newBinData.camera1 ||
             !newBinData.camera2 ||
-            !newBinData.camera3 ||
-            !newBinData.companyId
+            !newBinData.camera3
         ) {
             return res.status(400).json({
                 resCode: 400,
@@ -266,11 +264,54 @@ const getBinById = async (req, res) => {
         });
     }
 };
+const getResetBinById = async (req, res) => {
+    try {
+        let bin = await ADM_Bin.findOne({
+            where: {
+                id: req.params.binId
+            },
+            raw: true
+        });
+        if (!bin) {
+            return res.status(404).json({
+                resCode: 404,
+                resMessage: 'ADM_Bin not found.'
+            });
+        }
+        let binCompany = await ADM_Bin_Company.findAll({
+            where: {
+                binId: bin.id
+            },
+            raw: true
+        });
+        let companyIds = [];
+        for (let j = 0; j < binCompany.length; j++) {
+            companyIds.push(binCompany[j].companyId);
+        }
+        bin.company = await ADM_Company.findAll({
+            where: {
+                id: companyIds
+            },
+            raw: true
+        });
+        return res.status(200).json({
+            resCode: 200,
+            resMessage: 'OK',
+            data: bin
+        });
+    } catch (err) {
+        return res.status(500).json({
+            resCode: 500,
+            resMessage: err
+        });
+    }
+};
 
 module.exports = {
     addNewBin,
     deleteBinById,
     updateBinById,
     getAllBin,
-    getBinById
+    getBinById,
+    getResetBinById
 };

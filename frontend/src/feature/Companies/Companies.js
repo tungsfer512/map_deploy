@@ -41,7 +41,7 @@ const Companies = () => {
   };
 
   const columns = [
-    { field: 'id', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("companies.table.id")}`, minWidth: 70, sortable: false, },
+    { field: 'id', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("companies.table.id")}`, minWidth: 70, sortable: true, },
     {
       field: 'name', headerClassName: 'super-app-theme--header', headerName: `${t("companies.table.name")}`, minWidth: 160, flex: 1, sortable: true },
     { field: 'email', headerClassName: 'super-app-theme--header', headerName: `${t("companies.table.email")}`, minWidth: 160, flex: 1, sortable: false },

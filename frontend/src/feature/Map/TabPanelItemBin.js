@@ -125,13 +125,13 @@ export default function TabPanelItemBin({ open, handleClose, item }) {
                             }}
                         >
                             <Tab label={t("bin")} {...a11yProps(0)} />
-                            <Tab label={t("map.events")} {...a11yProps(1)} />
+                            {/* <Tab label={t("map.events")} {...a11yProps(1)} /> */}
                             {/* <Tab label={t("map.cameras1")} {...a11yProps(2)} onClick={() => handleViewCamera(1)} />
                             <Tab label={t("map.cameras2")} {...a11yProps(3)} onClick={() => handleViewCamera(2)} />
                             <Tab label={t("map.cameras3")} {...a11yProps(4)} onClick={() => handleViewCamera(3)} /> */}
-                            <Tab label={t("map.cameras1")} {...a11yProps(2)} />
-                            <Tab label={t("map.cameras2")} {...a11yProps(3)} />
-                            <Tab label={t("map.cameras3")} {...a11yProps(4)} />
+                            <Tab label={t("map.cameras1")} {...a11yProps(1)} />
+                            <Tab label={t("map.cameras2")} {...a11yProps(2)} />
+                            <Tab label={t("map.cameras3")} {...a11yProps(3)} />
                         </Tabs>
                     </Box>
                     <TabPanel value={value} index={0}>
@@ -245,7 +245,7 @@ export default function TabPanelItemBin({ open, handleClose, item }) {
                                         <ListItemIcon>
                                             <ScaleIcon />
                                         </ListItemIcon>
-                                        <ListItemText primary={t("bins.table.maxWeight")} secondary={item.maxWeight + ''} />
+                                        <ListItemText primary={t("bins.table.maxWeight")} secondary={`${(item.maxWeight/1000).toFixed(3)} Kg`} />
                                     </ListItem>
                                     <ListItem sx={{ width: 360, backgroundColor: '#f5f5f5', height: 40 }}>
                                         <ListItemIcon>
@@ -281,9 +281,9 @@ export default function TabPanelItemBin({ open, handleClose, item }) {
                             </Box>
                         </Box>
                     </TabPanel>
-                    <TabPanel value={value} index={1}>
+                    {/* <TabPanel value={value} index={1}>
                         Events
-                    </TabPanel>
+                    </TabPanel> */}
                     {/* <TabPanel value={value} index={2}>
                         <video id='video1' height={"360px"} width={"640px"} muted controls></video>
                     </TabPanel>
@@ -293,7 +293,7 @@ export default function TabPanelItemBin({ open, handleClose, item }) {
                     <TabPanel value={value} index={4}>
                         <video id='video3' width={"1180px"} muted controls></video>
                     </TabPanel> */}
-                    <TabPanel value={value} index={2}>
+                    <TabPanel value={value} index={1}>
                         <ReactPlayer
                             url={item.camera1}
                             playing={true}
@@ -312,7 +312,7 @@ export default function TabPanelItemBin({ open, handleClose, item }) {
                             playsinline
                         />
                     </TabPanel>
-                    <TabPanel value={value} index={3}>
+                    <TabPanel value={value} index={2}>
                         <ReactPlayer
                             url={item.camera2}
                             playing={true}
@@ -331,7 +331,7 @@ export default function TabPanelItemBin({ open, handleClose, item }) {
                             playsinline
                         />
                     </TabPanel>
-                    <TabPanel value={value} index={4}>
+                    <TabPanel value={value} index={3}>
                         <ReactPlayer
                             url={item.camera3}
                             playing={true}

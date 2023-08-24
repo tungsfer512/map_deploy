@@ -21,6 +21,11 @@ binRouter.delete(
     BinController.deleteBinById
 );
 binRouter.get(
+    'reset/:binId',
+    MiddlewareController.verify_Token,
+    BinController.getResetBinById
+);
+binRouter.get(
     '/:binId',
     MiddlewareController.verify_Token,
     BinController.getBinById

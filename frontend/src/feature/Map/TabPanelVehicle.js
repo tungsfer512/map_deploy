@@ -26,6 +26,9 @@ import FemaleIcon from '@mui/icons-material/Female';
 import MaleIcon from '@mui/icons-material/Male';
 import EmailIcon from '@mui/icons-material/Email';
 import ContactPhoneIcon from '@mui/icons-material/ContactPhone';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
 
 import PropTypes from 'prop-types';
 import { useTranslation } from 'react-i18next';
@@ -66,7 +69,7 @@ function a11yProps(index) {
 }
 
 
-export default function TabPanelVehicle({ open, handleClose, item }) {
+export default function TabPanelVehicle({ open, handleClose, item, listRoutes }) {
     const { t } = useTranslation();
     // console.log(item);
 
@@ -114,11 +117,11 @@ export default function TabPanelVehicle({ open, handleClose, item }) {
                         >
                             <Tab label={t("vehicle")} {...a11yProps(0)} />
                             <Tab label={t("driver")} {...a11yProps(1)} />
-                            <Tab label={t("map.events")} {...a11yProps(2)} />
-                            <Tab label={t("map.sendRequest")} {...a11yProps(3)} />
+                            {/* <Tab label={t("map.events")} {...a11yProps(2)} />
+                            <Tab label={t("map.sendRequest")} {...a11yProps(3)} /> */}
                             {/* <Tab label={t("map.cameras")} {...a11yProps(4)} onClick={() => handleViewCamera(1)} /> */}
-                            <Tab label={t("map.cameras")} {...a11yProps(4)} />
-                            <Tab label={t("map.routes")} {...a11yProps(5)} />
+                            <Tab label={t("map.cameras")} {...a11yProps(2)} />
+                            <Tab label={t("map.routes")} {...a11yProps(3)} />
                         </Tabs>
                     </Box>
                     <TabPanel value={value} index={0}>
@@ -379,33 +382,25 @@ export default function TabPanelVehicle({ open, handleClose, item }) {
                             </Box>
                         </Box>
                     </TabPanel>
-                    <TabPanel value={value} index={2}>
+                    {/* <TabPanel value={value} index={2}>
                         Events
                     </TabPanel>
                     <TabPanel value={value} index={3}>
                         Send require
+                    </TabPanel> */}
+                    <TabPanel value={value} index={2}>
+                        <img src={item.camera} height={"800px"} width={"100%"}></img>
                     </TabPanel>
-                    <TabPanel value={value} index={4}>
-                        {/* <ReactPlayer
-                            url={item.camera}
-                            playing={true}
-                            volume={1}
-                            height="90vh"
-                            width="100%"
-                            controls={true}
-                            muted={true}
-                            config={{
-                                file: {
-                                    attributes: {
-                                        preload: "auto",
-                                    },
-                                },
-                            }}
-                        /> */}
-                        <img src={item.camera} height={"90vh"} width={"100%"}></img>
-                    </TabPanel>
-                    <TabPanel value={value} index={5}>
-                        Routes
+                    <TabPanel value={value} index={3}>
+                        <Box sx={{ width: '100%', padding:'20px' }}>
+                            <Stepper activeStep={-1} orientation="vertical">
+                                {listRoutes.map((label, index) => (
+                                    <Step key={label} completed={false}>
+                                        <StepLabel >{label}</StepLabel>
+                                    </Step>
+                                ))}
+                            </Stepper>
+                        </Box>
                     </TabPanel>
                 </Box>
             </Box>

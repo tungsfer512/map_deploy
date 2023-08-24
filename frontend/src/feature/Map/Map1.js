@@ -102,6 +102,7 @@ const Map1 = () => {
   const [item, setItem] = useState({});
   const [itemBin, setItemBin] = useState({});
   const [itemVehicle, setItemVehicle] = useState({});
+  const [itemListRoutes, setItemListRoutes] = useState([]);
 
   // const [zoom, setZoom] = useState(-1);
 
@@ -314,6 +315,10 @@ const Map1 = () => {
               item?.demand?.longitude
             ]
           })
+          const listRoutes = routeData.map((item, index) => {
+            return item.company
+          })
+          setItemListRoutes(listRoutes)
 
           route.push([vehicle.latitude, vehicle.longitude])
           console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", route);
@@ -436,14 +441,13 @@ const Map1 = () => {
     <Fragment>
       <Box sx={{ position: 'relative', with: '100%' }}>
         <Box sx={{ height: "calc(100vh - 64px - 5px)" }}>
-          <MapContainer center={[41.248447, -73.856077]} zoom={9} style={{ height: "inherit" }} scrollWheelZoom={true}
-
+          <MapContainer center={[21.235175, 105.811986]} zoom={16} style={{ height: "inherit" }} scrollWheelZoom={true}
           >
             <LayersControl position="topright">
               <LayersControl.BaseLayer checked name="Map Layer Default">
                 <TileLayer
-                  attribution='Tiles &copy; Esri &mdash; Esri, DeLorme, NAVTEQ, TomTom, Intermap, iPC, USGS, FAO, NPS, NRCAN, GeoBase, Kadaster NL, Ordnance Survey, Esri Japan, METI, Esri China (Hong Kong), and the GIS User Community'
-                  url="https://server.arcgisonline.com/ArcGIS/rest/services/World_Topo_Map/MapServer/tile/{z}/{y}/{x}"
+                  attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+                  url="https://tile.openstreetmap.org/{z}/{x}/{y}.png"
                 />
               </LayersControl.BaseLayer>
             </LayersControl>
@@ -490,7 +494,7 @@ const Map1 = () => {
           </MapContainer>
         </Box>
         <TabPanelItemBin open={openBin} handleClose={handleCloseBin} item={itemBin} ></TabPanelItemBin>
-        <TabPanelVehicle open={openVehicle} handleClose={handleCloseVehicle} item={itemVehicle} ></TabPanelVehicle>
+        <TabPanelVehicle open={openVehicle} handleClose={handleCloseVehicle} item={itemVehicle} listRoutes = {itemListRoutes} ></TabPanelVehicle>
       </Box>
     </Fragment>
   )

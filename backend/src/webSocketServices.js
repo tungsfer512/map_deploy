@@ -72,7 +72,8 @@ const webSocketServices = (wss) => {
             // let vehicles = []
             setInterval(async () => {
                 for (let vehicle of vehicles) {
-                    let vehicleData = await axios.get(`${process.env.STATUS_API}/tracking/${vehicle.id}`);
+                    let vehicleData = await axios.get(`${process.env.STATUS_API}/tracking?limit=1`);
+                    let vehicleImageData = await axios.get(`${process.env.STATUS_API}/camera_gps?limit=1`);
                     console.log("+++++++++++++++====================");
                     console.log(vehicleData.data);
                     console.log("+++++++++++++++====================");
@@ -87,23 +88,23 @@ const webSocketServices = (wss) => {
                     // console.log('check vehicle id: ' + id);
                     const update = [
                         id,
-                        // 41.848447,
-                        // 40.329447, -73.866077,
-                        vehicleData.data.data['latitude'],
-                        vehicleData.data.data['longitude'],
-                        vehicleData.data.data.url
+                        // 21.234219,
+                        // 105.811371,
+                        vehicleData.data.data[0].location.coordinates[1],
+                        vehicleData.data.data[0].location.coordinates[0],
+                        vehicleImageData.data.data[0]?.image_url
                     ];
                     for (const [key, value] of Object.entries(admins)) {
                         // console.log('check sending vehicle info to admin site: ', update);
                         value.send(JSON.stringify(update));
                     }
                     updatePosition({
-                        latitude: 40.329447, 
-                        longitude: -73.866077,
-                        // latitude: vehicleData.data.data['latitude'],
-                        // longitude: vehicleData.data.data['longitude'],
+                        // latitude: 21.234219, 
+                        // longitude: 105.811371,
+                        latitude: vehicleData.data.data[0].location.coordinates[1], 
+                        longitude: vehicleData.data.data[0].location.coordinates[0],
                         id: id,
-                        camera: vehicleData.data.data.url
+                        camera: vehicleImageData.data.data[0]?.image_url
                     })
                 }
             }, 1000 * 60)
@@ -154,7 +155,7 @@ const webSocketServices = (wss) => {
                         addEvent_Bin_state({
                             id: id,
                             weight: binData.data.data['weight'],
-                            status: update.status,
+                            status: "full",
                         })
                     } else if (bin.weight <= 5) {
                         update = ['no-alert', {
@@ -168,7 +169,7 @@ const webSocketServices = (wss) => {
                         addEvent_Bin_state({
                             id: id,
                             weight: binData.data.data['weight'],
-                            status: update.status,
+                            status: "empty",
                         })
                     } else {
                         update = ['no-alert', {
@@ -182,7 +183,7 @@ const webSocketServices = (wss) => {
                         addEvent_Bin_state({
                             id: id,
                             weight: binData.data.data['weight'],
-                            status: update.status,
+                            status: "half",
                         })
                     }
                     for (const [key, value] of Object.entries(admins)) {
@@ -190,7 +191,7 @@ const webSocketServices = (wss) => {
                         value.send(JSON.stringify(update));
                     }
                 }
-            }, 1000 * 60)
+            }, 1000 * 60 * 5)
         } catch (err) {
             console.log(err);
         }
