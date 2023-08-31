@@ -34,6 +34,13 @@ const addEvent_Bin_state = async (data) => {
     }
 };
 
+const update_bin = async (data) => {
+    await ADM_Bin.update(
+        { status: data.status, weight: data.weight },
+        { where: { id: data.id }, raw: true }
+    );
+}
+
 const updatePosition = async (data) => {
     try {
         let vehicle = await ADM_Vehicle.findOne({
@@ -70,5 +77,6 @@ const updatePosition = async (data) => {
 
 module.exports = {
     updatePosition,
-    addEvent_Bin_state
+    addEvent_Bin_state,
+    update_bin
 };

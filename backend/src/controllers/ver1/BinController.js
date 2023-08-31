@@ -1,5 +1,6 @@
 const { ADM_Bin, ADM_Company, ADM_Bin_Company } = require('../../models/ver1/models');
 const uploadFile = require('../uploadFileMiddleware');
+const axios = require('axios');
 
 // Create
 const addNewBin = async (req, res) => {
@@ -33,7 +34,7 @@ const addNewBin = async (req, res) => {
                 companyId: Number(companyIds[i])
             });
             await newBinCompany.save();
-        }      
+        }
         resData.company = await ADM_Company.findAll({
             where: {
                 id: companyIds
@@ -144,7 +145,7 @@ const updateBinById = async (req, res) => {
                 });
                 await newBinCompany.save();
             }
-        }      
+        }
         let resData = await ADM_Bin.findOne({
             where: {
                 id: req.params.binId
@@ -266,38 +267,22 @@ const getBinById = async (req, res) => {
 };
 const getResetBinById = async (req, res) => {
     try {
-        let bin = await ADM_Bin.findOne({
-            where: {
-                id: req.params.binId
+        await ADM_Bin.update(
+            {
+                weight: 0,
+                status: "empty"
             },
-            raw: true
-        });
-        if (!bin) {
-            return res.status(404).json({
-                resCode: 404,
-                resMessage: 'ADM_Bin not found.'
-            });
-        }
-        let binCompany = await ADM_Bin_Company.findAll({
-            where: {
-                binId: bin.id
-            },
-            raw: true
-        });
-        let companyIds = [];
-        for (let j = 0; j < binCompany.length; j++) {
-            companyIds.push(binCompany[j].companyId);
-        }
-        bin.company = await ADM_Company.findAll({
-            where: {
-                id: companyIds
-            },
-            raw: true
-        });
+            {
+                where: {
+                    id: req.params.binId
+                },
+                raw: true
+            }
+        );
+        let binReset = await axios.put("http://222.252.29.85:19998/bins/" + req.params.binId, {weight: 0});
         return res.status(200).json({
             resCode: 200,
-            resMessage: 'OK',
-            data: bin
+            resMessage: 'OK'
         });
     } catch (err) {
         return res.status(500).json({

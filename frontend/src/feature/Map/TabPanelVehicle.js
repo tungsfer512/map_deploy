@@ -393,9 +393,9 @@ export default function TabPanelVehicle({ open, handleClose, item, listRoutes })
                     </TabPanel>
                     <TabPanel value={value} index={3}>
                         <Box sx={{ width: '100%', padding:'20px' }}>
-                            <Stepper activeStep={-1} orientation="vertical">
+                            <Stepper activeStep={0} orientation="vertical">
                                 {listRoutes.map((label, index) => (
-                                    <Step key={label} completed={false}>
+                                    <Step key={label}>
                                         <StepLabel >{label}</StepLabel>
                                     </Step>
                                 ))}

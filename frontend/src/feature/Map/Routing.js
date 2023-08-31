@@ -13,33 +13,61 @@ export default function Routing({ dataWaypoints }) {
   const map = useMap();
 
   const waypoints = dataWaypoints.map((item) => L.latLng([item[0], item[1]]));
-
-  // var allLeafletElements = document.querySelectorAll(".leaflet-container .leaflet-overlay-pane svg  path");
-  // if (allLeafletElements) {
-  //   console.log("remove waypoints XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX4");
-  //   console.log(allLeafletElements);
-  //   let ind = allLeafletElements.length - 1;
-  //   while (ind >= 0) {
-  //     allLeafletElements[ind].remove();
-  //     ind--;
-  //   }
-  // }
-  // if (id == -1) {
-  //   return;
-  // }
-
-  // else {
   console.log("add waypoints");
-  const leafletElement = L.Routing.control({
-    waypoints: waypoints,
-    routeWhileDragging: true,
-    show: false,
-    createMarker: () => null,
-    lineOptions: {
-      styles: [{ color: "#00b0ff", opacity: .6, weight: 4, borderRadius: 10 }]
+  let active = 0;
+  for (let i = 0; i < waypoints.length; i++) {
+    let leafletElement = null;
+    if (i < waypoints.length - 1) {
+      if (i == active) {
+        leafletElement = L.Routing.control({
+          waypoints: [waypoints[i], waypoints[i + 1]],
+          routeWhileDragging: true,
+          show: false,
+          fitSelectedRoutes: false,
+          createMarker: () => null,
+          lineOptions: {
+            styles: [{ color: "#ff0000", opacity: .6, weight: 4, borderRadius: 10 }]
+          }
+        });
+      } else {
+        leafletElement = L.Routing.control({
+          waypoints: [waypoints[i], waypoints[i + 1]],
+          routeWhileDragging: true,
+          show: false,
+          fitSelectedRoutes: false,
+          createMarker: () => null,
+          lineOptions: {
+            styles: [{ color: "#00b0ff", opacity: .6, weight: 4, borderRadius: 10 }]
+          }
+        });
+      }
+    } else {
+      if (i == active) {
+        leafletElement = L.Routing.control({
+          waypoints: [waypoints[i], waypoints[0]],
+          routeWhileDragging: true,
+          show: false,
+          fitSelectedRoutes: false,
+          createMarker: () => null,
+          lineOptions: {
+            styles: [{ color: "#ff0000", opacity: .6, weight: 4, borderRadius: 10 }]
+          }
+        });
+      } else {
+        leafletElement = L.Routing.control({
+          waypoints: [waypoints[i], waypoints[0]],
+          routeWhileDragging: true,
+          show: false,
+          fitSelectedRoutes: false,
+          createMarker: () => null,
+          lineOptions: {
+            styles: [{ color: "#00b0ff", opacity: .6, weight: 4, borderRadius: 10 }]
+          }
+        });
+      }
     }
-  });
-  leafletElement.addTo(map);
+    leafletElement.addTo(map);
+  }
 
 
 }

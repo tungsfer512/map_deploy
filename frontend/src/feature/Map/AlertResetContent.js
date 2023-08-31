@@ -2,12 +2,12 @@ import { Stack, Typography } from '@mui/material'
 import React from 'react'
 import { useTranslation } from 'react-i18next';
 
-const AlertAPIContent = ({ data }) => {
+const AlertResetContent = ({ data }) => {
     const { t } = useTranslation();
     return (
         <Stack spacing={0} direction="column">
             <Typography variant='caption' component='div'>
-                <strong>Có lỗi xảy ra khi gọi API</strong>
+                <strong>Rác đã được thu gom</strong>
             </Typography>
             <Typography variant='caption' component='div'>
                 {data}
@@ -16,4 +16,4 @@ const AlertAPIContent = ({ data }) => {
     )
 }
 
-export default AlertAPIContent
+export default AlertResetContent

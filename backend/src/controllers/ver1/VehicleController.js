@@ -627,8 +627,8 @@ let getRoutesByVehicleId = async (req, res) => {
                 "vehicle_id": 1,
                 "demand": {
                     "id": 1,
-                    "latitude": 21.234219,
-                    "longitude": 105.811371,
+                    "latitude": 21.23385,
+                    "longitude": 105.811164,
                     "quantity": 1
                 },
                 "company": "Công ty TNHH Kyoei Việt Nam (Nhà máy 1)"
@@ -640,8 +640,8 @@ let getRoutesByVehicleId = async (req, res) => {
                 "vehicle_id": 1,
                 "demand": {
                     "id": 8,
-                    "latitude": 21.231383,
-                    "longitude": 105.812283,
+                    "latitude": 21.231271,
+                    "longitude": 105.812022,
                     "quantity": 8
                 },
                 "company": "Công Ty TNHH Asahi Denso Việt Nam"
@@ -653,8 +653,8 @@ let getRoutesByVehicleId = async (req, res) => {
                 "vehicle_id": 10,
                 "demand": {
                     "id": 10,
-                    "latitude": 21.232842,
-                    "longitude": 105.808382,
+                    "latitude": 21.232646,
+                    "longitude": 105.808275,
                     "quantity": 10
                 },
                 "company": "Công Ty TNHH Honest Việt Nam"
@@ -666,8 +666,8 @@ let getRoutesByVehicleId = async (req, res) => {
                 "vehicle_id": 1,
                 "demand": {
                     "id": 2,
-                    "latitude": 21.228549,
-                    "longitude": 105.819898,
+                    "latitude": 21.228515,
+                    "longitude": 105.819616,
                     "quantity": 2
                 },
                 "company": "Công Ty Cổ Phần Thép Đặc Biệt Pro-Vision"
@@ -679,8 +679,8 @@ let getRoutesByVehicleId = async (req, res) => {
                 "vehicle_id": 1,
                 "demand": {
                     "id": 6,
-                    "latitude": 21.229033,
-                    "longitude": 105.820180,
+                    "latitude": 21.228801,
+                    "longitude": 105.819658,
                     "quantity": 6
                 },
                 "company": "Công Ty TNHH Hamagasu Việt Nam"
@@ -692,24 +692,11 @@ let getRoutesByVehicleId = async (req, res) => {
                 "vehicle_id": 1,
                 "demand": {
                     "id": 3,
-                    "latitude": 21.231058,
-                    "longitude": 105.820840,
+                    "latitude": 21.231008,
+                    "longitude": 105.820339,
                     "quantity": 3
                 },
                 "company": "Công Ty TNHH Kishiro Việt Nam"
-            },
-            {
-                "demand_id": 4,
-                "depot_id": 4,
-                "stop_number": 4,
-                "vehicle_id": 1,
-                "demand": {
-                    "id": 4,
-                    "latitude": 21.233656,
-                    "longitude": 105.816368,
-                    "quantity": 4
-                },
-                "company": "Công ty Nội Bài"
             },
             {
                 "demand_id": 9,
@@ -718,12 +705,25 @@ let getRoutesByVehicleId = async (req, res) => {
                 "vehicle_id": 1,
                 "demand": {
                     "id": 9,
-                    "latitude": 21.235909,
-                    "longitude": 105.811281,
+                    "latitude": 21.236329,
+                    "longitude": 105.812871,
                     "quantity": 9
                 },
                 "company": "Công Ty TNHH Tenma Việt Nam"
-            }
+            },
+            {
+                "demand_id": 4,
+                "depot_id": 4,
+                "stop_number": 4,
+                "vehicle_id": 1,
+                "demand": {
+                    "id": 4,
+                    "latitude": 21.235927,
+                    "longitude": 105.814744,
+                    "quantity": 4
+                },
+                "company": "Công ty Nội Bài"
+            },
         ]
         // 1-8-10-2-6-3-4-9
 
@@ -731,6 +731,7 @@ let getRoutesByVehicleId = async (req, res) => {
             resCode: 200,
             resMessage: 'OK Got Routes',
             data: resData
+            // data: [resData[1]]
         });
 
     } catch (err) {

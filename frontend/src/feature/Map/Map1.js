@@ -1,6 +1,5 @@
 import React, { forwardRef, Fragment, useEffect, useRef, useState } from 'react'
 import { MapContainer, TileLayer, Marker, Polyline, Popup, LayersControl, LayerGroup, useMapEvent, useMap, useMapEvents } from "react-leaflet";
-import L from 'leaflet';
 import "leaflet/dist/leaflet.css";
 import Routing from './Routing';
 import "leaflet-rotatedmarker";
@@ -22,12 +21,21 @@ import PopupVehicleMarker from './PopupVehicleMarker';
 import PopupBinMarker from './PopupBinMarker';
 import AlertContent from './AlertContent';
 import AlertAPIContent from './AlertAPIContent';
+import AlertResetContent from './AlertResetContent';
 import TabPanelVehicle from './TabPanelVehicle';
 import TabPanelItemBin from './TabPanelItemBin';
 import axios from 'axios';
 import { getResetBinWeightAsync } from '../../store/reducers/binSlice';
 import { clearWayPoints, setWayPoints, waypointsSelector } from '../../store/reducers/waypointSlice';
 import { isStaff } from '../Auth/Role';
+import L from "leaflet";
+import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
+import "leaflet-routing-machine";
+
+L.Marker.prototype.options.icon = L.icon({
+  iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png"
+});
+
 let id = -1;
 
 function ZoomHandler({ waypoints }) {
@@ -171,7 +179,7 @@ const Map1 = () => {
               vertical: "top",
               horizontal: "right",
             },
-            autoHideDuration: 3000,
+            autoHideDuration: 5000,
             content: (key, message) => (
               <Alert
                 key={key}
@@ -183,6 +191,30 @@ const Map1 = () => {
                 icon={false}
               >
                 <AlertAPIContent data={data[1]} />
+              </Alert>
+            ),
+          });
+      }
+      else if (data[0] === 'alert_reset') {
+        enqueueSnackbar(JSON.stringify(data),
+          {
+            variant: "success",
+            anchorOrigin: {
+              vertical: "bottom",
+              horizontal: "left",
+            },
+            autoHideDuration: 5000,
+            content: (key, message) => (
+              <Alert
+                key={key}
+                message={message}
+                severity="success"
+                color="success"
+                onClose={() => closeSnackbar(key)}
+                sx={{ width: "250px" }}
+                icon={false}
+              >
+                <AlertResetContent data={data[4]} />
               </Alert>
             ),
           });
@@ -200,7 +232,7 @@ const Map1 = () => {
   }, []);
 
   useEffect(() => {
-    if (data[0] !== "alert" && data[0] !== "no-alert") {
+    if (data[0] !== "alert" && data[0] !== "no-alert" && data[0] !== "alert_api" && data[0] !== "alert_reset") {
       if (!!vehicles && vehicles?.length > 0) {
         let vehicle = vehicles.find(item => item.id.toString() === data[0].toString());
         if (vehicle) {
@@ -228,10 +260,10 @@ const Map1 = () => {
                 }
               }
             }
-            setVehicles(vehiclesUpdate);
             if (data[0]?.toString() === itemVehicle?.id?.toString()) {
               setItemVehicle(vehicleData);
             }
+            setVehicles(vehiclesUpdate);
           } else {
             console.log("data5-----------____----__---__---___--___---------");
             const vehicleData = {
@@ -250,19 +282,21 @@ const Map1 = () => {
   }, [data]);
 
   useEffect(() => {
-    if (dataAlert[0] === "alert" || dataAlert[0] === "no-alert") {
+    if (dataAlert[0] === "alert" || dataAlert[0] === "no-alert" || data[0] !== "alert_reset") {
       if (!!bins && bins?.length > 0) {
         let bin = bins.find(item => item.id.toString() === dataAlert[1].id.toString());
         if (bin) {
           const binData = {
             ...bin,
+            weight: dataAlert[1].weight,
             status: dataAlert[1].status
           }
           const binsUpdate = [...bins.filter(item => item.id.toString() !== dataAlert[1].id.toString()), binData];
+          setBins(binsUpdate);
           if (dataAlert[1]?.id?.toString() === itemBin?.id?.toString()) {
+            console.log("-============================================================-0", dataAlert)
             setItemBin(binData)
           }
-          setBins(binsUpdate);
           console.log("update bin in map");
         }
       }
@@ -308,19 +342,20 @@ const Map1 = () => {
         id = vehicle.id;
         try {
           let routeData = await getRoutesByVehicleId(vehicle.id);
-          const route = routeData.map((item, index) => {
+          let route = routeData.map((item, index) => {
             // console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", item);
             return [
               item?.demand?.latitude,
               item?.demand?.longitude
             ]
           })
+          // route = [[vehicle.latitude, vehicle.longitude], ...route]
+          route = [[21.23568, 105.80895], ...route]
           const listRoutes = routeData.map((item, index) => {
             return item.company
           })
           setItemListRoutes(listRoutes)
 
-          route.push([vehicle.latitude, vehicle.longitude])
           console.log(">>>>>>>>>>>>>>>check >>>>>>>>>>>>>", route);
           setRoutes(route);
           const payload = {
@@ -494,7 +529,7 @@ const Map1 = () => {
           </MapContainer>
         </Box>
         <TabPanelItemBin open={openBin} handleClose={handleCloseBin} item={itemBin} ></TabPanelItemBin>
-        <TabPanelVehicle open={openVehicle} handleClose={handleCloseVehicle} item={itemVehicle} listRoutes = {itemListRoutes} ></TabPanelVehicle>
+        <TabPanelVehicle open={openVehicle} handleClose={handleCloseVehicle} item={itemVehicle} listRoutes={itemListRoutes} ></TabPanelVehicle>
       </Box>
     </Fragment>
   )
