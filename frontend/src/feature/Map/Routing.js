@@ -14,7 +14,7 @@ export default function Routing({ dataWaypoints }) {
 
   const waypoints = dataWaypoints.map((item) => L.latLng([item[0], item[1]]));
   console.log("add waypoints");
-  let active = 0;
+  let active = 2;
   for (let i = 0; i < waypoints.length; i++) {
     let leafletElement = null;
     if (i < waypoints.length - 1) {

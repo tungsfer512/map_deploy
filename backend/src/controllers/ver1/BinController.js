@@ -279,7 +279,7 @@ const getResetBinById = async (req, res) => {
                 raw: true
             }
         );
-        let binReset = await axios.put("http://222.252.29.85:19998/bins/" + req.params.binId, {weight: 0});
+        let binReset = await axios.put("http://localhost:9998/bins/" + req.params.binId, {weight: 0});
         return res.status(200).json({
             resCode: 200,
             resMessage: 'OK'

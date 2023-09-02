@@ -17,38 +17,38 @@ services:
       map:
         null
 
-  backend:
-    build:
-      context: ./backend
-      dockerfile: Dockerfile
-    container_name: backend
-    volumes:
-      - ./backend:/backend
-    depends_on:
-      - db
-    command: bash -c "npm run setupdb && npm run dev"
-    ports:
-      - "7000:7000"
-    restart: unless-stopped
-    networks:
-      map:
-        null
+  # backend:
+  #   build:
+  #     context: ./backend
+  #     dockerfile: Dockerfile
+  #   container_name: backend
+  #   volumes:
+  #     - ./backend:/backend
+  #   depends_on:
+  #     - db
+  #   command: bash -c "npm run setupdb && npm run dev"
+  #   ports:
+  #     - "7000:7000"
+  #   restart: unless-stopped
+  #   networks:
+  #     map:
+  #       null
 
-  frontend:
-    build:
-      context: ./frontend
-      dockerfile: Dockerfile
-    container_name: frontend
-    volumes:
-      - ./frontend:/frontend
-    ports:
-      - "7777:7777"
-    depends_on:
-      - backend
-    restart: unless-stopped
-    networks:
-      map:
-        null
+  # frontend:
+  #   build:
+  #     context: ./frontend
+  #     dockerfile: Dockerfile
+  #   container_name: frontend
+  #   volumes:
+  #     - ./frontend:/frontend
+  #   ports:
+  #     - "7777:7777"
+  #   depends_on:
+  #     - backend
+  #   restart: unless-stopped
+  #   networks:
+  #     map:
+  #       null
 
 networks:
   map:

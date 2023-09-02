@@ -218,6 +218,9 @@ const Map1 = () => {
               </Alert>
             ),
           });
+        setDataAlert(data);
+        dispatch(addNoti(data));
+        dispatch(increment());
       }
       else {
         setData(data);
@@ -282,7 +285,7 @@ const Map1 = () => {
   }, [data]);
 
   useEffect(() => {
-    if (dataAlert[0] === "alert" || dataAlert[0] === "no-alert" || data[0] !== "alert_reset") {
+    if (dataAlert[0] === "alert" || dataAlert[0] === "no-alert" || dataAlert[0] === "alert_reset") {
       if (!!bins && bins?.length > 0) {
         let bin = bins.find(item => item.id.toString() === dataAlert[1].id.toString());
         if (bin) {

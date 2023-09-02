@@ -58,25 +58,25 @@ const webSocketServices = (wss) => {
             console.log(err);
         }
         try {
-            let vehicles = await ADM_Vehicle.findAll({
-                raw: true
-            })
-            // let vehicles = await ADM_Vehicle.findAll({
-            //     where: {
-            //         id: [1, ]
-            //     },
-            //     raw: true
-            // })
-            console.log("________________________");
-            console.log(vehicles);
-            console.log("________________________");
-            // let vehicles = []
             setInterval(async () => {
+                let vehicles = await ADM_Vehicle.findAll({
+                    raw: true
+                })
+                // let vehicles = await ADM_Vehicle.findAll({
+                //     where: {
+                //         id: [1, ]
+                //     },
+                //     raw: true
+                // })
+                console.log("________________________");
+                console.log(vehicles);
+                console.log("________________________");
+                // let vehicles = []
                 for (let vehicle of vehicles) {
                     // let vehicleData = await axios.get(`${process.env.STATUS_API}/tracking?limit=1`);
-                    let vehicleData = await axios.get(`http://222.252.29.85:19998/vehicle`);
+                    let vehicleData = await axios.get(`http://localhost:9998/vehicle`);
                     let vehicleImageData = await axios.get(`${process.env.STATUS_API}/camera_gps?limit=10`);
-                    let image_id = 0;
+                    let image_id = 2;
                     console.log("+++++++++++++++====================");
                     console.log(vehicleData.data);
                     console.log("+++++++++++++++====================");
@@ -107,7 +107,8 @@ const webSocketServices = (wss) => {
                         latitude: vehicleData.data.data[0].location.coordinates[1],
                         longitude: vehicleData.data.data[0].location.coordinates[0],
                         id: id,
-                        camera: "http://203.162.10.118:8888/media/camera/a4ab715a-63a0-4d26-9c73-d23b2b4c04d5.jpg"
+                        camera: vehicleImageData.data.data[image_id]?.image_url
+                        // camera: "http://203.162.10.118:8888/media/camera/a4ab715a-63a0-4d26-9c73-d23b2b4c04d5.jpg"
                     })
                 }
             }, 1000 * 10)
@@ -116,23 +117,23 @@ const webSocketServices = (wss) => {
         }
         // event bin status
         try {
-            let bins = await ADM_Bin.findAll({
-                raw: true
-            })
-            // let bins = await ADM_Bin.findAll({
-            //     where: {
-            //         id: [1, ]
-            //     },
-            //     raw: true
-            // })
-            console.log("________________________");
-            console.log(bins);
-            console.log("________________________");
             // let bins = []
             setInterval(async () => {
+                let bins = await ADM_Bin.findAll({
+                    raw: true
+                })
+                // let bins = await ADM_Bin.findAll({
+                //     where: {
+                //         id: [1, ]
+                //     },
+                //     raw: true
+                // })
+                console.log("________________________");
+                console.log(bins);
+                console.log("________________________");
                 for (let bin of bins) {
                     // let binData = await axios.get(`${process.env.STATUS_API}/cell/${bin.id}`);
-                    let binData = await axios.get(`http://222.252.29.85:19998/bins/${bin.id}`);
+                    let binData = await axios.get(`http://localhost:9998/bins/${bin.id}`);
                     // let binData = await axios.get(`${process.env.STATUS_API}/cell/5`);
                     console.log("+====================");
                     console.log(binData.data);

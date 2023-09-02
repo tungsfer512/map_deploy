@@ -75,4 +75,4 @@ def update_vehicle(vehicle: schemas.VehiclesCreate, db: Session = Depends(get_db
     return crud.update_vehicle(db, vehicle)
 
 if __name__ == "__main__":
-    uvicorn.run(app, host="0.0.0.0", port=9999)
+    uvicorn.run(app, host="0.0.0.0", port=9998)
