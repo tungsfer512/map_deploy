@@ -68,6 +68,7 @@
             "odometer": "Công tơ mét",
             "tonnage": "Trọng tải",
             "status": "Trạng thái",
+            "createdAt": "Thời gian",
             "action": "Thao Tác"
         },
         "form": {
@@ -118,6 +119,8 @@
             "gender": "Giới tính",
             "male": "Nam",
             "female": "Nữ",
+            "invalid": "Không hợp lệ",
+            "valid": "Hợp lệ",
             "action": "Thao Tác"
         },
         "form": {

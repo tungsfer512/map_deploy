@@ -74,7 +74,7 @@ const webSocketServices = (wss) => {
                 // let vehicles = []
                 for (let vehicle of vehicles) {
                     // let vehicleData = await axios.get(`${process.env.STATUS_API}/tracking?limit=1`);
-                    let vehicleData = await axios.get(`http://localhost:9998/vehicle`);
+                    let vehicleData = await axios.get(`${process.env.STATUS_FAKE_API}/vehicle`);
                     let vehicleImageData = await axios.get(`${process.env.STATUS_API}/camera_gps?limit=10`);
                     let image_id = 2;
                     console.log("+++++++++++++++====================");
@@ -133,7 +133,7 @@ const webSocketServices = (wss) => {
                 console.log("________________________");
                 for (let bin of bins) {
                     // let binData = await axios.get(`${process.env.STATUS_API}/cell/${bin.id}`);
-                    let binData = await axios.get(`http://localhost:9998/bins/${bin.id}`);
+                    let binData = await axios.get(`${process.env.STATUS_FAKE_API}/bins/${bin.id}`);
                     // let binData = await axios.get(`${process.env.STATUS_API}/cell/5`);
                     console.log("+====================");
                     console.log(binData.data);

@@ -44,7 +44,19 @@ const ValidVehicle = () => {
         { field: 'binId', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.binId")}`, minWidth: 70, flex: 1, sortable: false, },
         { field: 'plate', headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.plate")}`, minWidth: 150, flex: 1, sortable: false, },
         // { field: 'model', headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.model")}`, minWidth: 200, flex: 1, },
-        { field: 'status', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.status")}`, minWidth: 100, flex: 1, sortable: true },
+        {
+            field: 'status', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.status")}`, minWidth: 100, flex: 1, sortable: true,
+            renderCell: (params) => (
+                `${params.row.status}` === "invalid" ? `${t("drivers.table.invalid")}` : `${t("drivers.table.valid")}`
+            )
+        },
+        {
+            field: 'createdAt', align: "center", headerAlign: "center", headerClassName: 'super-app-theme--header', headerName: `${t("vehicles.table.createdAt")}`, minWidth: 100, flex: 1, sortable: true,
+            renderCell: (params) => {
+                let times = params.row.createdAt.split("T")
+                return `${times[0]} ${times[1].slice(0, 8)}`
+            }
+        },
     ];
 
     return (

@@ -68,6 +68,7 @@
             "odometer": "Odometer",
             "tonnage": "Tonnage",
             "status": "Status",
+            "createdAt": "Time",
             "action": "Action"
         },
         "form": {
@@ -118,6 +119,8 @@
             "gender": "Gender",
             "male": "Male",
             "female": "Female",
+            "invalid": "Invalid",
+            "valid": "Valid",
             "action": "Action"
         },
         "form": {
