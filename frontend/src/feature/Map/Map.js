@@ -215,7 +215,7 @@ const Map = () => {
     <Fragment>
       <Box sx={{ position: 'relative', with: '100%' }}>
         <Box sx={{ height: "calc(100vh - 64px - 5px)" }}>
-          <MapContainer center={vehicle ? [auth?.bins[0].latitude, auth?.bins[0].longitude] : [21.023396, 105.850094]} zoom={17} style={{ height: "inherit" }} scrollWheelZoom={true}
+          <MapContainer center={vehicle ? [auth?.bins[0].latitude, auth?.bins[0].longitude] : [20.9794977, 105.7881109]} zoom={17} style={{ height: "inherit" }} scrollWheelZoom={true}
 
           >
             <LayersControl position="topright">

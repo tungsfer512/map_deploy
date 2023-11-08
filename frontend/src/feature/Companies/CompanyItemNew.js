@@ -32,7 +32,7 @@ const CompanyItemNew = ({ state }) => {
   }
   // convert companyId to number
   const companyId = parseInt(params.companyId);
-  const [dob, setDob] = useState(new Date());
+  // const [dob, setDob] = useState(new Date());
 
   const [companyItem, setCompanyItem] = useState(
     {
@@ -70,7 +70,7 @@ const CompanyItemNew = ({ state }) => {
     event.preventDefault();
     const formCompany = document.getElementById("formCompany");
     const formData = new FormData(formCompany);
-    formData.append("dob", dob.toLocaleDateString('en-GB'));
+    // formData.append("dob", dob.toLocaleDateString('en-GB'));
     if (state === "new") {
       dispatch(postCompanyDataAsync(formData)).then((result) => {
         console.log("Result:", result);
