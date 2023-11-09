@@ -353,7 +353,7 @@ const Map1 = () => {
             ]
           })
           // route = [[vehicle.latitude, vehicle.longitude], ...route]
-          route = [[21.23568, 105.80895], ...route]
+          route = [...route]
           const listRoutes = routeData.map((item, index) => {
             return item.company
           })

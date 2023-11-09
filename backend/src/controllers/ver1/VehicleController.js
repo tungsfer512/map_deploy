@@ -4,7 +4,9 @@ const {
     ADM_Task,
     ADM_User,
     VALID_Vehicle,
-    ADM_Bin
+    ADM_Bin,
+    ADM_Bin_Company,
+    ADM_Company
 } = require('../../models/ver1/models');
 const uploadFile = require('../uploadFileMiddleware');
 const axios = require('axios')
@@ -619,112 +621,186 @@ let getRoutesByVehicleId = async (req, res) => {
         //     if (a.demand_id < b.demand_id)
         //         return -1
         // })
-        let resData = [
-            {
-                "demand_id": 1,
-                "depot_id": 1,
-                "stop_number": 1,
+        // let resData = [
+        //     {
+        //         "demand_id": 1,
+        //         "depot_id": 1,
+        //         "stop_number": 1,
+        //         "vehicle_id": 1,
+        //         "demand": {
+        //             "id": 1,
+        //             "latitude": 21.23385,
+        //             "longitude": 105.811164,
+        //             "quantity": 1
+        //         },
+        //         "company": "Công ty TNHH Kyoei Việt Nam (Nhà máy 1)"
+        //     },
+        //     {
+        //         "demand_id": 8,
+        //         "depot_id": 8,
+        //         "stop_number": 8,
+        //         "vehicle_id": 1,
+        //         "demand": {
+        //             "id": 8,
+        //             "latitude": 21.231271,
+        //             "longitude": 105.812022,
+        //             "quantity": 8
+        //         },
+        //         "company": "Công Ty TNHH Asahi Denso Việt Nam"
+        //     },
+        //     {
+        //         "demand_id": 10,
+        //         "depot_id": 10,
+        //         "stop_number": 10,
+        //         "vehicle_id": 10,
+        //         "demand": {
+        //             "id": 10,
+        //             "latitude": 21.232646,
+        //             "longitude": 105.808275,
+        //             "quantity": 10
+        //         },
+        //         "company": "Công Ty TNHH Honest Việt Nam"
+        //     },
+        //     {
+        //         "demand_id": 2,
+        //         "depot_id": 2,
+        //         "stop_number": 2,
+        //         "vehicle_id": 1,
+        //         "demand": {
+        //             "id": 2,
+        //             "latitude": 21.228515,
+        //             "longitude": 105.819616,
+        //             "quantity": 2
+        //         },
+        //         "company": "Công Ty Cổ Phần Thép Đặc Biệt Pro-Vision"
+        //     },
+        //     {
+        //         "demand_id": 6,
+        //         "depot_id": 6,
+        //         "stop_number": 6,
+        //         "vehicle_id": 1,
+        //         "demand": {
+        //             "id": 6,
+        //             "latitude": 21.228801,
+        //             "longitude": 105.819658,
+        //             "quantity": 6
+        //         },
+        //         "company": "Công Ty TNHH Hamagasu Việt Nam"
+        //     },
+        //     {
+        //         "demand_id": 3,
+        //         "depot_id": 3,
+        //         "stop_number": 3,
+        //         "vehicle_id": 1,
+        //         "demand": {
+        //             "id": 3,
+        //             "latitude": 21.231008,
+        //             "longitude": 105.820339,
+        //             "quantity": 3
+        //         },
+        //         "company": "Công Ty TNHH Kishiro Việt Nam"
+        //     },
+        //     {
+        //         "demand_id": 9,
+        //         "depot_id": 9,
+        //         "stop_number": 9,
+        //         "vehicle_id": 1,
+        //         "demand": {
+        //             "id": 9,
+        //             "latitude": 21.236329,
+        //             "longitude": 105.812871,
+        //             "quantity": 9
+        //         },
+        //         "company": "Công Ty TNHH Tenma Việt Nam"
+        //     },
+        //     {
+        //         "demand_id": 4,
+        //         "depot_id": 4,
+        //         "stop_number": 4,
+        //         "vehicle_id": 1,
+        //         "demand": {
+        //             "id": 4,
+        //             "latitude": 21.235927,
+        //             "longitude": 105.814744,
+        //             "quantity": 4
+        //         },
+        //         "company": "Công ty Nội Bài"
+        //     },
+        // ]
+
+        let resData = []
+        let vehiclePosition = await SUP_Vehicle_Position.findOne({
+            where: {
+                vehicleId: req.params.vehicleId
+            },
+            raw: true
+        });
+
+        let bins = await ADM_Bin.findAll({
+            raw: true
+        });
+        let te_arr = []
+        
+        for (let i = 0; i < bins.length; i++) {
+            let binCompany = await ADM_Bin_Company.findAll({
+                where: {
+                    binId: bins[i].id
+                },
+                raw: true
+            });
+            let companyIds = [];
+            for (let j = 0; j < binCompany.length; j++) {
+                companyIds.push(binCompany[j].companyId);
+            }
+            bins[i].company = await ADM_Company.findAll({
+                where: {
+                    id: companyIds
+                },
+                raw: true
+            });
+            let distance = (bins[i].latitude - vehiclePosition.latitude) * (bins[i].latitude - vehiclePosition.latitude) + (bins[i].longitude - vehiclePosition.longitude) * (bins[i].longitude - vehiclePosition.longitude);
+            let x_te = {
+                id: bins[i].id,
+                ratio: bins[i].weight / distance,
+                weight: bins[i].weight,
+                latitude: bins[i].latitude,
+                longitude: bins[i].longitude,
+                company: bins[i].company[0].name
+            }
+            te_arr.push(x_te)
+        }
+
+        te_arr.sort((a, b) => b.ratio - a.ratio)
+        resData.push({
+            "demand_id": 0,
+            "depot_id": 0,
+            "stop_number": 0,
+            "vehicle_id": 1,
+            "demand": {
+                "id": 0,
+                "latitude": vehiclePosition.latitude,
+                "longitude": vehiclePosition.longitude,
+                "quantity": 0
+            },
+            "company": "Diem xuat phat",
+            "ratio": 0
+        })
+        for (let i = 0; i < 3; i++) {
+            resData.push({
+                "demand_id": te_arr[i].id,
+                "depot_id": te_arr[i].id,
+                "stop_number": te_arr[i].id,
                 "vehicle_id": 1,
                 "demand": {
-                    "id": 1,
-                    "latitude": 21.23385,
-                    "longitude": 105.811164,
-                    "quantity": 1
+                    "id": te_arr[i].id,
+                    "latitude": te_arr[i].latitude,
+                    "longitude": te_arr[i].longitude,
+                    "quantity": te_arr[i].weight
                 },
-                "company": "Công ty TNHH Kyoei Việt Nam (Nhà máy 1)"
-            },
-            {
-                "demand_id": 8,
-                "depot_id": 8,
-                "stop_number": 8,
-                "vehicle_id": 1,
-                "demand": {
-                    "id": 8,
-                    "latitude": 21.231271,
-                    "longitude": 105.812022,
-                    "quantity": 8
-                },
-                "company": "Công Ty TNHH Asahi Denso Việt Nam"
-            },
-            {
-                "demand_id": 10,
-                "depot_id": 10,
-                "stop_number": 10,
-                "vehicle_id": 10,
-                "demand": {
-                    "id": 10,
-                    "latitude": 21.232646,
-                    "longitude": 105.808275,
-                    "quantity": 10
-                },
-                "company": "Công Ty TNHH Honest Việt Nam"
-            },
-            {
-                "demand_id": 2,
-                "depot_id": 2,
-                "stop_number": 2,
-                "vehicle_id": 1,
-                "demand": {
-                    "id": 2,
-                    "latitude": 21.228515,
-                    "longitude": 105.819616,
-                    "quantity": 2
-                },
-                "company": "Công Ty Cổ Phần Thép Đặc Biệt Pro-Vision"
-            },
-            {
-                "demand_id": 6,
-                "depot_id": 6,
-                "stop_number": 6,
-                "vehicle_id": 1,
-                "demand": {
-                    "id": 6,
-                    "latitude": 21.228801,
-                    "longitude": 105.819658,
-                    "quantity": 6
-                },
-                "company": "Công Ty TNHH Hamagasu Việt Nam"
-            },
-            {
-                "demand_id": 3,
-                "depot_id": 3,
-                "stop_number": 3,
-                "vehicle_id": 1,
-                "demand": {
-                    "id": 3,
-                    "latitude": 21.231008,
-                    "longitude": 105.820339,
-                    "quantity": 3
-                },
-                "company": "Công Ty TNHH Kishiro Việt Nam"
-            },
-            {
-                "demand_id": 9,
-                "depot_id": 9,
-                "stop_number": 9,
-                "vehicle_id": 1,
-                "demand": {
-                    "id": 9,
-                    "latitude": 21.236329,
-                    "longitude": 105.812871,
-                    "quantity": 9
-                },
-                "company": "Công Ty TNHH Tenma Việt Nam"
-            },
-            {
-                "demand_id": 4,
-                "depot_id": 4,
-                "stop_number": 4,
-                "vehicle_id": 1,
-                "demand": {
-                    "id": 4,
-                    "latitude": 21.235927,
-                    "longitude": 105.814744,
-                    "quantity": 4
-                },
-                "company": "Công ty Nội Bài"
-            },
-        ]
+                "company": te_arr[i].company,
+                "ratio": te_arr[i].ratio
+            })
+        }
         // 1-8-10-2-6-3-4-9
 
         return res.status(200).json({
