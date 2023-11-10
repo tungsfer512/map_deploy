@@ -778,28 +778,30 @@ let getRoutesByVehicleId = async (req, res) => {
             "vehicle_id": 1,
             "demand": {
                 "id": 0,
-                "latitude": vehiclePosition.latitude,
-                "longitude": vehiclePosition.longitude,
+                "latitude": 20.98036646550657,
+                "longitude": 105.7878550887108,
                 "quantity": 0
             },
             "company": "Diem xuat phat",
             "ratio": 0
         })
-        for (let i = 0; i < 3; i++) {
-            resData.push({
-                "demand_id": te_arr[i].id,
-                "depot_id": te_arr[i].id,
-                "stop_number": te_arr[i].id,
-                "vehicle_id": 1,
-                "demand": {
-                    "id": te_arr[i].id,
-                    "latitude": te_arr[i].latitude,
-                    "longitude": te_arr[i].longitude,
-                    "quantity": te_arr[i].weight
-                },
-                "company": te_arr[i].company,
-                "ratio": te_arr[i].ratio
-            })
+        for (let i = 0; i < te_arr.length; i++) {
+            if(te_arr[i].id !== 3 && te_arr[i].id !== 5) {
+                resData.push({
+                    "demand_id": te_arr[i].id,
+                    "depot_id": te_arr[i].id,
+                    "stop_number": te_arr[i].id,
+                    "vehicle_id": 1,
+                    "demand": {
+                        "id": te_arr[i].id,
+                        "latitude": te_arr[i].latitude,
+                        "longitude": te_arr[i].longitude,
+                        "quantity": te_arr[i].weight
+                    },
+                    "company": te_arr[i].company,
+                    "ratio": te_arr[i].ratio
+                })
+            }
         }
         // 1-8-10-2-6-3-4-9
 

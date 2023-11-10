@@ -41,106 +41,99 @@ const webSocketServices = (wss) => {
             let id = parameters.query.id;
             console.log("check id: ", id);
             if (id[0] == 'v') {
-                id = id.substr(id.length - 1);
-                vehicles[id] = ws;
+                let ws_id = id.substr(id.length - 1);
+                vehicles[ws_id] = ws;
             }
             if (id[0] == 'g') {
-                id = id.substr(id.length - 1);
-                gpss[id] = ws;
+                let ws_id = id.substr(id.length - 1);
+                gpss[ws_id] = ws;
                 let xxx = await axios.get(`${process.env.STATUS_API}/camera_gps?limit=10`);
                 vehicleImage = xxx.data.data[0]?.image_url;
                 console.log(vehicleImage)
             }
             if (id[0] == 'a') {
-                id = id.substr(id.length - 1);
-                admins[id] = ws;
+                let ws_id = id.substr(id.length - 1);
+                admins[ws_id] = ws;
             }
             if (id[0] == 'r') {
-                id = id.substr(id.length - 1);
-                routing[id] = ws;
+                let ws_id = id.substr(id.length - 1);
+                routing[ws_id] = ws;
             }
-        } catch (err) {
-            console.log(err);
-        }
-        try {
-            setInterval(async () => {
-                let vehicles = await ADM_Vehicle.findAll({
-                    raw: true
-                })
-                // let vehicles = await ADM_Vehicle.findAll({
-                //     where: {
-                //         id: [1, ]
-                //     },
-                //     raw: true
-                // })
-                // console.log("________________________");
-                // console.log(vehicles);
-                // console.log("________________________");
-                // let vehicles = []
-                for (let vehicle of vehicles) {
-                    try {
-                        // let vehicleData = await axios.get(`${process.env.STATUS_API}/tracking?limit=1`);
-                        // let vehicleData = await axios.get(`${process.env.STATUS_FAKE_API}/vehicle`);
-                        let vehicleImageData = await axios.get(`${process.env.STATUS_API}/camera_gps?limit=10`);
-                        let image_id = 0;
-                        // console.log("+++++++++++++++====================");
-                        // console.log(vehicleData.data);
-                        // console.log("+++++++++++++++====================");
-                        // if (vehicleData.data.message != "success") {
-                        //     console.log(`request vehicle ${vehicle.id} failed 404`);
-                        //     for (const [key, value] of Object.entries(admins)) {
-                        //         value.send(JSON.stringify(['alert_api', 'Lỗi khi gọi API lấy thông tin xe hiện tại']));
-                        //     }
-                        //     continue;
-                        // }
-                        let id = vehicle.id
-                        let vehiclePosition = await SUP_Vehicle_Position.findOne({
-                            where: {
-                                vehicleId: id,
-                            },
-                            raw: true
-                        });
-                        // console.log('check vehicle id: ' + id);
-                        vehicleImage = vehicleImageData.data.data[image_id]?.image_url;
-                        const update = [
-                            id,
-                            // 21.235600, 105.808782,
-                            // vehicleData.data.data[0].location.coordinates[1],
-                            // vehicleData.data.data[0].location.coordinates[0],
-                            // current_gps[0],
-                            // current_gps[1],
-                            vehiclePosition.latitude,
-                            vehiclePosition.longitude,
-                            vehicleImageData.data.data[image_id]?.image_url
-                            // "http://203.162.10.118:8888/media/camera/a4ab715a-63a0-4d26-9c73-d23b2b4c04d5.jpg"
-                        ];
-                        for (const [key, value] of Object.entries(admins)) {
-                            // console.log('check sending vehicle info to admin site: ', update);
-                            value.send(JSON.stringify(update));
+            if (id[0] == 'g') {
+                setInterval(async () => {
+                    // let vehicles = await ADM_Vehicle.findAll({
+                    //     raw: true
+                    // })
+                    // let vehicles = await ADM_Vehicle.findAll({
+                    //     where: {
+                    //         id: [1, ]
+                    //     },
+                    //     raw: true
+                    // })
+                    // console.log("________________________");
+                    // console.log(vehicles);
+                    // console.log("________________________");
+                    // let vehicles = []
+                    // for (let vehicle of vehicles) {
+                        try {
+                            // let vehicleData = await axios.get(`${process.env.STATUS_API}/tracking?limit=1`);
+                            // let vehicleData = await axios.get(`${process.env.STATUS_FAKE_API}/vehicle`);
+                            let vehicleImageData = await axios.get(`${process.env.STATUS_API}/camera_gps?limit=10`);
+                            let image_id = 0;
+                            // console.log("+++++++++++++++====================");
+                            // console.log(vehicleData.data);
+                            // console.log("+++++++++++++++====================");
+                            // if (vehicleData.data.message != "success") {
+                            //     console.log(`request vehicle ${vehicle.id} failed 404`);
+                            //     for (const [key, value] of Object.entries(admins)) {
+                            //         value.send(JSON.stringify(['alert_api', 'Lỗi khi gọi API lấy thông tin xe hiện tại']));
+                            //     }
+                            //     continue;
+                            // }
+                            let id = 1
+                            // let vehiclePosition = await SUP_Vehicle_Position.findOne({
+                            //     where: {
+                            //         vehicleId: id,
+                            //     },
+                            //     raw: true
+                            // });
+                            // console.log('check vehicle id: ' + id);
+                            vehicleImage = vehicleImageData.data.data[image_id]?.image_url;
+                            const update = [
+                                id,
+                                // 21.235600, 105.808782,
+                                // vehicleData.data.data[0].location.coordinates[1],
+                                // vehicleData.data.data[0].location.coordinates[0],
+                                current_gps[0],
+                                current_gps[1],
+                                // vehiclePosition.latitude,
+                                // vehiclePosition.longitude,
+                                vehicleImageData.data.data[image_id]?.image_url
+                                // "http://203.162.10.118:8888/media/camera/a4ab715a-63a0-4d26-9c73-d23b2b4c04d5.jpg"
+                            ];
+                            for (const [key, value] of Object.entries(admins)) {
+                                // console.log('check sending vehicle info to admin site: ', update);
+                                value.send(JSON.stringify(update));
+                            }
+                            // updatePosition({
+                            //     // latitude: 21.235600,
+                            //     // longitude: 105.808782,
+                            //     // latitude: vehicleData.data.data[0].location.coordinates[1],
+                            //     // longitude: vehicleData.data.data[0].location.coordinates[0],
+                            //     // latitude: current_gps[0],
+                            //     // longitude: current_gps[1],
+                            //     latitude: vehiclePosition.latitude,
+                            //     longitude: vehiclePosition.longitude,
+                            //     id: id,
+                            //     camera: vehicleImageData.data.data[image_id]?.image_url
+                            //     // camera: "http://203.162.10.118:8888/media/camera/a4ab715a-63a0-4d26-9c73-d23b2b4c04d5.jpg"
+                            // })
+                        } catch (error) {
+                            console.log(" loix loix xe")
                         }
-                        // updatePosition({
-                        //     // latitude: 21.235600,
-                        //     // longitude: 105.808782,
-                        //     // latitude: vehicleData.data.data[0].location.coordinates[1],
-                        //     // longitude: vehicleData.data.data[0].location.coordinates[0],
-                        //     // latitude: current_gps[0],
-                        //     // longitude: current_gps[1],
-                        //     latitude: vehiclePosition.latitude,
-                        //     longitude: vehiclePosition.longitude,
-                        //     id: id,
-                        //     camera: vehicleImageData.data.data[image_id]?.image_url
-                        //     // camera: "http://203.162.10.118:8888/media/camera/a4ab715a-63a0-4d26-9c73-d23b2b4c04d5.jpg"
-                        // })
-                    } catch (error) {
-                        console.log(" loix loix xe")
-                    }
-                }
-            }, 1000 * 10)
-        } catch (err) {
-            console.log(err);
-        }
-        // event bin status
-        try {
+                    // }
+                }, 1000 * 3)
+            }
             // let bins = []
             setInterval(async () => {
                 let bins = await ADM_Bin.findAll({
@@ -263,17 +256,17 @@ const webSocketServices = (wss) => {
             let messageParse = JSON.parse(message);
             console.log(messageParse[0], messageParse[1])
             current_gps = [messageParse[0], messageParse[1]]
-            updatePosition({
-                // latitude: 21.235600,
-                // longitude: 105.808782,
-                // latitude: vehicleData.data.data[0].location.coordinates[1],
-                // longitude: vehicleData.data.data[0].location.coordinates[0],
-                latitude: current_gps[0],
-                longitude: current_gps[1],
-                id: 1,
-                camera: vehicleImage
-                // camera: "http://203.162.10.118:8888/media/camera/a4ab715a-63a0-4d26-9c73-d23b2b4c04d5.jpg"
-            })
+            // updatePosition({
+            //     // latitude: 21.235600,
+            //     // longitude: 105.808782,
+            //     // latitude: vehicleData.data.data[0].location.coordinates[1],
+            //     // longitude: vehicleData.data.data[0].location.coordinates[0],
+            //     latitude: current_gps[0],
+            //     longitude: current_gps[1],
+            //     id: 1,
+            //     camera: vehicleImage
+            //     // camera: "http://203.162.10.118:8888/media/camera/a4ab715a-63a0-4d26-9c73-d23b2b4c04d5.jpg"
+            // })
             // console.log('\n')
         })
         ws.on('close', function () {
