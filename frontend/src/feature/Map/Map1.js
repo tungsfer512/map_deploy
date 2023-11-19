@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Polyline, Popup, LayersControl, LayerGroup, us
 import "leaflet/dist/leaflet.css";
 import Routing from './Routing';
 import "leaflet-rotatedmarker";
-import { _getAngle, green_bin, red_bin, yellow_bin, green_vehicle } from './constants';
+import { _getAngle, green_bin, red_bin, yellow_bin, green_vehicle, bien_cam } from './constants';
 
 import { getVehiclesData } from '../../api/vehicle/vehicles';
 import { getBinsData } from '../../api/bin/bins';
@@ -353,7 +353,7 @@ const kb2 = [
   [20.980362708925917,105.78786313533784]
 ];
 
-const kb = kb2;
+const kb = kb1;
 
 L.Marker.prototype.options.icon = L.icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png"
@@ -794,9 +794,11 @@ const Map1 = () => {
   const iconBinGreenUrl = green_bin;
   const iconBinRedUrl = red_bin;
   const iconBinYellowUrl = yellow_bin;
+  const iconBienCam = bien_cam;
   const iconBinGreen = new L.Icon({ iconUrl: iconBinGreenUrl, iconSize: [16, 24] })
   const iconBinRed = new L.Icon({ iconUrl: iconBinRedUrl, iconSize: [16, 24] })
   const iconBinYellow = new L.Icon({ iconUrl: iconBinYellowUrl, iconSize: [16, 24] })
+  const iconChan = new L.Icon({ iconUrl: iconBienCam, iconSize: [40, 40] })
 
   return (
     <Fragment>
@@ -856,7 +858,7 @@ const Map1 = () => {
 
               </RotatedMarker>
             ))}
-
+            {(waypoints.hideInMap === true && kb === kb2) && <RotatedMarker position={[20.981227, 105.787763]} icon={iconChan} />}
             {(waypoints.hideInMap === true) && <Routing dataWaypoints={waypoints.data}></Routing>}
             {(waypoints.hideInMap === true) && <Polyline pathOptions={{color: 'red'}} positions={kb} />}
             <ZoomHandler waypoints={waypoints} ></ZoomHandler>

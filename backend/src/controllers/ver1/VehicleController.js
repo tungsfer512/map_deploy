@@ -153,24 +153,30 @@ const updateVehicleById = async (req, res) => {
 // Read
 const getAllVehicle = async (req, res) => {
     try {
+        console.log("==========================1")
         let vehicles = await ADM_Vehicle.findAll({
             raw: true
         });
+        console.log("==========================2")
         if (!vehicles) {
             return res.status(404).json({
                 resCode: 404,
                 resMessage: 'Vehicle not found.'
             });
         }
+        console.log("==========================3")
         for (let i = 0; i < vehicles.length; i++) {
+            console.log("==========================4")
             let vehiclePosition = await SUP_Vehicle_Position.findOne({
                 where: {
                     vehicleId: vehicles[i].id
                 },
                 raw: true
             });
+            console.log("==========================5")
             vehicles[i].latitude = vehiclePosition.latitude;
             vehicles[i].longitude = vehiclePosition.longitude;
+            console.log("==========================6")
             let task = await ADM_Task.findOne({
                 where: {
                     vehicleId: vehicles[i].id,
@@ -178,12 +184,14 @@ const getAllVehicle = async (req, res) => {
                 },
                 raw: true
             });
+            console.log("==========================7")
             vehicles[i].driver = await ADM_User.findOne({
                 where: {
                     id: task.driverId
                 },
                 raw: true
             });
+            console.log("==========================8")
         }
         return res.status(200).json({
             resCode: 200,
